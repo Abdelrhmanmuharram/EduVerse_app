@@ -1,11 +1,12 @@
 import 'package:edusync_app/core/app_theme.dart';
+import 'package:edusync_app/core/services/local_storage_service.dart';
 import 'package:edusync_app/core/widgets/main_button.dart';
 import 'package:edusync_app/core/widgets/main_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnboardingView extends StatefulWidget {
-  static const String routeName = '/';
+  static const String routeName = '/onboarding';
 
   @override
   State<OnboardingView> createState() => _OnboardingViewState();
@@ -20,7 +21,10 @@ class _OnboardingViewState extends State<OnboardingView> {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
-      appBar: AppBar(title: Text('EduSync', style: textTheme.headlineSmall)),
+      appBar: AppBar(
+        title: Text('EduSync', style: textTheme.headlineSmall),
+        leading: SizedBox(),
+      ),
       body: Column(
         children: [
           Expanded(
@@ -99,10 +103,16 @@ class _OnboardingViewState extends State<OnboardingView> {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
             child: MainBotton(
-              onPressed: () => controller.nextPage(
-                duration: Duration(milliseconds: 500),
-                curve: Curves.easeInOut,
-              ),
+              onPressed: () async {
+                controller.nextPage(
+                  duration: Duration(milliseconds: 500),
+                  curve: Curves.easeInOut,
+                );
+                if (currentIndex == 2) {
+                  await LocalStorageService.setOnBoardingSeen();
+                  Navigator.pushNamed(context, '/login');
+                }
+              },
               text: currentIndex == 0
                   ? 'Continue'
                   : currentIndex == 2
@@ -118,7 +128,8 @@ class _OnboardingViewState extends State<OnboardingView> {
                 ? true
                 : false,
             child: MainTextButton(
-              onPressed: () {
+              onPressed: () async {
+                await LocalStorageService.setOnBoardingSeen();
                 Navigator.of(context).pushNamed('/login');
               },
               text: currentIndex == 0 ? 'Skip' : 'Skip for now',

@@ -1,10 +1,47 @@
+import 'dart:async';
+
 import 'package:edusync_app/core/app_theme.dart';
+import 'package:edusync_app/core/services/local_storage_service.dart';
+import 'package:edusync_app/feature/login/login_view.dart';
+import 'package:edusync_app/feature/onboarding/onboarding_view.dart';
 import 'package:flutter/material.dart';
 
-class SplashView extends StatelessWidget {
+class SplashView extends StatefulWidget {
   const SplashView({super.key});
 
   static const String routeName = '/splash';
+
+  @override
+  State<SplashView> createState() => _SplashViewState();
+}
+
+class _SplashViewState extends State<SplashView> {
+  double progress = 0.0;
+  late Timer timer;
+
+  void initState() {
+    startLoading();
+  }
+
+  void startLoading() {
+    timer = Timer.periodic(Duration(milliseconds: 50), (timer) async {
+      setState(() {
+        progress += 0.02;
+      });
+      if (progress >= 1) {
+        timer.cancel();
+
+        await Future.delayed(const Duration(seconds: 2));
+        bool seen = await LocalStorageService.isOnboardingSeen();
+
+        if (seen) {
+          Navigator.pushNamed(context, LoginView.routeName);
+        } else {
+          Navigator.pushNamed(context, OnboardingView.routeName);
+        }
+      }
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,7 +101,7 @@ class SplashView extends StatelessWidget {
                   style: TextStyle(color: Color(0xFF64748B)),
                 ),
                 Text(
-                  "75%",
+                  "${(progress * 100).toInt()}%",
                   style: TextStyle(
                     color: Color(0xFF3B82F6),
                     fontWeight: FontWeight.w600,
@@ -76,7 +113,7 @@ class SplashView extends StatelessWidget {
             ClipRRect(
               borderRadius: BorderRadius.circular(0),
               child: LinearProgressIndicator(
-                value: 0.75,
+                value: progress,
                 minHeight: 6,
                 backgroundColor: Color(0xFFE2E8F0),
                 color: AppTheme.primaryLight,

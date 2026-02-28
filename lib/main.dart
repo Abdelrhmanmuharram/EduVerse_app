@@ -20,7 +20,7 @@ class EduSync extends StatelessWidget {
         OnboardingView.routeName: (_) => OnboardingView(),
         LoginView.routeName: (_) => LoginView(),
       },
-      initialRoute: OnboardingView.routeName,
+      home: SplashView(),
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,
