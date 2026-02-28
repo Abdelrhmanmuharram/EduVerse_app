@@ -1,9 +1,9 @@
 import 'dart:async';
-
 import 'package:edusync_app/core/app_theme.dart';
 import 'package:edusync_app/core/services/local_storage_service.dart';
 import 'package:edusync_app/feature/login/login_view.dart';
 import 'package:edusync_app/feature/onboarding/onboarding_view.dart';
+import 'package:edusync_app/feature/splash/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
 
 class SplashView extends StatefulWidget {
@@ -16,10 +16,13 @@ class SplashView extends StatefulWidget {
 }
 
 class _SplashViewState extends State<SplashView> {
+  final SplashViewmodel viewModel = SplashViewmodel();
   double progress = 0.0;
   late Timer timer;
 
+  @override
   void initState() {
+    super.initState();
     startLoading();
   }
 
@@ -43,6 +46,15 @@ class _SplashViewState extends State<SplashView> {
     });
   }
 
+  Future<void> onLoadingFinished() async {
+    await Future.delayed(Duration(seconds: 2));
+
+    final route = await viewModel.getNextRoute();
+
+    if (!mounted) return;
+    Navigator.pushReplacementNamed(context, route);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,18 +63,21 @@ class _SplashViewState extends State<SplashView> {
         child: Column(
           mainAxisAlignment: .center,
           children: [
-            const Spacer(),
+            Spacer(),
             Container(
               width: 90,
               height: 90,
               decoration: BoxDecoration(
-                color: Colors.white,
-                shape: BoxShape.circle,
+                color: AppTheme.white,
+                shape: .circle,
                 boxShadow: [
-                  BoxShadow(blurRadius: 20, color: Colors.black.withAlpha(30)),
+                  BoxShadow(
+                    blurRadius: 20,
+                    color: AppTheme.black.withAlpha(30),
+                  ),
                 ],
               ),
-              child: Icon(Icons.school, size: 40, color: Color(0xFF3B82F6)),
+              child: Icon(Icons.school, size: 40, color: AppTheme.primaryLight),
             ),
             SizedBox(height: 24),
             RichText(
@@ -79,7 +94,7 @@ class _SplashViewState extends State<SplashView> {
                   TextSpan(
                     text: "Sync",
                     style: TextStyle(
-                      color: Color(0xFF3B82F6),
+                      color: AppTheme.primaryLight,
                       fontSize: 32,
                       fontWeight: FontWeight.bold,
                     ),
@@ -90,7 +105,7 @@ class _SplashViewState extends State<SplashView> {
             const SizedBox(height: 8),
             Text(
               "Smart University Management",
-              style: TextStyle(color: Color(0xFF64748B), fontSize: 14),
+              style: TextStyle(color: AppTheme.secondText, fontSize: 14),
             ),
             Spacer(),
             Row(
@@ -98,12 +113,12 @@ class _SplashViewState extends State<SplashView> {
               children: [
                 Text(
                   "Initializing campus...",
-                  style: TextStyle(color: Color(0xFF64748B)),
+                  style: TextStyle(color: AppTheme.secondText),
                 ),
                 Text(
                   "${(progress * 100).toInt()}%",
                   style: TextStyle(
-                    color: Color(0xFF3B82F6),
+                    color: AppTheme.primaryLight,
                     fontWeight: FontWeight.w600,
                   ),
                 ),
