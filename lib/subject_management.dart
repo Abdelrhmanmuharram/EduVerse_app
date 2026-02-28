@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import 'attendance_screen.dart';
+import 'upload_material_bottom_sheet.dart';
+
 class SubjectManagementScreen extends StatelessWidget {
   const SubjectManagementScreen({super.key});
 
@@ -32,11 +35,11 @@ class SubjectManagementScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildMaterialsCard(),
+            _buildMaterialsCard(context),
 
             const SizedBox(height: 16),
 
-            _buildAttendanceCard(),
+            _buildAttendanceCard(context),
 
             const SizedBox(height: 16),
 
@@ -48,7 +51,7 @@ class SubjectManagementScreen extends StatelessWidget {
       bottomNavigationBar: _buildBottomButton(),
     );
   }
-  Widget _buildMaterialsCard() {
+  Widget _buildMaterialsCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
@@ -67,7 +70,16 @@ class SubjectManagementScreen extends StatelessWidget {
                   Text("Materials", style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
                 ],
               ),
-              TextButton(onPressed: () {}, child: const Text("+ Upload", style: TextStyle(color: Color(0xFF2D60FF)))),
+              TextButton(onPressed: () {
+                showModalBottomSheet(
+                  context: context,
+                  isScrollControlled: true,
+                  shape: const RoundedRectangleBorder(
+                    borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
+                  ),
+                  builder: (context) => UploadMaterialSheet(),
+                );
+              }, child: const Text("+ Upload", style: TextStyle(color: Color(0xFF2D60FF)))),
             ],
           ),
           const Divider(),
@@ -80,11 +92,12 @@ class SubjectManagementScreen extends StatelessWidget {
   }
 
   // (Attendance History)
-  Widget _buildAttendanceCard() {
+  Widget _buildAttendanceCard(BuildContext context) {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(color: Colors.white, borderRadius: BorderRadius.circular(24)),
       child: ListTile(
+
         leading: Container(
           padding: const EdgeInsets.all(8),
           decoration: BoxDecoration(color: Colors.blue[50], borderRadius: BorderRadius.circular(12)),
@@ -93,6 +106,12 @@ class SubjectManagementScreen extends StatelessWidget {
         title: const Text("View Attendance History", style: TextStyle(fontWeight: FontWeight.bold)),
         subtitle: const Text("Last entry: Today, 10:30 AM"),
         trailing: const Icon(Icons.arrow_forward_ios, size: 16),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const AttendanceScreen()),
+          );
+        },
       ),
     );
   }
