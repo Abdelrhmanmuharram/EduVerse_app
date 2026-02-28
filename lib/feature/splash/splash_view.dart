@@ -1,8 +1,5 @@
 import 'dart:async';
 import 'package:edusync_app/core/app_theme.dart';
-import 'package:edusync_app/core/services/local_storage_service.dart';
-import 'package:edusync_app/feature/login/login_view.dart';
-import 'package:edusync_app/feature/onboarding/onboarding_view.dart';
 import 'package:edusync_app/feature/splash/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
 
@@ -20,6 +17,8 @@ class _SplashViewState extends State<SplashView> {
   double progress = 0.0;
   late Timer timer;
 
+  SplashViewmodel viewmodel = SplashViewmodel();
+
   @override
   void initState() {
     super.initState();
@@ -33,15 +32,7 @@ class _SplashViewState extends State<SplashView> {
       });
       if (progress >= 1) {
         timer.cancel();
-
-        await Future.delayed(Duration(seconds: 2));
-        bool seen = await LocalStorageService.isOnboardingSeen();
-
-        if (seen) {
-          Navigator.pushNamed(context, LoginView.routeName);
-        } else {
-          Navigator.pushNamed(context, OnboardingView.routeName);
-        }
+        onLoadingFinished();
       }
     });
   }
@@ -52,7 +43,7 @@ class _SplashViewState extends State<SplashView> {
     final route = await viewModel.getNextRoute();
 
     if (!mounted) return;
-    Navigator.pushReplacementNamed(context, route);
+    Navigator.pushNamed(context, route);
   }
 
   @override
