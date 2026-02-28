@@ -31,7 +31,7 @@ class _SplashViewState extends State<SplashView> {
       if (progress >= 1) {
         timer.cancel();
 
-        await Future.delayed(const Duration(seconds: 2));
+        await Future.delayed(Duration(seconds: 2));
         bool seen = await LocalStorageService.isOnboardingSeen();
 
         if (seen) {
