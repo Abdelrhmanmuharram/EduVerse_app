@@ -1,4 +1,5 @@
 import 'package:edusync_app/core/app_theme.dart';
+import 'package:edusync_app/feature/admin/admin_view.dart';
 import 'package:edusync_app/feature/login/login_view.dart';
 import 'package:edusync_app/feature/onboarding/onboarding_view.dart';
 import 'package:edusync_app/feature/splash/splash_view.dart';
@@ -19,8 +20,9 @@ class EduSync extends StatelessWidget {
         SplashView.routeName: (_) => SplashView(),
         OnboardingView.routeName: (_) => OnboardingView(),
         LoginView.routeName: (_) => LoginView(),
+        AdminView.routeName: (_) => AdminView(),
       },
-      home: SplashView(),
+      home: AdminView(),
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,

@@ -1,7 +1,7 @@
 import 'package:edusync_app/core/app_theme.dart';
 import 'package:edusync_app/core/services/local_storage_service.dart';
-import 'package:edusync_app/core/widgets/main_button.dart';
-import 'package:edusync_app/core/widgets/main_text_button.dart';
+import 'package:edusync_app/core/widgets/default_button.dart';
+import 'package:edusync_app/core/widgets/default_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -102,7 +102,7 @@ class _OnboardingViewState extends State<OnboardingView> {
           SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: MainBotton(
+            child: PrimaryButton(
               onPressed: () async {
                 controller.nextPage(
                   duration: Duration(milliseconds: 500),
@@ -113,7 +113,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                   Navigator.pushNamed(context, '/login');
                 }
               },
-              text: currentIndex == 0
+              label: currentIndex == 0
                   ? 'Continue'
                   : currentIndex == 2
                   ? 'Get Started'
@@ -127,7 +127,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 : currentIndex == 1
                 ? true
                 : false,
-            child: MainTextButton(
+            child: DefaultTextButton(
               onPressed: () async {
                 await LocalStorageService.setOnBoardingSeen();
                 Navigator.of(context).pushNamed('/login');

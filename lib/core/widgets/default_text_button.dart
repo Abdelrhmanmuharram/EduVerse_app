@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-class MainTextButton extends StatelessWidget {
+class DefaultTextButton extends StatelessWidget {
   String text;
   VoidCallback onPressed;
   Color? color;
 
-  MainTextButton({required this.onPressed, required this.text, this.color});
+  DefaultTextButton({required this.onPressed, required this.text, this.color});
 
   @override
   Widget build(BuildContext context) {
