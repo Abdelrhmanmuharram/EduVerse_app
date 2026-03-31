@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  static const Color primaryLight = Color(0xFF3B82F6);
+  static const Color primaryLight = Color(0xFF2962FF);
   static const Color backgroundLight = Color(0xFFF8FAFC);
   static const Color secondText = Color(0xFF64748B);
   static const Color black = Color(0xFF0D131C);
@@ -18,6 +18,11 @@ class AppTheme {
       backgroundColor: backgroundLight,
       centerTitle: true,
       titleTextStyle: TextStyle(color: black),
+    ),
+    bottomNavigationBarTheme: BottomNavigationBarThemeData(
+      backgroundColor: white,
+      selectedItemColor: primaryLight,
+      unselectedItemColor: secondText,
     ),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(

@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
 import '../app_theme.dart';
 
-class UmsMenuItemCard extends StatelessWidget {
+class MenuItemCard extends StatelessWidget {
   final IconData icon;
   final String title;
   final String subtitle;
   final VoidCallback? onTap;
 
-  const UmsMenuItemCard({
+  const MenuItemCard({
     super.key,
     required this.icon,
     required this.title,
     required this.subtitle,
     this.onTap,
   });
+
+
 
   @override
   Widget build(BuildContext context) {

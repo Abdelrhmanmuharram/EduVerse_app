@@ -4,7 +4,8 @@ import 'package:edusync_app/core/widgets/default_text_field.dart';
 import 'package:edusync_app/core/widgets/language_selector.dart';
 import 'package:edusync_app/core/widgets/default_logo.dart';
 import 'package:edusync_app/core/widgets/default_button.dart';
-import 'package:edusync_app/feature/admin/admin_view.dart';
+import 'package:edusync_app/feature/admin/view/screens/panel_view.dart';
+import 'package:edusync_app/feature/admin/view/screens/admin_home_view.dart';
 import 'package:flutter/material.dart';
 
 class LoginView extends StatefulWidget {
@@ -42,7 +43,7 @@ class _LoginViewState extends State<LoginView> {
         ),
       );
       await Future.delayed(Duration(seconds: 2));
-      Navigator.of(context).pushNamed(AdminView.routeName);
+      Navigator.of(context).pushNamed(HomeAdmin.routeName);
     }
   }
 

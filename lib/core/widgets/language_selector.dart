@@ -1,5 +1,5 @@
 import 'package:edusync_app/core/app_theme.dart';
-import 'package:edusync_app/model/language_model.dart';
+import 'package:edusync_app/core/model/language_model.dart';
 import 'package:flutter/material.dart';
 
 class LanguageSelector extends StatelessWidget {

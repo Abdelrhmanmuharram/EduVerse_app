@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:edusync_app/core/app_theme.dart';
-import 'package:edusync_app/feature/splash/splash_viewmodel.dart';
+import 'package:edusync_app/feature/splash/viewmodel/splash_viewmodel.dart';
 import 'package:flutter/material.dart';
 
 class SplashView extends StatefulWidget {

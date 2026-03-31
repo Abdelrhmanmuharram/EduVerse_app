@@ -43,7 +43,7 @@ class _UmsTextFieldState extends State<DefaultTextField> {
           fontSize: 15,
           fontWeight: FontWeight.w400,
         ),
-        prefixIcon: Icon(widget.prefixIcon, color: AppTheme.hintText, size: 20),
+        prefixIcon: Icon(widget.prefixIcon, color: AppTheme.hintText),
         suffixIcon: widget.isPassword
             ? IconButton(
                 icon: Icon(
@@ -61,7 +61,6 @@ class _UmsTextFieldState extends State<DefaultTextField> {
             : null,
         filled: true,
         fillColor: AppTheme.white,
-        contentPadding: EdgeInsets.symmetric(horizontal: 16, vertical: 18),
       ),
       controller: widget.controller,
       obscureText: widget.isPassword ? _obscureText : false,
