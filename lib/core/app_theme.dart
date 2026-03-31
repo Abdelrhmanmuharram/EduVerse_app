@@ -24,6 +24,11 @@ class AppTheme {
       selectedItemColor: primaryLight,
       unselectedItemColor: secondText,
     ),
+    floatingActionButtonTheme: FloatingActionButtonThemeData(
+      backgroundColor: primaryLight,
+      foregroundColor: white,
+      shape: CircleBorder(),
+    ),
     inputDecorationTheme: InputDecorationTheme(
       border: OutlineInputBorder(
         borderRadius: BorderRadius.circular(12),

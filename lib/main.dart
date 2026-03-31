@@ -19,7 +19,7 @@ class EduSync extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       routes: AppRoutes.routes,
-      home: HomeAdmin(),
+      home: SplashView(),
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.light,
