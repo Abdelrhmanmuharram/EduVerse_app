@@ -1,4 +1,4 @@
-# edysync
+# edusync_app
 
 A new Flutter project.
 
