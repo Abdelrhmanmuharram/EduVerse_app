@@ -1,0 +1,42 @@
+import 'package:edusync_app/core/enums/menu_type.dart';
+import 'package:edusync_app/core/widgets/menu_item_card.dart';
+import 'package:edusync_app/feature/admin/view/widgets/admin_header_widget.dart';
+import 'package:edusync_app/feature/admin/viewmodel/panel_viewmodel.dart';
+import 'package:flutter/material.dart';
+
+class PanelView extends StatelessWidget {
+  final viewModel = PanelViewModel();
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: SafeArea(
+        child: Column(
+          children: [
+            AdminHeader(),
+            Expanded(
+              child: ListView.separated(
+                padding: EdgeInsets.symmetric(horizontal: 20),
+                itemCount: viewModel.menuItems.length,
+                separatorBuilder: (_, _) => SizedBox(height: 16),
+                itemBuilder: (_, index) {
+                  final item = viewModel.menuItems[index];
+                  return GestureDetector(
+                    onTap: () {
+                      viewModel.onItemClicked(context, item);
+                    },
+                    child: MenuItemCard(
+                      icon: item.type.icon,
+                      title: item.type.title,
+                      subtitle: item.type.subtitle,
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
