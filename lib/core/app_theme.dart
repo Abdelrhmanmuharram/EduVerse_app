@@ -1,4 +1,4 @@
-import 'package:flutter/material.dart';
+  import 'package:flutter/material.dart';
 
 class AppTheme {
   static const Color primaryLight = Color(0xFF2962FF);
@@ -11,6 +11,9 @@ class AppTheme {
   static const Color white = Color(0xFFFFFFFF);
   static const Color primaryDark = Color(0xFF3C83F6);
   static const Color backgroundDark = Color(0xFF0F172A);
+  static const Color border = Color(0xFFE2E8F0);
+  static const Color flashWhite = Color(0xFFF1F5F9);
+  static const Color blueGray = Color(0xFF475569);
 
   static ThemeData lightTheme = ThemeData(
     scaffoldBackgroundColor: backgroundLight,

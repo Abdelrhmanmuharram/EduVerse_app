@@ -1,14 +1,18 @@
 import 'package:edusync_app/core/app_theme.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class DefaultTextField extends StatefulWidget {
   final String hint;
-  final IconData prefixIcon;
+  final Widget? prefixIcon;
   final bool isPassword;
   final TextEditingController? controller;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
   final int maxLines;
+  final String? prefixSvg;
+  final Function(String)? onChanged;
+
 
   const DefaultTextField({
     super.key,
@@ -19,6 +23,8 @@ class DefaultTextField extends StatefulWidget {
     this.keyboardType = TextInputType.text,
     this.validator,
     this.maxLines = 1,
+    this.prefixSvg,
+    this.onChanged,
   });
 
   @override
@@ -31,6 +37,10 @@ class _UmsTextFieldState extends State<DefaultTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onChanged: (value) {
+
+        widget.onChanged?.call(value);
+      },
       style: TextStyle(
         color: AppTheme.black,
         fontSize: 15,
@@ -43,7 +53,9 @@ class _UmsTextFieldState extends State<DefaultTextField> {
           fontSize: 15,
           fontWeight: FontWeight.w400,
         ),
-        prefixIcon: Icon(widget.prefixIcon, color: AppTheme.hintText),
+        prefixIcon: widget.prefixSvg != null
+            ? SvgPicture.asset(widget.prefixSvg!)
+            : widget.prefixIcon,
         suffixIcon: widget.isPassword
             ? IconButton(
                 icon: Icon(

@@ -42,7 +42,7 @@ class _AdminHeaderState extends State<AdminHeader> {
           const SizedBox(height: 24),
           DefaultTextField(
             hint: 'Search...',
-            prefixIcon: Icons.search,
+            prefixIcon: Icon(Icons.search),
             controller: _searchController,
           ),
           const SizedBox(height: 24),

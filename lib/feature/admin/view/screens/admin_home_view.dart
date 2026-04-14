@@ -4,14 +4,16 @@ import 'package:edusync_app/feature/admin/view/screens/panel_view.dart';
 import 'package:edusync_app/feature/admin/view/screens/reports_view.dart';
 import 'package:flutter/material.dart';
 
-class HomeAdmin extends StatefulWidget {
+class AdminHomeView extends StatefulWidget {
   static const String routeName = '/home';
 
+  const AdminHomeView({super.key});
+
   @override
-  State<HomeAdmin> createState() => _HomeAdminState();
+  State<AdminHomeView> createState() => _HomeAdminState();
 }
 
-class _HomeAdminState extends State<HomeAdmin> {
+class _HomeAdminState extends State<AdminHomeView> {
   int currentIndex = 0;
 
   List<Widget> taps = [PanelView(), AlertsView(), ReportsView()];

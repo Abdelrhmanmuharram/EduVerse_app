@@ -43,7 +43,7 @@ class _LoginViewState extends State<LoginView> {
         ),
       );
       await Future.delayed(Duration(seconds: 2));
-      Navigator.of(context).pushNamed(HomeAdmin.routeName);
+      Navigator.of(context).pushNamed(AdminHomeView.routeName);
     }
   }
 
@@ -121,7 +121,7 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(height: 8),
                   DefaultTextField(
                     hint: 'Enter your username',
-                    prefixIcon: Icons.person_outline,
+                    prefixIcon: Icon(Icons.person_outline),
                     controller: _usernameController,
                     keyboardType: TextInputType.text,
                     validator: (value) {
@@ -136,7 +136,7 @@ class _LoginViewState extends State<LoginView> {
                   const SizedBox(height: 8),
                   DefaultTextField(
                     hint: '••••••••',
-                    prefixIcon: Icons.lock_outline,
+                    prefixIcon: Icon(Icons.lock_outline),
                     isPassword: true,
                     controller: _passwordController,
                     validator: (value) {
