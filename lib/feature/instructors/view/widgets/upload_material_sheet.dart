@@ -60,13 +60,10 @@ class UploadMaterialSheet extends StatelessWidget {
 
           DefaultTextField(
             hint: "e.g. Midterm Study Guide",
-            prefixIcon: Icons.description_outlined,
+            prefixIcon: Icon(Icons.description_outlined),
             controller: nameController,
           ),
-
           const SizedBox(height: 20),
-
-          /// SELECT FILE
           Align(
             alignment: Alignment.centerLeft,
             child: Text(
@@ -91,8 +88,6 @@ class UploadMaterialSheet extends StatelessWidget {
             ),
             child: Column(
               children: [
-
-                /// ICON CIRCLE
                 Container(
                   width: 50,
                   height: 50,
