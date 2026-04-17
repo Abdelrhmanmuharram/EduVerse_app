@@ -1,3 +1,5 @@
+import 'dart:ui' as BorderType;
+
 import 'package:flutter/material.dart';
 import 'package:dotted_border/dotted_border.dart';
 
@@ -11,7 +13,7 @@ class UploadMaterialSheet extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-      ),git checkout development
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -42,19 +44,17 @@ class UploadMaterialSheet extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 20),
-
-          // *** SELECT FILE ***
           const Text("SELECT FILE",
               style: TextStyle(fontSize: 11, color: Color(0xFF74777F), fontWeight: FontWeight.bold, letterSpacing: 1.1)),
           const SizedBox(height: 8),
-
-          // **dotted line ***
           DottedBorder(
-            color: const Color(0xFFD1D9E8),
-            strokeWidth: 1,
-            dashPattern: const [6, 3],
-            borderType: BorderType.RRect,
-            radius: const Radius.circular(16),
+            options: RoundedRectDottedBorderOptions(
+              color: const Color(0xFFD1D9E8),
+              strokeWidth: 1,
+              dashPattern: const [6, 3],
+              radius: const Radius.circular(16),
+            ),
+
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 30),
