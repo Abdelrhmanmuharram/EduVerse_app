@@ -1,7 +1,9 @@
 import 'package:edusync_app/feature/admin/view/screens/add_student_view.dart';
 import 'package:edusync_app/feature/admin/view/screens/admin_home_view.dart';
 import 'package:edusync_app/feature/departments/departments_view.dart';
-import 'package:edusync_app/feature/instructors/instructors_view.dart';
+import 'package:edusync_app/feature/instructors/view/screens/instructors_view.dart';
+import 'package:edusync_app/feature/instructors/view/screens/subjects_view.dart';
+import 'package:edusync_app/feature/instructors/view/screens/students_list_view.dart';
 import 'package:edusync_app/feature/login/view/login_view.dart';
 import 'package:edusync_app/feature/onboarding/view/onboarding_view.dart';
 import 'package:edusync_app/feature/semesters/semesters_view.dart';
@@ -22,5 +24,7 @@ class AppRoutes {
     '/departments': (_) => DepartmentsView(),
     '/semesters': (_) => SemestersView(),
     '/instructors': (_) => InstructorsView(),
+    '/subjects': (_) => SubjectsView(),
+    '/students_list': (_) => StudentsListView(),
   };
 }

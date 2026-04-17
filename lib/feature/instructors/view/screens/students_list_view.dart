@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:edusync_app/core/app_theme.dart';
 import '../../viewmodel/students_list_viewmodel.dart';
 
+// 🔥 دول اللي بعتهم
+import 'package:edusync_app/feature/admin/view/widgets/student_header.dart';
+import 'package:edusync_app/feature/admin/view/widgets/student_table.dart';
+
 class StudentsListView extends StatelessWidget {
   static const routeName = "/students_list";
 
@@ -11,16 +15,11 @@ class StudentsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
-
     return Scaffold(
       backgroundColor: AppTheme.backgroundLight,
 
       appBar: AppBar(
-        title: Text(
-          "Student List",
-          style: textTheme.headlineSmall,
-        ),
+        title: const Text("Student List"),
         leading: IconButton(
           icon: const Icon(
             Icons.arrow_back_ios_new,
@@ -41,6 +40,12 @@ class StudentsListView extends StatelessWidget {
 
             const SizedBox(height: 16),
 
+            /// 🔥 HEADER (اللي بعتّه)
+            StudentHeader(),
+
+            const SizedBox(height: 16),
+
+            /// 🔍 SEARCH
             Container(
               height: 50,
               padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -59,23 +64,20 @@ class StudentsListView extends StatelessWidget {
 
                   const SizedBox(width: 10),
 
-                  Expanded(
+                  const Expanded(
                     child: TextField(
-                      decoration: const InputDecoration(
-
+                      decoration: InputDecoration(
                         hintText: "Search students...",
                         hintStyle: TextStyle(
                           color: Colors.grey,
                           fontSize: 14,
                         ),
-
                         border: InputBorder.none,
                         enabledBorder: InputBorder.none,
                         focusedBorder: InputBorder.none,
                         disabledBorder: InputBorder.none,
                         filled: false,
                         fillColor: Colors.transparent,
-
                         contentPadding: EdgeInsets.zero,
                         isDense: true,
                       ),
@@ -87,45 +89,16 @@ class StudentsListView extends StatelessWidget {
 
             const SizedBox(height: 20),
 
-            /// 📊 TABLE
             Expanded(
               child: Container(
-                width: double.infinity,
                 padding: const EdgeInsets.all(16),
-
                 decoration: BoxDecoration(
                   color: AppTheme.white,
                   borderRadius: BorderRadius.circular(16),
                 ),
 
-                child: SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-
-                  child: DataTable(
-
-                    headingTextStyle: const TextStyle(
-                      fontWeight: FontWeight.w600,
-                      color: AppTheme.primaryLight,
-                    ),
-
-                    columns: const [
-                      DataColumn(label: Text("ID")),
-                      DataColumn(label: Text("Name")),
-                      DataColumn(label: Text("Email")),
-                      DataColumn(label: Text("Status")),
-                    ],
-
-                    rows: viewModel.students.map((student) {
-                      return DataRow(
-                        cells: [
-                          DataCell(Text(student["id"] ?? "")),
-                          DataCell(Text(student["name"] ?? "")),
-                          DataCell(Text(student["email"] ?? "")),
-                          DataCell(Text(student["status"] ?? "")),
-                        ],
-                      );
-                    }).toList(),
-                  ),
+                child: StudentTable(
+                  students: viewModel.students,
                 ),
               ),
             ),
