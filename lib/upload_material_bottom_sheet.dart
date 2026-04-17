@@ -11,26 +11,40 @@ class UploadMaterialSheet extends StatelessWidget {
       decoration: const BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.vertical(top: Radius.circular(32)),
-      ),git checkout development
+      ),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
-              const Text("Upload Material",
-                  style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Color(0xFF1A1C1E))),
-              IconButton(onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.close, color: Colors.grey)),
+              const Text(
+                "Upload Material",
+                style: TextStyle(
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFF1A1C1E),
+                ),
+              ),
+              IconButton(
+                onPressed: () => Navigator.pop(context),
+                icon: const Icon(Icons.close, color: Colors.grey),
+              ),
             ],
           ),
           const SizedBox(height: 20),
 
           // Material Name
-          const Text("MATERIAL NAME",
-              style: TextStyle(fontSize: 11, color: Color(0xFF74777F), fontWeight: FontWeight.bold, letterSpacing: 1.1)),
+          const Text(
+            "MATERIAL NAME",
+            style: TextStyle(
+              fontSize: 11,
+              color: Color(0xFF74777F),
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.1,
+            ),
+          ),
           const SizedBox(height: 8),
           TextField(
             decoration: InputDecoration(
@@ -38,23 +52,35 @@ class UploadMaterialSheet extends StatelessWidget {
               hintStyle: const TextStyle(color: Colors.grey, fontSize: 14),
               filled: true,
               fillColor: const Color(0xFFF8F9FD),
-              border: OutlineInputBorder(borderRadius: BorderRadius.circular(12), borderSide: BorderSide.none),
+              border: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(12),
+                borderSide: BorderSide.none,
+              ),
             ),
           ),
           const SizedBox(height: 20),
 
           // *** SELECT FILE ***
-          const Text("SELECT FILE",
-              style: TextStyle(fontSize: 11, color: Color(0xFF74777F), fontWeight: FontWeight.bold, letterSpacing: 1.1)),
+          const Text(
+            "SELECT FILE",
+            style: TextStyle(
+              fontSize: 11,
+              color: Color(0xFF74777F),
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1.1,
+            ),
+          ),
           const SizedBox(height: 8),
 
           // **dotted line ***
           DottedBorder(
-            color: const Color(0xFFD1D9E8),
-            strokeWidth: 1,
-            dashPattern: const [6, 3],
-            borderType: BorderType.RRect,
-            radius: const Radius.circular(16),
+            options: RoundedRectDottedBorderOptions(
+              color: const Color(0xFFD1D9E8),
+              strokeWidth: 1,
+              dashPattern: const [6, 3],
+              radius: const Radius.circular(16),
+            ),
+
             child: Container(
               width: double.infinity,
               padding: const EdgeInsets.symmetric(vertical: 30),
@@ -70,14 +96,26 @@ class UploadMaterialSheet extends StatelessWidget {
                       color: const Color(0xFFF0F4FF),
                       shape: BoxShape.circle,
                     ),
-                    child: const Icon(Icons.cloud_upload, size: 28, color: Color(0xFF2D60FF)),
+                    child: const Icon(
+                      Icons.cloud_upload,
+                      size: 28,
+                      color: Color(0xFF2D60FF),
+                    ),
                   ),
                   const SizedBox(height: 12),
-                  const Text("Tap to choose a file",
-                      style: TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF1A1C1E), fontSize: 14)),
+                  const Text(
+                    "Tap to choose a file",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF1A1C1E),
+                      fontSize: 14,
+                    ),
+                  ),
                   const SizedBox(height: 4),
-                  const Text("PDF, DOCX, PPT or ZIP up to 25MB",
-                      style: TextStyle(fontSize: 11, color: Color(0xFF74777F))),
+                  const Text(
+                    "PDF, DOCX, PPT or ZIP up to 25MB",
+                    style: TextStyle(fontSize: 11, color: Color(0xFF74777F)),
+                  ),
                 ],
               ),
             ),
@@ -97,7 +135,10 @@ class UploadMaterialSheet extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: const StadiumBorder(),
                   ),
-                  child: const Text("Cancel", style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: const Text(
+                    "Cancel",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
               const SizedBox(width: 16),
@@ -110,7 +151,10 @@ class UploadMaterialSheet extends StatelessWidget {
                     padding: const EdgeInsets.symmetric(vertical: 16),
                     shape: const StadiumBorder(),
                   ),
-                  child: const Text("Upload Material", style: TextStyle(fontWeight: FontWeight.bold)),
+                  child: const Text(
+                    "Upload Material",
+                    style: TextStyle(fontWeight: FontWeight.bold),
+                  ),
                 ),
               ),
             ],
