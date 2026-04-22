@@ -18,4 +18,6 @@ class AddStudentModel {
     required this.department,
     required this.academicYear,
   });
+
+
 }

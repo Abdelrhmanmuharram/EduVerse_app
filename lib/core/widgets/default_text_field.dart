@@ -6,6 +6,7 @@ class DefaultTextField extends StatefulWidget {
   final String hint;
   final Widget? prefixIcon;
   final bool isPassword;
+  final bool readOnly;
   final TextEditingController? controller;
   final TextInputType keyboardType;
   final String? Function(String?)? validator;
@@ -16,6 +17,7 @@ class DefaultTextField extends StatefulWidget {
 
   const DefaultTextField({
     super.key,
+    this.readOnly = false,
     required this.hint,
     required this.prefixIcon,
     this.isPassword = false,
@@ -81,6 +83,7 @@ class _UmsTextFieldState extends State<DefaultTextField> {
       autovalidateMode: .onUserInteraction,
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
       minLines: widget.maxLines,
+      enabled: widget.readOnly ? false : true,
     );
   }
 }

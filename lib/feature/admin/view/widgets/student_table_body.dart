@@ -73,7 +73,6 @@ class StudentTableBody extends StatelessWidget {
             ],
           ),
         ),
-        const Divider(),
         ...List.generate(students.length, (index) {
           final student = students[index];
           return Container(

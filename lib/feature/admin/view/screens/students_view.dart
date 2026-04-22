@@ -36,7 +36,7 @@ class _StudentsViewState extends State<StudentsView> {
     }).toList();
   }
 
-  void onRowTap(Student student) {
+  void onRowTap(AddStudentModel student) {
     Navigator.pushNamed(
       context,
       StudentDetailsView.routeName,
@@ -77,7 +77,12 @@ class _StudentsViewState extends State<StudentsView> {
                       year: student.academicYear,
                     );
                   }).toList(),
-                  onRowTap: onRowTap,
+                  onRowTap: (student) {
+                    final index = filteredStudents.indexWhere(
+                      (s) => s.code == student.code,
+                    );
+                    onRowTap(filteredStudents[index]);
+                  },
                 ),
               ],
             ),
