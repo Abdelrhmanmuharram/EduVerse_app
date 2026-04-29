@@ -7,6 +7,11 @@ import 'package:edusync_app/core/widgets/default_button.dart';
 import 'package:edusync_app/feature/admin/view/screens/panel_view.dart';
 import 'package:edusync_app/feature/admin/view/screens/admin_home_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+
+import '../../admin/view/screens/students_view.dart';
+import '../../instructors/view/screens/instructors_view.dart';
+import '../viewmodel/login_view_model.dart';
 
 class LoginView extends StatefulWidget {
   static const String routeName = '/login';
@@ -27,26 +32,31 @@ class _LoginViewState extends State<LoginView> {
     _passwordController.dispose();
     super.dispose();
   }
-
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
-
     setState(() => _isLoading = true);
-    await Future.delayed(Duration(seconds: 2));
-
-    setState(() => _isLoading = false);
-    if (mounted) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-          content: Text('Login successful!'),
-          backgroundColor: AppTheme.green,
-        ),
+    try {
+      final route = await context.read<LoginViewModel>().testLogin(
+        email: _usernameController.text,
+        password: _passwordController.text,
       );
-      await Future.delayed(Duration(seconds: 2));
-      Navigator.of(context).pushNamed(AdminHomeView.routeName);
+      if (route != null) {
+        Navigator.of(context).pushNamed(route);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text('Login successful!'),
+            backgroundColor: AppTheme.green,
+          ),
+        );
+      }
+    } catch (e) {
+      final message = e.toString();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(message), backgroundColor: Colors.red),
+      );
     }
+    setState(() => _isLoading = false);
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

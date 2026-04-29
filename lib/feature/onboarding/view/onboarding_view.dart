@@ -110,7 +110,7 @@ class _OnboardingViewState extends State<OnboardingView> {
                 );
                 if (currentIndex == 2) {
                   await LocalStorageService.setOnBoardingSeen();
-                  Navigator.pushNamed(context, '/login');
+                  Navigator.pushReplacementNamed(context, '/login');
                 }
               },
               label: currentIndex == 0
@@ -130,7 +130,7 @@ class _OnboardingViewState extends State<OnboardingView> {
             child: DefaultTextButton(
               onPressed: () async {
                 await LocalStorageService.setOnBoardingSeen();
-                Navigator.of(context).pushNamed('/login');
+                Navigator.of(context).pushReplacementNamed('/login');
               },
               text: currentIndex == 0 ? 'Skip' : 'Skip for now',
               color: currentIndex == 0

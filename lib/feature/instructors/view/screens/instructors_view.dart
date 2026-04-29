@@ -7,6 +7,7 @@ import '../widgets/attendance_card_widget.dart';
 import '../widgets/instructor_menu_card.dart';
 
 class InstructorsView extends StatelessWidget {
+  static const String routeName = '/instructors-view';
 
   final viewModel = InstructorsViewModel();
 
