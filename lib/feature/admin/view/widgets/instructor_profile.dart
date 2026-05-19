@@ -3,24 +3,23 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
 import '../../../../core/app_theme.dart';
+import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/default_text_field.dart';
 
 class InstructorProfile extends StatelessWidget {
-  final TextEditingController codeController;
-  final TextEditingController firstNameController;
-  final TextEditingController lastNameController;
-  final TextEditingController usernameController;
+  final TextEditingController emailController;
+  final TextEditingController passwordController;
+  final TextEditingController fullNameController;
   final Function(String?) onRoleChanged;
-  final String? selectedRole;
+  final bool showPassword;
 
   const InstructorProfile({
     super.key,
-    required this.codeController,
-    required this.firstNameController,
-    required this.lastNameController,
-    required this.usernameController,
+    required this.emailController,
+    required this.passwordController,
+    required this.fullNameController,
     required this.onRoleChanged,
-    this.selectedRole,
+    this.showPassword = true,
   });
 
   @override
@@ -60,36 +59,11 @@ class InstructorProfile extends StatelessWidget {
                 ),
               ],
             ),
-            const SizedBox(height: 24),
-            DefaultTextField(
-              hint: 'Instructor Code',
-              prefixIcon: null,
-              controller: codeController,
-            ),
-            const SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: DefaultTextField(
-                    hint: 'First Name',
-                    prefixIcon: null,
-                    controller: firstNameController,
-                  ),
-                ),
-                const SizedBox(width: 16),
-                Expanded(
-                  child: DefaultTextField(
-                    hint: 'Last Name',
-                    prefixIcon: null,
-                    controller: lastNameController,
-                  ),
-                ),
-              ],
-            ),
             const SizedBox(height: 16),
             DefaultTextField(
-              hint: 'Username',
-              controller: usernameController,
+              hint: 'Full Name',
+              controller: fullNameController,
+              validator: (value) => AppValidators.requiredField(value, 'Full Name'),
               prefixIcon: SvgPicture.asset(
                 'assets/icons/@.svg',
                 width: 24,
@@ -97,19 +71,22 @@ class InstructorProfile extends StatelessWidget {
                 fit: BoxFit.scaleDown,
               ),
             ),
-            const SizedBox(height: 16),
-            DefaultDropDownField(
-              items: [
-                "Professor",
-                "Assistant Professor",
-                "Associate Professor",
-                "Teaching Assistant",
-                "Lecturer",
-              ],
-              hint: selectedRole ?? 'Academic Role',
-              icon: 'name',
-              onChanged: onRoleChanged,
+            const SizedBox(height: 24),
+            DefaultTextField(
+              hint: 'Instructor Email',
+              prefixIcon: null,
+              controller: emailController,
+              validator: AppValidators.emailValidator,
             ),
+            const SizedBox(height: 16),
+            if (showPassword)
+              DefaultTextField(
+                hint: 'Password',
+                prefixIcon: null,
+                controller: passwordController,
+                validator: AppValidators.passwordValidator,
+                isPassword: true,
+              ),
             const SizedBox(height: 16),
           ],
         ),

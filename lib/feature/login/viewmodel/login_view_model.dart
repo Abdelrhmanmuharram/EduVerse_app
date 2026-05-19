@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:edusync_app/core/services/local_storage_service.dart';
 import 'package:edusync_app/feature/login/repository/login_repository.dart';
+import 'package:edusync_app/feature/login/viewmodel/roles.dart';
 import 'package:flutter/material.dart';
 
 import '../model/login_model.dart';
@@ -26,11 +27,11 @@ class LoginViewModel extends ChangeNotifier {
         await LocalStorageService.saveRole(result.roles.first);
       }
       final roles = result.roles;
-      if (roles.contains("Admin")) {
+      if (roles.contains(Roles.roleAdmin)) {
         return "/home";
-      } else if (roles.contains("Instructor")) {
+      } else if (roles.contains(Roles.roleInstructor)) {
         return "/instructors-view";
-      } else if (roles.contains("Student")) {
+      } else if (roles.contains(Roles.roleStudent)) {
         return "/student";
       }
       return null;

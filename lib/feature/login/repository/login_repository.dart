@@ -17,7 +17,6 @@ class LoginRepository {
       final data = response.data;
       if (data['success'] == false) {
         String errorMessage = data['message'];
-
         if (data['errors'] != null &&
             data['errors'] is Map<String, dynamic> &&
             data['errors']['message'] != null) {

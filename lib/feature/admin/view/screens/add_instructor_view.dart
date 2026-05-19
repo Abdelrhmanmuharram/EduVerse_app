@@ -17,10 +17,9 @@ class AddInstructorView extends StatefulWidget {
 }
 
 class _AddInstructorViewState extends State<AddInstructorView> {
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController usernameController = TextEditingController();
-  final TextEditingController codeController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
   String? selectedRole;
   List<SubjectModel> subjects = [];
 
@@ -46,11 +45,9 @@ class _AddInstructorViewState extends State<AddInstructorView> {
           child: Column(
             children: [
               InstructorProfile(
-                selectedRole: selectedRole,
-                codeController: codeController,
-                firstNameController: firstNameController,
-                lastNameController: lastNameController,
-                usernameController: usernameController,
+                emailController: emailController,
+                passwordController: passwordController,
+                fullNameController: fullNameController,
                 onRoleChanged: (value) {
                   setState(() {
                     selectedRole = value;
@@ -64,6 +61,7 @@ class _AddInstructorViewState extends State<AddInstructorView> {
                   setState(() {
                     subjects = newList;
                   });
+
                 },
               ),
               const SizedBox(height: 16),
@@ -71,11 +69,9 @@ class _AddInstructorViewState extends State<AddInstructorView> {
                 label: 'Save',
                 onPressed: () {
                   final instructor = InstructorsModel(
-                    id: codeController.text,
-                    firstName: firstNameController.text,
-                    lastName: lastNameController.text,
-                    username: usernameController.text,
-                    academicRole: selectedRole ?? '',
+                    email: emailController.text,
+                    fullName: fullNameController.text,
+                    password: passwordController.text,
                     subjects: subjects,
                   );
                   Navigator.pop(context, instructor);
