@@ -6,7 +6,7 @@ class InstructorViewModel extends ChangeNotifier {
   final InstructorRepository repository;
   InstructorViewModel(this.repository);
   bool isLoading = false;
-  Future<void> addInstructor({
+  Future<bool> addInstructor({
     required String email,
     required String fullName,
     required String password,
@@ -21,9 +21,13 @@ class InstructorViewModel extends ChangeNotifier {
         password: password,
         departmentId: departmentId,
       );
+      return true;
+    } catch (e) {
+      return false;
     } finally {
       isLoading = false;
       notifyListeners();
     }
   }
+
 }

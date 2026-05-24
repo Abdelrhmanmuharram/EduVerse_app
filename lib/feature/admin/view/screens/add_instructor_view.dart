@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/widgets/default_button.dart';
-import '../../model/instructor_model.dart';
 import '../../model/subject_model.dart';
+import '../../viewmodel/instructor_viewmodel.dart';
 import '../widgets/assign_subject.dart';
 import '../widgets/instructor_profile.dart';
 
@@ -20,11 +21,13 @@ class _AddInstructorViewState extends State<AddInstructorView> {
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
   String? selectedRole;
   List<SubjectModel> subjects = [];
 
   @override
   Widget build(BuildContext context) {
+    final viewModel = Provider.of<InstructorViewModel>(context);
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
@@ -41,44 +44,70 @@ class _AddInstructorViewState extends State<AddInstructorView> {
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              InstructorProfile(
-                emailController: emailController,
-                passwordController: passwordController,
-                fullNameController: fullNameController,
-                onRoleChanged: (value) {
-                  setState(() {
-                    selectedRole = value;
-                  });
-                },
-              ),
-              const SizedBox(height: 16),
-              AssignSubject(
-                subjects: subjects,
-                onChanged: (newList) {
-                  setState(() {
-                    subjects = newList;
-                  });
+        child: Form(
+          key: _formKey,
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
 
-                },
-              ),
-              const SizedBox(height: 16),
-              PrimaryButton(
-                label: 'Save',
-                onPressed: () {
-                  final instructor = InstructorsModel(
-                    email: emailController.text,
-                    fullName: fullNameController.text,
-                    password: passwordController.text,
-                    subjects: subjects,
-                  );
-                  Navigator.pop(context, instructor);
-                },
-              ),
-              const SizedBox(height: 16),
-            ],
+                InstructorProfile(
+                  emailController: emailController,
+                  passwordController: passwordController,
+                  fullNameController: fullNameController,
+                  onRoleChanged: (value) {
+                    setState(() {
+                      selectedRole = value;
+                    });
+                  },
+                ),
+                const SizedBox(height: 16),
+                AssignSubject(
+                  subjects: subjects,
+                  onChanged: (newList) {
+                    setState(() {
+                      subjects = newList;
+                    });
+          
+                  },
+                ),
+                const SizedBox(height: 16),
+                PrimaryButton(
+                  label: 'Save',
+                  onPressed: () async {
+                    if (_formKey.currentState!.validate()) {
+                      final success = await viewModel.addInstructor(
+                        email: emailController.text.trim(),
+                        fullName: fullNameController.text.trim(),
+                        password: passwordController.text.trim(),
+                        departmentId: 3364,
+                      );
+                      if (success) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Instructor added successfully',
+                            ),
+                          ),
+                        );
+          
+                        Navigator.pop(context);
+          
+                      } else {
+          
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                              'Failed to add instructor',
+                            ),
+                          ),
+                        );
+                      }
+                    }
+                  },
+                ),
+                const SizedBox(height: 16),
+              ],
+            ),
           ),
         ),
       ),

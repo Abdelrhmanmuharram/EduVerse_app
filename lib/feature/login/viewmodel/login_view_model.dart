@@ -4,10 +4,9 @@ import 'package:edusync_app/feature/login/repository/login_repository.dart';
 import 'package:edusync_app/feature/login/viewmodel/roles.dart';
 import 'package:flutter/material.dart';
 
-import '../model/login_model.dart';
-
 class LoginViewModel extends ChangeNotifier {
   final LoginRepository repo;
+
   LoginViewModel(this.repo);
 
   Future<String?> testLogin({
@@ -15,9 +14,6 @@ class LoginViewModel extends ChangeNotifier {
     required String password,
   }) async {
     try {
-      print("EMAIL: $email");
-      print("PASSWORD: $password");
-
       final result = await repo.login(
         email: email.trim(),
         password: password.trim(),
@@ -35,27 +31,37 @@ class LoginViewModel extends ChangeNotifier {
         return "/student";
       }
       return null;
+    } on DioException catch (e) {
+      String message = 'Something went wrong';
+      if (e.type == DioExceptionType.connectionTimeout ||
+          e.type == DioExceptionType.receiveTimeout ||
+          e.type == DioExceptionType.sendTimeout) {
+        message = 'Connection timeout';
+      } else if (e.type == DioExceptionType.connectionError) {
+        message = 'Check your internet connection';
+      } else if (e.response != null) {
+        final statusCode = e.response?.statusCode;
+        final data = e.response?.data;
+        if (statusCode == 401) {
+          message = 'Invalid email or password';
+        } else if (statusCode == 404) {
+          message = 'User not found';
+        } else if (statusCode == 400) {
+          message = data['message'] ?? 'Invalid input data';
+        } else if (statusCode == 500) {
+          message = 'Server error';
+        }
+      }
+      throw message;
     } catch (e) {
-      print("RAW ERROR: $e");
       String message = e.toString()
-          .replaceAll("Exception:", "")
+          .toLowerCase()
           .replaceAll("exception:", "")
           .trim();
-      final lower = message.toLowerCase();
-      if (lower.contains("emailorpasswordisincorrect")) {
-        message = "Invalid email or password";
-      } else if (lower.contains("usernotfound")) {
-        message = "User not found";
-      } else if (lower.contains("validationfailed")) {
-        message = "Invalid input data";
-      } else if (lower.contains("network")) {
-        message = "Check your internet connection";
-      } else {
-        message = "Something went wrong";
+      if (message.contains("emailorpassworisincorrect")) {
+        throw "Invalid email or password";
       }
-      print("FINAL MESSAGE: $message");
-      throw message;
     }
+    return null;
   }
-
 }

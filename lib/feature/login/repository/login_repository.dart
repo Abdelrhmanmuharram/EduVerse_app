@@ -12,17 +12,12 @@ class LoginRepository {
     try {
       final response = await DioClient.dio.post(
         APIConstants.login,
+
         data: {"email": email, "password": password},
       );
       final data = response.data;
       if (data['success'] == false) {
-        String errorMessage = data['message'];
-        if (data['errors'] != null &&
-            data['errors'] is Map<String, dynamic> &&
-            data['errors']['message'] != null) {
-          errorMessage = data['errors']['message'];
-        }
-        throw Exception(data['errors']?['message'] ?? data['message']);
+        throw data['errors']?['message'] ?? data['message'];
       }
       return LoginModel.fromJson(data);
     } on DioException catch (e) {
@@ -39,6 +34,7 @@ class LoginRepository {
                 break;
               } else if (value is List && value.isNotEmpty) {
                 errorMessage = value.first.toString();
+
                 break;
               }
             }
@@ -49,7 +45,7 @@ class LoginRepository {
       } else {
         errorMessage = "Check your internet connection";
       }
-      throw Exception(errorMessage);
+      throw errorMessage;
     }
   }
 }

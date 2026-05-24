@@ -1,21 +1,16 @@
 import 'package:edusync_app/core/app_theme.dart';
+import 'package:edusync_app/core/utils/validators.dart';
 import 'package:edusync_app/core/widgets/default_field_lable.dart';
 import 'package:edusync_app/core/widgets/default_text_field.dart';
 import 'package:edusync_app/core/widgets/language_selector.dart';
 import 'package:edusync_app/core/widgets/default_logo.dart';
 import 'package:edusync_app/core/widgets/default_button.dart';
-import 'package:edusync_app/feature/admin/view/screens/panel_view.dart';
-import 'package:edusync_app/feature/admin/view/screens/admin_home_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import '../../admin/view/screens/students_view.dart';
-import '../../instructors/view/screens/instructors_view.dart';
 import '../viewmodel/login_view_model.dart';
-
 class LoginView extends StatefulWidget {
   static const String routeName = '/login';
-
+  const LoginView({super.key});
   @override
   State<LoginView> createState() => _LoginViewState();
 }
@@ -41,7 +36,7 @@ class _LoginViewState extends State<LoginView> {
         password: _passwordController.text,
       );
       if (route != null) {
-        Navigator.of(context).pushNamed(route);
+        Navigator.of(context).pushReplacementNamed(route);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Text('Login successful!'),
@@ -50,9 +45,11 @@ class _LoginViewState extends State<LoginView> {
         );
       }
     } catch (e) {
-      final message = e.toString();
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text(message), backgroundColor: Colors.red),
+        SnackBar(
+          content: Text(e as String),
+          backgroundColor: Colors.red,
+        ),
       );
     }
     setState(() => _isLoading = false);
@@ -127,19 +124,14 @@ class _LoginViewState extends State<LoginView> {
                     ),
                   ),
                   const SizedBox(height: 48),
-                  FieldLabel(label: 'Username'),
+                  FieldLabel(label: 'Email Address'),
                   const SizedBox(height: 8),
                   DefaultTextField(
-                    hint: 'Enter your username',
+                    hint: 'Enter your email address',
                     prefixIcon: Icon(Icons.person_outline),
                     controller: _usernameController,
                     keyboardType: TextInputType.text,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your username';
-                      }
-                      return null;
-                    },
+                    validator: AppValidators.emailValidator,
                   ),
                   const SizedBox(height: 20),
                   FieldLabel(label: 'Password'),
@@ -149,15 +141,7 @@ class _LoginViewState extends State<LoginView> {
                     prefixIcon: Icon(Icons.lock_outline),
                     isPassword: true,
                     controller: _passwordController,
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return 'Please enter your password';
-                      }
-                      if (value.length < 6) {
-                        return 'Password must be at least 6 characters';
-                      }
-                      return null;
-                    },
+                    validator: AppValidators.passwordValidator,
                   ),
                   const SizedBox(height: 32),
                   PrimaryButton(
