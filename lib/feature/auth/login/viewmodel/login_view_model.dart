@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:edusync_app/core/services/local_storage_service.dart';
-import 'package:edusync_app/feature/login/repository/login_repository.dart';
-import 'package:edusync_app/feature/login/viewmodel/roles.dart';
+import 'package:edusync_app/feature/auth/login/repository/login_repository.dart';
+import 'package:edusync_app/feature/auth/login/viewmodel/roles.dart';
 import 'package:flutter/material.dart';
 
 class LoginViewModel extends ChangeNotifier {

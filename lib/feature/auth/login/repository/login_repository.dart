@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 
-import '../../../core/constants/api_constants.dart';
-import '../../../core/network/dio_client.dart';
+import '../../../../../core/constants/api_constants.dart';
+import '../../../../../core/network/dio_client.dart';
 import '../model/login_model.dart';
 
 class LoginRepository {
@@ -12,7 +12,6 @@ class LoginRepository {
     try {
       final response = await DioClient.dio.post(
         APIConstants.login,
-
         data: {"email": email, "password": password},
       );
       final data = response.data;

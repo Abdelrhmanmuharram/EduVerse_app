@@ -1,8 +1,8 @@
 import 'package:edusync_app/feature/students/view/student_view.dart';
 import 'package:flutter/material.dart';
+import '../../feature/auth/login/view/login_view.dart';
 import '../../feature/onboarding/view/onboarding_view.dart';
 import '../services/local_storage_service.dart';
-import '../../feature/login/view/login_view.dart';
 import '../../feature/admin/home/view/admin_home_view.dart';
 import '../../feature/instructors/view/screens/instructors_view.dart';
 
