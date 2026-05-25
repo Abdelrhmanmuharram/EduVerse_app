@@ -1,5 +1,5 @@
 import 'package:edusync_app/core/widgets/default_text_field.dart';
-import 'package:edusync_app/feature/admin/semester/widgets/add_semester_button.dart';
+import 'package:edusync_app/feature/admin/semesters/widgets/add_semester_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

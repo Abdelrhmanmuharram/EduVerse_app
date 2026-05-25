@@ -1,5 +1,5 @@
-import 'package:edusync_app/feature/admin/semester/model/semester_model.dart';
-import 'package:edusync_app/feature/admin/semester/widgets/semester_item_action_button.dart';
+import 'package:edusync_app/feature/admin/semesters/model/semester_model.dart';
+import 'package:edusync_app/feature/admin/semesters/widgets/semester_item_action_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/app_theme.dart';

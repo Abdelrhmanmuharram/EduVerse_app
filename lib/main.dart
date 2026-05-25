@@ -3,8 +3,8 @@ import 'package:edusync_app/core/routes/app_routes.dart';
 import 'package:edusync_app/core/view/splash_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'feature/admin/instructor/repository/instructor_repository.dart';
-import 'feature/admin/instructor/viewmodel/instructor_viewmodel.dart';
+import 'feature/admin/instructors/repository/instructor_repository.dart';
+import 'feature/admin/instructors/viewmodel/instructor_viewmodel.dart';
 
 void main() {
   runApp(

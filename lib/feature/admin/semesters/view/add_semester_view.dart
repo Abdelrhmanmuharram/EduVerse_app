@@ -1,6 +1,6 @@
 import 'package:edusync_app/core/utils/validators.dart';
 import 'package:edusync_app/core/widgets/default_text_field.dart';
-import 'package:edusync_app/feature/admin/semester/model/semester_model.dart';
+import 'package:edusync_app/feature/admin/semesters/model/semester_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

@@ -1,4 +1,4 @@
-import 'package:edusync_app/feature/admin/semester/widgets/semester_item.dart';
+import 'package:edusync_app/feature/admin/semesters/widgets/semester_item.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
