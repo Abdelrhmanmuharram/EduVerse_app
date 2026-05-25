@@ -20,7 +20,6 @@ class DioClient {
               if (token != null && !options.path.contains("/Auth/GetToken")) {
                 options.headers['Authorization'] = 'Bearer $token';
               }
-              print("HEADERS: ${options.headers}");
               return handler.next(options);
             },
           ),

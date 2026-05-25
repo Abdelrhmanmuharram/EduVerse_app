@@ -13,7 +13,7 @@ class DefaultTextField extends StatefulWidget {
   final int maxLines;
   final String? prefixSvg;
   final Function(String)? onChanged;
-
+  final TextInputAction? textInputAction;
 
 
   const DefaultTextField({
@@ -28,6 +28,7 @@ class DefaultTextField extends StatefulWidget {
     this.maxLines = 1,
     this.prefixSvg,
     this.onChanged,
+    this.textInputAction,
   });
 
   @override
@@ -40,6 +41,7 @@ class _UmsTextFieldState extends State<DefaultTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      textInputAction: widget.textInputAction,
       onChanged: (value) {
 
         widget.onChanged?.call(value);
@@ -83,7 +85,7 @@ class _UmsTextFieldState extends State<DefaultTextField> {
       validator: widget.validator,
       autovalidateMode: .onUserInteraction,
       onTapOutside: (_) => FocusManager.instance.primaryFocus?.unfocus(),
-      minLines: widget.maxLines,
+      maxLines: widget.maxLines,
       enabled: widget.readOnly ? false : true,
     );
   }

@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import '../../feature/onboarding/view/onboarding_view.dart';
 import '../services/local_storage_service.dart';
 import '../../feature/login/view/login_view.dart';
-import '../../feature/admin/view/screens/admin_home_view.dart';
+import '../../feature/admin/home/view/admin_home_view.dart';
 import '../../feature/instructors/view/screens/instructors_view.dart';
 
 class SplashView extends StatefulWidget {

@@ -4,7 +4,7 @@ import 'package:edusync_app/core/widgets/default_field_lable.dart';
 import 'package:edusync_app/core/widgets/default_text_field.dart';
 import 'package:edusync_app/core/widgets/language_selector.dart';
 import 'package:edusync_app/core/widgets/default_logo.dart';
-import 'package:edusync_app/core/widgets/default_button.dart';
+import 'package:edusync_app/core/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodel/login_view_model.dart';

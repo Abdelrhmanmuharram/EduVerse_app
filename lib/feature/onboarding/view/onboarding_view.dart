@@ -1,6 +1,6 @@
 import 'package:edusync_app/core/app_theme.dart';
 import 'package:edusync_app/core/services/local_storage_service.dart';
-import 'package:edusync_app/core/widgets/default_button.dart';
+import 'package:edusync_app/core/widgets/primary_button.dart';
 import 'package:edusync_app/core/widgets/default_text_button.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
