@@ -7,6 +7,10 @@ import 'package:edusync_app/feature/admin/student/view/students_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../feature/admin/departments/repository/department_repository_impl.dart';
+import '../../feature/admin/departments/view/add_department_view.dart';
+import '../../feature/admin/departments/view/edit_department_view.dart';
+import '../../feature/admin/departments/viewmodel/departement_viewmodel.dart';
 import '../../feature/admin/semesters/view/semesters_view.dart';
 import '../../feature/admin/instructors/view/add_instructor_view.dart';
 import '../../feature/admin/semesters/view/add_semester_view.dart';
@@ -30,9 +34,11 @@ class AppRoutes {
     AdminHomeView.routeName: (_) => AdminHomeView(),
     AddStudentView.routeName: (_) => AddStudentView(),
     StudentDetailsView.routeName: (_) => StudentDetailsView(),
-
     '/students': (_) => StudentsView(),
-    '/departments': (_) => DepartmentsView(),
+    '/departments': (_) => ChangeNotifierProvider(
+      create: (_) => DepartmentViewModel(DepartmentRepositoryImpl()),
+      child: const DepartmentsView(),
+    ),
     '/semesters': (_) => SemestersView(),
     '/instructors': (_) => AdminInstructorsView(),
     '/add-instructor': (_) => AddInstructorView(),
@@ -42,5 +48,7 @@ class AppRoutes {
     '/splash': (_) => SplashView(),
     '/add-semester': (_) => AddSemester(),
     '/edit-semester': (_) => EditSemesterView(),
+    '/add-department': (_) => AddDepartmentView(),
+    '/edit-department': (_) => EditDepartmentView(),
   };
 }

@@ -47,7 +47,7 @@ class _SemestersViewState extends State<SemestersView> {
                         });
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            backgroundColor: Colors.green,
+                            backgroundColor: AppTheme.green,
                             content: Text('Semester added successfully'),
                           ),
                         );
@@ -68,6 +68,14 @@ class _SemestersViewState extends State<SemestersView> {
                             value.toLowerCase(),
                           );
                     }).toList();
+                    if (filteredSemesters.isEmpty) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(
+                          backgroundColor: AppTheme.red,
+                          content: Text('No semesters found'),
+                        ),
+                      );
+                    }
                   });
                 },
                 hint: 'Search Semesters',
