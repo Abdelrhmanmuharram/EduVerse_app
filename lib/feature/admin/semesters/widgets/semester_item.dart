@@ -39,7 +39,7 @@ class SemesterItem extends StatelessWidget {
             onTap: onEdit,
           ),
           SizedBox(width: 8),
-          SemesterItemActionButton(icon: Icons.delete, onTap: onDelete),
+          SemesterItemActionButton(icon: Icons.delete, onTap: onDelete, color: AppTheme.red),
         ],
       ),
     );

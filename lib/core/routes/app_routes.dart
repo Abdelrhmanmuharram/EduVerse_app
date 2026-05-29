@@ -1,3 +1,5 @@
+import 'package:edusync_app/feature/admin/semesters/repository/semester_repository_Impl.dart';
+import 'package:edusync_app/feature/admin/semesters/viewmodel/semester_viewmodel.dart';
 import 'package:edusync_app/feature/admin/student/view/add_student_view.dart';
 import 'package:edusync_app/feature/admin/home/view/admin_home_view.dart';
 import 'package:edusync_app/feature/admin/instructors/view/instructor_details.dart';
@@ -39,7 +41,10 @@ class AppRoutes {
       create: (_) => DepartmentViewModel(DepartmentRepositoryImpl()),
       child: const DepartmentsView(),
     ),
-    '/semesters': (_) => SemestersView(),
+    '/semesters': (_) => ChangeNotifierProvider(
+      create: (context) => SemesterViewModel(SemesterRepositoryImpl()),
+      child: const SemestersView(),
+    ),
     '/instructors': (_) => AdminInstructorsView(),
     '/add-instructor': (_) => AddInstructorView(),
     '/instructor-details': (_) => InstructorDetails(),

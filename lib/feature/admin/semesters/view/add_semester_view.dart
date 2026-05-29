@@ -72,6 +72,7 @@ class _AddSemesterState extends State<AddSemester> {
                   ),
                   SizedBox(width: 12),
                   Expanded(
+                    flex: 2,
                     child: PrimaryButton(
                       label: 'Save',
                       onPressed: () {

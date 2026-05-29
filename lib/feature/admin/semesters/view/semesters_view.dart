@@ -1,10 +1,13 @@
 import 'package:edusync_app/core/widgets/default_text_field.dart';
-import 'package:edusync_app/feature/admin/semesters/widgets/add_semester_button.dart';
+import 'package:edusync_app/core/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/app_theme.dart';
+import '../../../../core/widgets/empty_state_widget.dart';
 import '../model/semester_model.dart';
+import '../viewmodel/semester_viewmodel.dart';
 import '../widgets/semesters_list.dart';
 
 class SemestersView extends StatefulWidget {
@@ -16,13 +19,16 @@ class SemestersView extends StatefulWidget {
 }
 
 class _SemestersViewState extends State<SemestersView> {
-  List<SemesterModel> allSemesters = [];
-  List<SemesterModel> filteredSemesters = [];
-
   @override
   Widget build(BuildContext context) {
+    final viewModel = context.watch<SemesterViewModel>();
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      appBar: AppBar(
+        title: Text('Semesters', style: textTheme.headlineSmall),
+        centerTitle: true,
+        leading: SvgPicture.asset('assets/icons/back.svg'),
+      ),
       body: SafeArea(
         child: Padding(
           padding: const EdgeInsets.all(16),
@@ -30,80 +36,59 @@ class _SemestersViewState extends State<SemestersView> {
             children: [
               Row(
                 children: [
-                  Text('Semesters', style: textTheme.headlineMedium),
-                  Spacer(),
-                  AddSemesters(
-                    onTap: () async {
-                      final result = await Navigator.pushNamed(
-                        context,
-                        '/add-semester',
-                      );
-                      if (!context.mounted) return;
-                      if (result != null) {
-                        SemesterModel semester = result as SemesterModel;
-                        setState(() {
-                          allSemesters.add(semester);
-                          filteredSemesters = List.from(allSemesters);
-                        });
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: AppTheme.green,
-                            content: Text('Semester added successfully'),
-                          ),
+                  Expanded(
+                    flex: 3,
+                    child: DefaultTextField(
+                      onChanged: viewModel.search,
+                      hint: 'Search Semesters',
+                      prefixIcon: SvgPicture.asset(
+                        'assets/icons/search.svg',
+                        width: 24,
+                        height: 24,
+                        fit: BoxFit.scaleDown,
+                      ),
+                    ),
+                  ),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: PrimaryButton(
+                      label: 'Add',
+                      onPressed: () async {
+                        final result = await Navigator.pushNamed(
+                          context,
+                          '/add-semester',
                         );
-                      }
-                    },
+                        if (!context.mounted) return;
+                        if (result != null) {
+                          SemesterModel semester = result as SemesterModel;
+                          viewModel.addSemester(semester);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              backgroundColor: AppTheme.green,
+                              content: Text('Semester added successfully'),
+                            ),
+                          );
+                        }
+                      },
+                      color: AppTheme.primaryLight,
+                    ),
                   ),
                 ],
               ),
               SizedBox(height: 16),
-              DefaultTextField(
-                onChanged: (value) {
-                  setState(() {
-                    filteredSemesters = allSemesters.where((semester) {
-                      return semester.arabicName.toLowerCase().contains(
-                            value.toLowerCase(),
-                          ) ||
-                          semester.englishName.toLowerCase().contains(
-                            value.toLowerCase(),
-                          );
-                    }).toList();
-                    if (filteredSemesters.isEmpty) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          backgroundColor: AppTheme.red,
-                          content: Text('No semesters found'),
-                        ),
-                      );
-                    }
-                  });
-                },
-                hint: 'Search Semesters',
-                prefixIcon: SvgPicture.asset(
-                  'assets/icons/search.svg',
-                  width: 24,
-                  height: 24,
-                  fit: BoxFit.scaleDown,
-                ),
-              ),
-              SizedBox(height: 16),
               Expanded(
-                child: filteredSemesters.isEmpty
-                    ? Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(Icons.menu_book_outlined, size: 80,color: AppTheme.primaryLight,),
-                          SizedBox(height: 16),
-                          Text(
-                            'No Semesters Yet',
-                            style: textTheme.headlineSmall,
-                          ),
-                          SizedBox(height: 8),
-                          Text('Add your first semester'),
-                        ],
+                child: viewModel.isEmpty
+                    ? EmptyStateWidget(
+                        icon: Icons.menu_book_outlined,
+                        title: 'No Semesters Yet',
+                      )
+                    : viewModel.semesters.isEmpty
+                    ? EmptyStateWidget(
+                        icon: Icons.search_off_outlined,
+                        title: 'No Semesters Found',
                       )
                     : SemestersList(
-                        semesters: filteredSemesters,
+                        semesters: viewModel.semesters,
                         onDelete: (semester) {
                           showDialog(
                             context: context,
@@ -128,12 +113,7 @@ class _SemestersViewState extends State<SemestersView> {
                                   ),
                                   TextButton(
                                     onPressed: () {
-                                      setState(() {
-                                        allSemesters.remove(semester);
-                                        filteredSemesters = List.from(
-                                          allSemesters,
-                                        );
-                                      });
+                                      viewModel.deleteSemester(semester);
                                       Navigator.pop(context);
                                       ScaffoldMessenger.of(
                                         context,
@@ -167,14 +147,12 @@ class _SemestersViewState extends State<SemestersView> {
                           if (result != null) {
                             SemesterModel updateSemester =
                                 result as SemesterModel;
-                            setState(() {
-                              allSemesters[index] = updateSemester;
-                              filteredSemesters = List.from(allSemesters);
-                            });
+                            viewModel.editSemester(index, updateSemester);
                           }
                         },
                       ),
               ),
+              SizedBox(height: 16),
             ],
           ),
         ),
