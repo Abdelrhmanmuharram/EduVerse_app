@@ -5,7 +5,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../core/app_theme.dart';
+import '../../../../core/widgets/back_item.dart';
 import '../../../../core/widgets/primary_button.dart';
+import '../../../../core/widgets/title_widget.dart';
 
 class AddSemester extends StatefulWidget {
   static const String routeName = '/add-semester';
@@ -13,6 +15,7 @@ class AddSemester extends StatefulWidget {
   @override
   State<AddSemester> createState() => _AddSemesterState();
 }
+
 class _AddSemesterState extends State<AddSemester> {
   TextEditingController arabicNameController = TextEditingController();
   TextEditingController englishNameController = TextEditingController();
@@ -22,10 +25,11 @@ class _AddSemesterState extends State<AddSemester> {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
-        title: Text('Add Semester', style: textTheme.headlineSmall),
+        title: TitleWidget(title: 'Add Semester'),
         centerTitle: true,
-        leading: SizedBox(),
+        leading: BackItem(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -61,34 +65,20 @@ class _AddSemesterState extends State<AddSemester> {
                 ),
               ),
               Spacer(),
-              Row(
-                children: [
-                  Expanded(
-                    child: PrimaryButton(
-                      label: 'Back',
-                      onPressed: () => Navigator.pop(context),
-                      color: AppTheme.black,
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    flex: 2,
-                    child: PrimaryButton(
-                      label: 'Save',
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          Navigator.pop(
-                            context,
-                            SemesterModel(
-                              arabicName: arabicNameController.text,
-                              englishName: englishNameController.text,
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ],
+              PrimaryButton(
+                label: 'Save',
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    Navigator.pop(
+                      context,
+                      SemesterModel(
+                        id: 0,
+                        arabicName: arabicNameController.text,
+                        englishName: englishNameController.text,
+                      ),
+                    );
+                  }
+                },
               ),
             ],
           ),

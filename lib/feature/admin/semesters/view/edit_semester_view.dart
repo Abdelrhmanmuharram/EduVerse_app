@@ -1,8 +1,10 @@
+import 'package:edusync_app/core/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
 import '../../../../core/app_theme.dart';
 import '../../../../core/utils/validators.dart';
+import '../../../../core/widgets/back_item.dart';
 import '../../../../core/widgets/default_text_field.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../model/semester_model.dart';
@@ -23,15 +25,15 @@ class _EditSemesterViewState extends State<EditSemesterView> {
   @override
   Widget build(BuildContext context) {
     final SemesterModel semester =
-    ModalRoute.of(context)!.settings.arguments as SemesterModel;
+        ModalRoute.of(context)!.settings.arguments as SemesterModel;
     arabicNameController.text = semester.arabicName;
     englishNameController.text = semester.englishName;
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Edit Semester', style: textTheme.headlineSmall),
+        title: TitleWidget(title: 'Edit Semester'),
         centerTitle: true,
-        leading: SizedBox(),
+        leading: BackItem(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -67,33 +69,20 @@ class _EditSemesterViewState extends State<EditSemesterView> {
                 ),
               ),
               Spacer(),
-              Row(
-                children: [
-                  Expanded(
-                    child: PrimaryButton(
-                      label: 'Back',
-                      onPressed: () => Navigator.pop(context),
-                      color: AppTheme.black,
-                    ),
-                  ),
-                  SizedBox(width: 12),
-                  Expanded(
-                    child: PrimaryButton(
-                      label: 'Edit',
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          Navigator.pop(
-                            context,
-                            SemesterModel(
-                              arabicName: arabicNameController.text,
-                              englishName: englishNameController.text,
-                            ),
-                          );
-                        }
-                      },
-                    ),
-                  ),
-                ],
+              PrimaryButton(
+                label: 'Edit',
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    Navigator.pop(
+                      context,
+                      SemesterModel(
+                        id: semester.id,
+                        arabicName: arabicNameController.text,
+                        englishName: englishNameController.text,
+                      ),
+                    );
+                  }
+                },
               ),
             ],
           ),

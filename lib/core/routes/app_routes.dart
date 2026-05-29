@@ -13,6 +13,7 @@ import '../../feature/admin/departments/repository/department_repository_impl.da
 import '../../feature/admin/departments/view/add_department_view.dart';
 import '../../feature/admin/departments/view/edit_department_view.dart';
 import '../../feature/admin/departments/viewmodel/departement_viewmodel.dart';
+import '../../feature/admin/semesters/data/remote/semester_remote_data_source_impl.dart';
 import '../../feature/admin/semesters/view/semesters_view.dart';
 import '../../feature/admin/instructors/view/add_instructor_view.dart';
 import '../../feature/admin/semesters/view/add_semester_view.dart';
@@ -42,7 +43,10 @@ class AppRoutes {
       child: const DepartmentsView(),
     ),
     '/semesters': (_) => ChangeNotifierProvider(
-      create: (context) => SemesterViewModel(SemesterRepositoryImpl()),
+      create: (context) =>
+          SemesterViewModel(SemesterRepositoryImpl(
+            SemesterRemoteDataSourceImpl(),
+          ))..loadSemesters(),
       child: const SemestersView(),
     ),
     '/instructors': (_) => AdminInstructorsView(),

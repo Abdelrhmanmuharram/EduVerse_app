@@ -23,10 +23,14 @@ class _AddDepartmentViewState extends State<AddDepartmentView> {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: Text('Add Department', style: textTheme.headlineSmall),
         centerTitle: true,
-        leading: const SizedBox(),
+        leading: InkWell(
+          onTap: () => Navigator.pop(context),
+          child: SvgPicture.asset('assets/icons/back.svg'),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -60,35 +64,20 @@ class _AddDepartmentViewState extends State<AddDepartmentView> {
                 ),
               ),
               Spacer(),
-              Row(
-                children: [
-                  Expanded(
-                    child: PrimaryButton(
-                      label: 'Back',
-                      onPressed: () => Navigator.pop(context),
-                      color: AppTheme.black,
-                    ),
-                  ),
-                  SizedBox(width: 8),
-                  Expanded(
-                    flex: 2,
-                    child: PrimaryButton(
-                      label: 'Save',
-                      onPressed: () {
-                        if (formKey.currentState!.validate()) {
-                          Navigator.pop(
-                            context,
-                            DepartmentModel(
-                              arabicName: arabicNameController.text,
-                              englishName: englishNameController.text,
-                            ),
-                          );
-                        }
-                      },
-                      color: AppTheme.primaryLight,
-                    ),
-                  ),
-                ],
+              PrimaryButton(
+                label: 'Save',
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    Navigator.pop(
+                      context,
+                      DepartmentModel(
+                        arabicName: arabicNameController.text,
+                        englishName: englishNameController.text,
+                      ),
+                    );
+                  }
+                },
+                color: AppTheme.primaryLight,
               ),
             ],
           ),

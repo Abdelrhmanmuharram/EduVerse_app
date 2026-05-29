@@ -3,4 +3,5 @@ class APIConstants {
 
   static const String login = "/Auth/GetToken";
   static const String addUser = "/Auth/addUser";
+  static const String semesters = "/Semesters";
 }

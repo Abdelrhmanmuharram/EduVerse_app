@@ -1,10 +1,14 @@
 import 'package:edusync_app/core/app_theme.dart';
 import 'package:edusync_app/core/widgets/default_text_field.dart';
+import 'package:edusync_app/core/widgets/empty_state_widget.dart';
 import 'package:edusync_app/core/widgets/primary_button.dart';
+import 'package:edusync_app/core/widgets/title_widget.dart';
 import 'package:edusync_app/feature/admin/departments/viewmodel/departement_viewmodel.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/widgets/back_item.dart';
 import '../model/department_model.dart';
 import '../widgets/list_department_item.dart';
 
@@ -23,37 +27,62 @@ class _DepartmentsViewState extends State<DepartmentsView> {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Departments', style: textTheme.headlineSmall),
+        title: TitleWidget(title: 'Departments'),
         centerTitle: true,
-        leading: SizedBox(),
+        leading: BackItem(),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
           children: [
-            DefaultTextField(
-              hint: 'Search',
-              prefixIcon: Icon(Icons.search, color: AppTheme.hintText),
-              onChanged: viewModel.search,
+            Row(
+              children: [
+                Expanded(
+                  flex: 3,
+                  child: DefaultTextField(
+                    hint: 'Search',
+                    prefixIcon: Icon(Icons.search, color: AppTheme.hintText),
+                    onChanged: viewModel.search,
+                  ),
+                ),
+                SizedBox(width: 8),
+                Expanded(
+                  child: PrimaryButton(
+                    label: 'Add',
+                    onPressed: () async {
+                      final result = await Navigator.pushNamed(
+                        context,
+                        '/add-department',
+                      );
+                      if (!context.mounted) return;
+                      if (result != null) {
+                        DepartmentModel department = result as DepartmentModel;
+                        viewModel.addDepartment(department);
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            backgroundColor: AppTheme.green,
+                            content: Text('Department added successfully'),
+                          ),
+                        );
+                      }
+                    },
+                    color: AppTheme.primaryLight,
+                  ),
+                ),
+              ],
             ),
             SizedBox(height: 16),
             Expanded(
               child: viewModel.isEmpty
-                  ? Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.local_fire_department,
-                          size: 80,
-                          color: AppTheme.primaryLight,
-                        ),
-                        SizedBox(height: 16),
-                        Text(
-                          viewModel.isEmpty
-                              ? 'No Departments Yet'
-                              : 'No Departments Found',
-                        )
-                      ],
+                  ? EmptyStateWidget(
+                      icon: Icons.menu_book_outlined,
+                      title: 'No Semesters Yet',
+                      color: AppTheme.primaryLight,
+                    )
+                  : viewModel.departments.isEmpty
+                  ? EmptyStateWidget(
+                      icon: Icons.search_off_outlined,
+                      title: 'No Semesters Found',
                     )
                   : ListDepartmentItem(
                       departments: viewModel.departments,
@@ -88,7 +117,7 @@ class _DepartmentsViewState extends State<DepartmentsView> {
                           ),
                         );
                         if (confirmDelete == true) {
-                            viewModel.deleteDepartment(department);
+                          viewModel.deleteDepartment(department);
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: AppTheme.red,
@@ -106,48 +135,12 @@ class _DepartmentsViewState extends State<DepartmentsView> {
                         if (result != null) {
                           DepartmentModel updateDepartment =
                               result as DepartmentModel;
-                            viewModel.editDepartment(index, updateDepartment);
+                          viewModel.editDepartment(index, updateDepartment);
                         }
                       },
                     ),
             ),
             SizedBox(height: 16),
-            Row(
-              children: [
-                Expanded(
-                  child: PrimaryButton(
-                    label: 'Back',
-                    onPressed: () => Navigator.pop(context),
-                    color: AppTheme.black,
-                  ),
-                ),
-                SizedBox(width: 8),
-                Expanded(
-                  flex: 2,
-                  child: PrimaryButton(
-                    label: 'Add Department',
-                    onPressed: () async {
-                      final result = await Navigator.pushNamed(
-                        context,
-                        '/add-department',
-                      );
-                      if (!context.mounted) return;
-                      if (result != null) {
-                        DepartmentModel department = result as DepartmentModel;
-                          viewModel.addDepartment(department);
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(
-                            backgroundColor: AppTheme.green,
-                            content: Text('Department added successfully'),
-                          ),
-                        );
-                      }
-                    },
-                    color: AppTheme.primaryLight,
-                  ),
-                ),
-              ],
-            ),
           ],
         ),
       ),

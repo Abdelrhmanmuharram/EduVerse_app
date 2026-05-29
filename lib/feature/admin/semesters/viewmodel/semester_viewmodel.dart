@@ -6,9 +6,12 @@ import '../repository/semester_repository.dart';
 class SemesterViewModel extends ChangeNotifier {
   final SemesterRepository _repository;
   SemesterViewModel(this._repository);
+  List<SemesterModel> _semesters = [];
+  bool _isLoading = false;
+  bool get isLoading => _isLoading;
   String _searchQuery = '';
   List<SemesterModel> get semesters {
-    final semesters = _repository.getSemesters();
+    final semesters = _semesters;
     if (_searchQuery.isEmpty) {
       return semesters;
     }
@@ -22,9 +25,19 @@ class SemesterViewModel extends ChangeNotifier {
     }).toList();
   }
 
-  bool get isEmpty => _repository.getSemesters().isEmpty;
-  void addSemester(SemesterModel semester) {
-    _repository.addSemester(semester);
+  Future<void> loadSemesters() async {
+    _isLoading = true;
+    notifyListeners();
+    _semesters = await _repository.getSemesters();
+    _isLoading = false;
+    notifyListeners();
+  }
+
+  bool get isEmpty => _semesters.isEmpty;
+
+  Future<void> addSemester(SemesterModel semester) async{
+    await _repository.addSemester(semester);
+    await loadSemesters();
     notifyListeners();
   }
 

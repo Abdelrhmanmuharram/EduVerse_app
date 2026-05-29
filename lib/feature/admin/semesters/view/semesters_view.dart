@@ -1,11 +1,14 @@
+import 'package:edusync_app/core/widgets/back_item.dart';
 import 'package:edusync_app/core/widgets/default_text_field.dart';
 import 'package:edusync_app/core/widgets/primary_button.dart';
+import 'package:edusync_app/core/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/app_theme.dart';
 import '../../../../core/widgets/empty_state_widget.dart';
+import '../../../../core/widgets/loading_widget.dart';
 import '../model/semester_model.dart';
 import '../viewmodel/semester_viewmodel.dart';
 import '../widgets/semesters_list.dart';
@@ -25,9 +28,9 @@ class _SemestersViewState extends State<SemestersView> {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text('Semesters', style: textTheme.headlineSmall),
+        title: TitleWidget(title: 'Semesters'),
         centerTitle: true,
-        leading: SvgPicture.asset('assets/icons/back.svg'),
+        leading: BackItem(),
       ),
       body: SafeArea(
         child: Padding(
@@ -61,7 +64,8 @@ class _SemestersViewState extends State<SemestersView> {
                         if (!context.mounted) return;
                         if (result != null) {
                           SemesterModel semester = result as SemesterModel;
-                          viewModel.addSemester(semester);
+                          await viewModel.addSemester(semester);
+                          if (!context.mounted) return;
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               backgroundColor: AppTheme.green,
@@ -77,7 +81,9 @@ class _SemestersViewState extends State<SemestersView> {
               ),
               SizedBox(height: 16),
               Expanded(
-                child: viewModel.isEmpty
+                child: viewModel.isLoading
+                    ? Center(child: LoadingWidget())
+                    : viewModel.isEmpty
                     ? EmptyStateWidget(
                         icon: Icons.menu_book_outlined,
                         title: 'No Semesters Yet',
@@ -87,69 +93,74 @@ class _SemestersViewState extends State<SemestersView> {
                         icon: Icons.search_off_outlined,
                         title: 'No Semesters Found',
                       )
-                    : SemestersList(
-                        semesters: viewModel.semesters,
-                        onDelete: (semester) {
-                          showDialog(
-                            context: context,
-                            builder: (context) {
-                              return AlertDialog(
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(16),
-                                ),
-                                title: Text('Delete Semester'),
-                                content: Text(
-                                  'Are you sure you want to delete this semester?',
-                                ),
-                                actions: [
-                                  TextButton(
-                                    onPressed: () => Navigator.pop(context),
-                                    child: Text(
-                                      'Cancel',
-                                      style: textTheme.titleMedium!.copyWith(
-                                        color: AppTheme.primaryLight,
-                                      ),
-                                    ),
+                    : RefreshIndicator(
+                        color: AppTheme.primaryLight,
+                        strokeWidth: 3,
+                        onRefresh: viewModel.loadSemesters,
+                        child: SemestersList(
+                          semesters: viewModel.semesters,
+                          onDelete: (semester) {
+                            showDialog(
+                              context: context,
+                              builder: (context) {
+                                return AlertDialog(
+                                  shape: RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(16),
                                   ),
-                                  TextButton(
-                                    onPressed: () {
-                                      viewModel.deleteSemester(semester);
-                                      Navigator.pop(context);
-                                      ScaffoldMessenger.of(
-                                        context,
-                                      ).showSnackBar(
-                                        SnackBar(
-                                          backgroundColor: Colors.red,
-                                          content: Text(
-                                            'Semester deleted successfully',
-                                          ),
+                                  title: Text('Delete Semester'),
+                                  content: Text(
+                                    'Are you sure you want to delete this semester?',
+                                  ),
+                                  actions: [
+                                    TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: Text(
+                                        'Cancel',
+                                        style: textTheme.titleMedium!.copyWith(
+                                          color: AppTheme.primaryLight,
                                         ),
-                                      );
-                                    },
-                                    child: Text(
-                                      'Delete',
-                                      style: textTheme.titleMedium!.copyWith(
-                                        color: AppTheme.red,
                                       ),
                                     ),
-                                  ),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                        onEdit: (semester, index) async {
-                          final result = await Navigator.pushNamed(
-                            context,
-                            '/edit-semester',
-                            arguments: semester,
-                          );
-                          if (result != null) {
-                            SemesterModel updateSemester =
-                                result as SemesterModel;
-                            viewModel.editSemester(index, updateSemester);
-                          }
-                        },
+                                    TextButton(
+                                      onPressed: () {
+                                        viewModel.deleteSemester(semester);
+                                        Navigator.pop(context);
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
+                                          SnackBar(
+                                            backgroundColor: Colors.red,
+                                            content: Text(
+                                              'Semester deleted successfully',
+                                            ),
+                                          ),
+                                        );
+                                      },
+                                      child: Text(
+                                        'Delete',
+                                        style: textTheme.titleMedium!.copyWith(
+                                          color: AppTheme.red,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                );
+                              },
+                            );
+                          },
+                          onEdit: (semester, index) async {
+                            final result = await Navigator.pushNamed(
+                              context,
+                              '/edit-semester',
+                              arguments: semester,
+                            );
+                            if (result != null) {
+                              SemesterModel updateSemester =
+                                  result as SemesterModel;
+                              viewModel.editSemester(index, updateSemester);
+                            }
+                          },
+                        ),
                       ),
               ),
               SizedBox(height: 16),
