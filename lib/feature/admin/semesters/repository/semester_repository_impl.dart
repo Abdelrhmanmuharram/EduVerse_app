@@ -23,7 +23,7 @@ class SemesterRepositoryImpl implements SemesterRepository {
   }
 
   @override
-  void deleteSemester(SemesterModel semester) {
-    throw UnimplementedError();
+  Future<void> deleteSemester(int id) {
+    return _remoteDataSource.deleteSemester(id);
   }
 }

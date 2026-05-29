@@ -8,6 +8,7 @@ class SemesterViewModel extends ChangeNotifier {
   SemesterViewModel(this._repository);
   List<SemesterModel> _semesters = [];
   bool _isLoading = false;
+  bool _isDeleting = false;
   bool get isLoading => _isLoading;
   String _searchQuery = '';
   List<SemesterModel> get semesters {
@@ -35,7 +36,7 @@ class SemesterViewModel extends ChangeNotifier {
 
   bool get isEmpty => _semesters.isEmpty;
 
-  Future<void> addSemester(SemesterModel semester) async{
+  Future<void> addSemester(SemesterModel semester) async {
     await _repository.addSemester(semester);
     await loadSemesters();
     notifyListeners();
@@ -46,8 +47,12 @@ class SemesterViewModel extends ChangeNotifier {
     notifyListeners();
   }
 
-  void deleteSemester(SemesterModel semester) {
-    _repository.deleteSemester(semester);
+  Future<void> deleteSemester(SemesterModel semester) async {
+    _isDeleting = true;
+    notifyListeners();
+    await _repository.deleteSemester(semester.id);
+    await loadSemesters();
+    _isDeleting = false;
     notifyListeners();
   }
 

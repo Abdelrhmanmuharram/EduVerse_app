@@ -122,8 +122,8 @@ class _SemestersViewState extends State<SemestersView> {
                                       ),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        viewModel.deleteSemester(semester);
+                                      onPressed: () async {
+                                       await viewModel.deleteSemester(semester);
                                         Navigator.pop(context);
                                         ScaffoldMessenger.of(
                                           context,

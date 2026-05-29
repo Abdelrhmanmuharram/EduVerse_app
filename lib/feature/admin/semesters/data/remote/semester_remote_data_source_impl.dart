@@ -18,4 +18,8 @@ class SemesterRemoteDataSourceImpl implements SemesterRemoteDataSource {
   Future<void> addSemester(SemesterModel semester) async {
     await DioClient.dio.post(APIConstants.semesters, data: semester.toJson());
   }
+  @override
+  Future<void> deleteSemester(int id) async {
+    await DioClient.dio.delete('${APIConstants.semesters}/$id');
+  }
 }
