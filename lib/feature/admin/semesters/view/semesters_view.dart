@@ -95,6 +95,7 @@ class _SemestersViewState extends State<SemestersView> {
                       )
                     : RefreshIndicator(
                         color: AppTheme.primaryLight,
+                        backgroundColor: AppTheme.white,
                         strokeWidth: 3,
                         onRefresh: viewModel.loadSemesters,
                         child: SemestersList(
@@ -123,18 +124,34 @@ class _SemestersViewState extends State<SemestersView> {
                                     ),
                                     TextButton(
                                       onPressed: () async {
-                                       await viewModel.deleteSemester(semester);
-                                        Navigator.pop(context);
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            backgroundColor: Colors.red,
-                                            content: Text(
-                                              'Semester deleted successfully',
+                                        try {
+                                          await viewModel.deleteSemester(
+                                            semester,
+                                          );
+                                          if (!context.mounted) return;
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              backgroundColor: Colors.red,
+                                              content: Text(
+                                                'Semester deleted successfully',
+                                              ),
                                             ),
-                                          ),
-                                        );
+                                          );
+                                        } catch (e) {
+                                          if (!context.mounted) return;
+                                          Navigator.pop(context);
+                                          ScaffoldMessenger.of(
+                                            context,
+                                          ).showSnackBar(
+                                            SnackBar(
+                                              backgroundColor: Colors.red,
+                                              content: Text(e.toString()),
+                                            ),
+                                          );
+                                        }
                                       },
                                       child: Text(
                                         'Delete',
@@ -155,9 +172,9 @@ class _SemestersViewState extends State<SemestersView> {
                               arguments: semester,
                             );
                             if (result != null) {
-                              SemesterModel updateSemester =
+                              SemesterModel updatedSemester =
                                   result as SemesterModel;
-                              viewModel.editSemester(index, updateSemester);
+                              await viewModel.updateSemester(updatedSemester);
                             }
                           },
                         ),

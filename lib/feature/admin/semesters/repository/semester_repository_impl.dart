@@ -18,8 +18,8 @@ class SemesterRepositoryImpl implements SemesterRepository {
   }
 
   @override
-  void editSemester(int index, SemesterModel semester) {
-    throw UnimplementedError();
+  Future<void> updateSemester(SemesterModel semester) {
+    return _remoteDataSource.updateSemester(semester);
   }
 
   @override

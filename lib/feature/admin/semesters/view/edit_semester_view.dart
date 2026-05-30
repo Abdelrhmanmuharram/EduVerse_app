@@ -1,8 +1,6 @@
 import 'package:edusync_app/core/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../../../core/app_theme.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/back_item.dart';
 import '../../../../core/widgets/default_text_field.dart';
@@ -22,14 +20,25 @@ class _EditSemesterViewState extends State<EditSemesterView> {
   TextEditingController englishNameController = TextEditingController();
   GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
+  late SemesterModel semester;
+  bool _isInitialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isInitialized) {
+      semester = ModalRoute.of(context)!.settings.arguments as SemesterModel;
+      arabicNameController.text = semester.arabicName;
+      englishNameController.text = semester.englishName;
+      _isInitialized = true;
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    final SemesterModel semester =
-        ModalRoute.of(context)!.settings.arguments as SemesterModel;
-    arabicNameController.text = semester.arabicName;
-    englishNameController.text = semester.englishName;
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
+      resizeToAvoidBottomInset: false,
       appBar: AppBar(
         title: TitleWidget(title: 'Edit Semester'),
         centerTitle: true,
@@ -73,6 +82,13 @@ class _EditSemesterViewState extends State<EditSemesterView> {
                 label: 'Edit',
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
+                    if (arabicNameController.text.trim() ==
+                            semester.arabicName &&
+                        englishNameController.text.trim() ==
+                            semester.englishName) {
+                      Navigator.pop(context);
+                      return;
+                    }
                     Navigator.pop(
                       context,
                       SemesterModel(

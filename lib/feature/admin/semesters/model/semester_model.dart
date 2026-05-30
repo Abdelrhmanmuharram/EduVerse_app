@@ -16,6 +16,6 @@ class SemesterModel {
     );
   }
   Map<String, dynamic> toJson() {
-    return {'arbName': arabicName, 'engName': englishName};
+    return {'id': id, 'arbName': arabicName, 'engName': englishName};
   }
 }
