@@ -3,8 +3,6 @@ import 'package:edusync_app/core/widgets/default_text_field.dart';
 import 'package:edusync_app/feature/admin/semesters/model/semester_model.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
-import '../../../../core/app_theme.dart';
 import '../../../../core/widgets/back_item.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../core/widgets/title_widget.dart';
@@ -23,7 +21,6 @@ class _AddSemesterState extends State<AddSemester> {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(

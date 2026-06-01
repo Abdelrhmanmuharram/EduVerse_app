@@ -1,7 +1,5 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../../core/app_theme.dart';
 import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/default_text_field.dart';

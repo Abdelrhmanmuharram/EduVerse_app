@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class FieldLabel extends StatelessWidget {
   final String label;
 
-  const FieldLabel({required this.label});
+  const FieldLabel({super.key, required this.label});
 
   @override
   Widget build(BuildContext context) {

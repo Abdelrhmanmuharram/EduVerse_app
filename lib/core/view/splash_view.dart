@@ -1,3 +1,4 @@
+import 'package:edusync_app/core/widgets/loading_widget.dart';
 import 'package:edusync_app/feature/students/view/student_view.dart';
 import 'package:flutter/material.dart';
 import '../../feature/auth/login/view/login_view.dart';
@@ -8,6 +9,8 @@ import '../../feature/instructors/view/screens/instructors_view.dart';
 
 class SplashView extends StatefulWidget {
   static const routeName = "/splash";
+
+  const SplashView({super.key});
 
   @override
   State<SplashView> createState() => _SplashViewState();
@@ -45,7 +48,7 @@ class _SplashViewState extends State<SplashView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(child: CircularProgressIndicator()),
+      body: Center(child: LoadingWidget()),
     );
   }
 }

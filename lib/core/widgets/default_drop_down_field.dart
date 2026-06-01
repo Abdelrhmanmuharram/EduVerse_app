@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -12,7 +11,7 @@ class DefaultDropDownField extends StatelessWidget {
 
   final void Function(String?)? onChanged;
 
-  DefaultDropDownField({
+  const DefaultDropDownField({
     super.key,
     required this.items,
     required this.hint,

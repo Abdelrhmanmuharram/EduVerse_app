@@ -1,11 +1,16 @@
 import 'package:flutter/material.dart';
 
 class DefaultTextButton extends StatelessWidget {
-  String text;
-  VoidCallback onPressed;
-  Color? color;
+  final String text;
+  final VoidCallback onPressed;
+  final Color? color;
 
-  DefaultTextButton({required this.onPressed, required this.text, this.color});
+  const DefaultTextButton({
+    super.key,
+    required this.onPressed,
+    required this.text,
+    this.color,
+  });
 
   @override
   Widget build(BuildContext context) {

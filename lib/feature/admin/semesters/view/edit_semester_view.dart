@@ -36,7 +36,6 @@ class _EditSemesterViewState extends State<EditSemesterView> {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       resizeToAvoidBottomInset: false,
       appBar: AppBar(

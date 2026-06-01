@@ -77,7 +77,9 @@ class _UmsTextFieldState extends State<DefaultTextField> {
               )
             : null,
         filled: true,
-        fillColor: AppTheme.white,
+        fillColor: widget.readOnly
+            ? AppTheme.black.withValues(alpha: 0.08)
+            : AppTheme.white,
       ),
       controller: widget.controller,
       obscureText: widget.isPassword ? _obscureText : false,

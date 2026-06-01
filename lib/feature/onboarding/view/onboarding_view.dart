@@ -8,6 +8,8 @@ import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 class OnboardingView extends StatefulWidget {
   static const String routeName = '/onboarding';
 
+  const OnboardingView({super.key});
+
   @override
   State<OnboardingView> createState() => _OnboardingViewState();
 }

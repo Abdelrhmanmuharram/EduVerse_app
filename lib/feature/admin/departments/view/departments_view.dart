@@ -6,11 +6,7 @@ import 'package:edusync_app/core/widgets/primary_button.dart';
 import 'package:edusync_app/core/widgets/title_widget.dart';
 import 'package:edusync_app/feature/admin/departments/viewmodel/departement_viewmodel.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
-import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
-
-import '../../../../core/network/dio_client.dart';
 import '../../../../core/widgets/back_item.dart';
 import '../model/department_model.dart';
 import '../widgets/list_department_item.dart';

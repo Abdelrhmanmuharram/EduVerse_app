@@ -1,11 +1,14 @@
 import 'package:dio/dio.dart';
 import 'package:edusync_app/core/services/local_storage_service.dart';
-import 'package:edusync_app/feature/auth/login/repository/login_repository.dart';
 import 'package:edusync_app/feature/auth/login/viewmodel/roles.dart';
 import 'package:flutter/material.dart';
 
+import '../../../../core/services/navigation_service.dart';
+import '../repository/auth_repository.dart';
+import '../view/login_view.dart';
+
 class LoginViewModel extends ChangeNotifier {
-  final LoginRepository repo;
+  final AuthRepository repo;
 
   LoginViewModel(this.repo);
 
@@ -22,8 +25,11 @@ class LoginViewModel extends ChangeNotifier {
         await LocalStorageService.saveToken(result.accessToken!);
         await LocalStorageService.saveRefreshToken(result.refreshToken!);
         await LocalStorageService.saveTokenExpiry(result.expiresIn!);
-        await LocalStorageService.saveRefreshTokenExpiry(result.refreshTokenExpiration!);
+        await LocalStorageService.saveRefreshTokenExpiry(
+          result.refreshTokenExpiration!,
+        );
         await LocalStorageService.saveRole(result.roles.first);
+        await LocalStorageService.saveUser(result.user);
       }
       final roles = result.roles;
       if (roles.contains(Roles.roleAdmin)) {
@@ -67,5 +73,19 @@ class LoginViewModel extends ChangeNotifier {
       }
     }
     return null;
+  }
+
+  Future<void> logout() async {
+    debugPrint('[AUTH] START LOGOUT');
+    final user = await LocalStorageService.getUser();
+    debugPrint(user?.id);
+    if (user == null) return;
+    await repo.logout(user.id);
+    debugPrint('[AUTH] API SUCCESS');
+    debugPrint('[PROFILE] USER LOADED');
+    debugPrint('[DEPARTMENT] DATA LOADED');
+    await LocalStorageService.clearUserData();
+    debugPrint('LOCAL STORAGE CLEARED');
+    NavigationService.pushNamedAndRemoveUntil(LoginView.routeName);
   }
 }

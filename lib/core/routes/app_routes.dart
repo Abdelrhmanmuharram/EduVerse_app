@@ -21,7 +21,8 @@ import '../../feature/admin/semesters/view/add_semester_view.dart';
 import '../../feature/admin/instructors/view/admin_instructors_view.dart';
 import '../../feature/admin/semesters/view/edit_semester_view.dart';
 import '../../feature/admin/student/view/student_details_view.dart';
-import '../../feature/auth/login/repository/login_repository.dart';
+import '../../feature/auth/login/data/remote/auth_remote_data_source_impl.dart';
+import '../../feature/auth/login/repository/auth_repository.dart';
 import '../../feature/auth/login/view/login_view.dart';
 import '../../feature/instructors/view/screens/instructors_view.dart';
 import '../../feature/auth/login/viewmodel/login_view_model.dart';
@@ -32,7 +33,7 @@ class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     OnboardingView.routeName: (_) => OnboardingView(),
     LoginView.routeName: (_) => ChangeNotifierProvider(
-      create: (_) => LoginViewModel(LoginRepository()),
+      create: (_) => LoginViewModel(AuthRepository( AuthRemoteDataSourceImpl())),
       child: LoginView(),
     ),
     AdminHomeView.routeName: (_) => AdminHomeView(),

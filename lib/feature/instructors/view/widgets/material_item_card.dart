@@ -4,7 +4,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 class MaterialItemCard extends StatelessWidget {
   final dynamic material;
 
-  const MaterialItemCard({required this.material});
+  const MaterialItemCard({super.key, required this.material});
 
   @override
   Widget build(BuildContext context) {

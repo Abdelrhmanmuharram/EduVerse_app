@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:edusync_app/core/network/dio_error_handler.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../../../../core/constants/api_constants.dart';
 import '../../../../../core/network/dio_client.dart';
@@ -17,16 +18,16 @@ class DepartmentRemoteDataSourceImpl implements DepartmentRemoteDataSource {
           'take': 2147483647,
         },
       );
-      print('STATUS CODE = ${response.statusCode}');
-      print('RESPONSE DATA = ${response.data}');
+      debugPrint('STATUS CODE = ${response.statusCode}');
+      debugPrint('RESPONSE DATA = ${response.data}');
       final List data = response.data['data'];
       return data.map((item) =>
           DepartmentModel.fromJson(item)
       ).toList();
 
     } catch (e) {
-      print('GET DEPARTMENTS ERROR');
-      print(e);
+      debugPrint('GET DEPARTMENTS ERROR');
+      debugPrint(e as String?);
       rethrow;
     }
   }

@@ -1,4 +1,8 @@
+import 'dart:convert';
+
 import 'package:shared_preferences/shared_preferences.dart';
+
+import '../model/user_model.dart';
 
 class LocalStorageService {
   static const String onboardingKey = 'on_boarding_seen';
@@ -22,11 +26,6 @@ class LocalStorageService {
   static Future<void> saveToken(String token) async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.setString("token", token);
-  }
-
-  static Future<void> clearToken() async {
-    final prefs = await SharedPreferences.getInstance();
-    await prefs.remove("token");
   }
 
   // ─── Access Token Expiry ─────────────────────────────────────────────────────
@@ -78,11 +77,26 @@ class LocalStorageService {
   }
 
   // ─── Clear all auth data on logout ───────────────────────────────────────────
-  static Future<void> clearTokens() async {
+  static Future<void> clearUserData() async {
     final prefs = await SharedPreferences.getInstance();
     await prefs.remove("token");
-    await prefs.remove("tokenExpiry");
     await prefs.remove("refreshToken");
+    await prefs.remove("role");
+    await prefs.remove("user");
+    await prefs.remove("tokenExpiry");
     await prefs.remove("refreshTokenExpiry");
+  }
+
+  static Future<void> saveUser(UserModel user) async {
+    final prefs = await SharedPreferences.getInstance();
+
+    await prefs.setString('user', jsonEncode(user.toJson()));
+  }
+
+  static Future<UserModel?> getUser() async {
+    final prefs = await SharedPreferences.getInstance();
+    final userJson = prefs.getString('user');
+    if (userJson == null) return null;
+    return UserModel.fromJson(jsonDecode(userJson));
   }
 }

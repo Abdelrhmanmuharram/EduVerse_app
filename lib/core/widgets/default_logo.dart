@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class DefaultLogo extends StatelessWidget {
   final double size;
 
-  DefaultLogo({super.key, this.size = 72});
+  const DefaultLogo({super.key, this.size = 72});
 
   @override
   Widget build(BuildContext context) {

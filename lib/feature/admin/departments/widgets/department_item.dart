@@ -16,7 +16,6 @@ class DepartmentItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    TextTheme textTheme = Theme.of(context).textTheme;
     return Container(
       width: double.infinity,
       height: 80,

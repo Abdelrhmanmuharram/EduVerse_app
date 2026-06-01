@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:edusync_app/core/app_theme.dart';
 
 class InstructorHeaderWidget extends StatelessWidget {
+  const InstructorHeaderWidget({super.key});
+
 
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,6 @@ import 'package:cookie_jar/cookie_jar.dart';
 import 'package:dio/dio.dart';
 import 'package:dio_cookie_manager/dio_cookie_manager.dart';
 import 'package:flutter/cupertino.dart';
-
 import '../constants/api_constants.dart';
 import '../services/local_storage_service.dart';
 import '../services/navigation_service.dart';
@@ -50,8 +49,8 @@ class DioClient {
 
               if (refreshExpiry != null && now.isAfter(refreshExpiry)) {
                 // Both tokens are dead — force logout immediately, no point sending
-                print('Refresh token expired — forcing logout.');
-                await LocalStorageService.clearTokens();
+                debugPrint('Refresh token expired — forcing logout.');
+                await LocalStorageService.clearUserData();
                 // TODO: navigate to login, e.g. NavigationService.navigateTo('/login');
                 NavigationService.pushReplacementNamed('/login');
                 return handler.reject(
@@ -70,7 +69,7 @@ class DioClient {
                   now.isAfter(tokenExpiry.subtract(_expiryBuffer));
 
               if (accessTokenExpired) {
-                print(
+                debugPrint(
                   'Access token expired or expiring soon — refreshing proactively...',
                 );
                 final newToken = await _refreshAccessToken();
@@ -79,7 +78,7 @@ class DioClient {
                   return handler.next(options);
                 } else {
                   // Refresh failed — stop the request
-                  await LocalStorageService.clearTokens();
+                  await LocalStorageService.clearUserData();
                   // TODO: navigate to login
                   NavigationService.pushReplacementNamed('/login');
                   return handler.reject(
@@ -104,21 +103,21 @@ class DioClient {
               // Safety net: handles 401s from clock skew or server-side revocation
               // that slipped past the proactive check above.
               if (error.response?.statusCode == 401) {
-                print('401 received — attempting emergency token refresh...');
+                debugPrint('401 received — attempting emergency token refresh...');
                 final newToken = await _refreshAccessToken();
                 if (newToken != null) {
-                  print('Token refreshed — retrying original request...');
+                  debugPrint('Token refreshed — retrying original request...');
                   final opts = error.requestOptions;
                   opts.headers['Authorization'] = 'Bearer $newToken';
                   try {
                     final retryResponse = await dio.fetch(opts);
                     return handler.resolve(retryResponse);
                   } catch (retryError) {
-                    print('Retry after refresh failed: $retryError');
+                    debugPrint('Retry after refresh failed: $retryError');
                   }
                 }
-                print('Emergency refresh failed — clearing tokens.');
-                await LocalStorageService.clearTokens();
+                debugPrint('Emergency refresh failed — clearing tokens.');
+                await LocalStorageService.clearUserData();
                 // TODO: navigate to login
                 NavigationService.pushReplacementNamed('/login');
               }
@@ -132,7 +131,7 @@ class DioClient {
     try {
       final refreshToken = await LocalStorageService.getRefreshToken();
       if (refreshToken == null) {
-        print('No refresh token found in storage.');
+        debugPrint('No refresh token found in storage.');
         return null;
       }
 
@@ -152,14 +151,14 @@ class DioClient {
         await LocalStorageService.saveRefreshToken(newRefreshToken);
         await LocalStorageService.saveRefreshTokenExpiry(newRefreshExpiry);
 
-        print('All tokens and expiry dates updated successfully.');
+        debugPrint('All tokens and expiry dates updated successfully.');
         return newAccessToken;
       } else {
-        print('Refresh endpoint returned failure: ${response.data}');
+        debugPrint('Refresh endpoint returned failure: ${response.data}');
         return null;
       }
     } catch (e) {
-      print('Exception during token refresh: $e');
+      debugPrint('Exception during token refresh: $e');
       return null;
     }
   }
