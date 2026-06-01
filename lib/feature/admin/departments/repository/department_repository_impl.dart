@@ -1,23 +1,27 @@
+import '../data/remote/department_remote_data_source.dart';
 import '../model/department_model.dart';
 import 'department_repository.dart';
 
 class DepartmentRepositoryImpl implements DepartmentRepository {
-  final List<DepartmentModel> _departments = [];
+  final DepartmentRemoteDataSource _remoteDataSource;
+  DepartmentRepositoryImpl(this._remoteDataSource);
 
   @override
-  List<DepartmentModel> getDepartments() {
-    return _departments;
+  Future<List<DepartmentModel>> getDepartments() {
+    return _remoteDataSource.getDepartment();
   }
   @override
-  void addDepartment(DepartmentModel department) {
-    _departments.add(department);
+  Future<void> addDepartment(DepartmentModel department) {
+    return _remoteDataSource.addDepartment(department);
   }
+
   @override
-  void deleteDepartment(DepartmentModel department) {
-    _departments.remove(department);
+  Future<void> deleteDepartment(int id) {
+    return _remoteDataSource.deleteDepartment(id);
   }
+
   @override
-  void editDepartment(int index, DepartmentModel department) {
-    _departments[index] = department;
+  Future<void> updateDepartment(DepartmentModel department) {
+    return _remoteDataSource.updateDepartment(department);
   }
 }

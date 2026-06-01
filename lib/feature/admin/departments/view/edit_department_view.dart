@@ -33,8 +33,9 @@ class _EditDepartmentViewState extends State<EditDepartmentView> {
         title: Text('Edit Department', style: textTheme.headlineSmall),
         centerTitle: true,
         leading: InkWell(
-            onTap: () => Navigator.pop(context),
-            child: SvgPicture.asset('assets/icons/back.svg')),
+          onTap: () => Navigator.pop(context),
+          child: SvgPicture.asset('assets/icons/back.svg'),
+        ),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),
@@ -72,9 +73,17 @@ class _EditDepartmentViewState extends State<EditDepartmentView> {
                 label: 'Edit',
                 onPressed: () {
                   if (formKey.currentState!.validate()) {
+                    if (arabicNameController.text.trim() ==
+                            department.arabicName &&
+                        englishNameController.text.trim() ==
+                            department.englishName) {
+                      Navigator.pop(context);
+                      return;
+                    }
                     Navigator.pop(
                       context,
                       DepartmentModel(
+                        id: department.id,
                         arabicName: arabicNameController.text,
                         englishName: englishNameController.text,
                       ),

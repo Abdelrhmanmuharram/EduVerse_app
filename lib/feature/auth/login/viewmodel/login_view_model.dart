@@ -20,6 +20,9 @@ class LoginViewModel extends ChangeNotifier {
       );
       if (result.accessToken != null) {
         await LocalStorageService.saveToken(result.accessToken!);
+        await LocalStorageService.saveRefreshToken(result.refreshToken!);
+        await LocalStorageService.saveTokenExpiry(result.expiresIn!);
+        await LocalStorageService.saveRefreshTokenExpiry(result.refreshTokenExpiration!);
         await LocalStorageService.saveRole(result.roles.first);
       }
       final roles = result.roles;
@@ -54,7 +57,8 @@ class LoginViewModel extends ChangeNotifier {
       }
       throw message;
     } catch (e) {
-      String message = e.toString()
+      String message = e
+          .toString()
           .toLowerCase()
           .replaceAll("exception:", "")
           .trim();

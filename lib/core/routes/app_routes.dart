@@ -9,6 +9,7 @@ import 'package:edusync_app/feature/admin/student/view/students_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../feature/admin/departments/data/remote/department_remote_data_source_impl.dart';
 import '../../feature/admin/departments/repository/department_repository_impl.dart';
 import '../../feature/admin/departments/view/add_department_view.dart';
 import '../../feature/admin/departments/view/edit_department_view.dart';
@@ -39,14 +40,15 @@ class AppRoutes {
     StudentDetailsView.routeName: (_) => StudentDetailsView(),
     '/students': (_) => StudentsView(),
     '/departments': (_) => ChangeNotifierProvider(
-      create: (_) => DepartmentViewModel(DepartmentRepositoryImpl()),
+      create: (_) => DepartmentViewModel(
+        DepartmentRepositoryImpl(DepartmentRemoteDataSourceImpl()),
+      )..loadDepartments(),
       child: const DepartmentsView(),
     ),
     '/semesters': (_) => ChangeNotifierProvider(
-      create: (context) =>
-          SemesterViewModel(SemesterRepositoryImpl(
-            SemesterRemoteDataSourceImpl(),
-          ))..loadSemesters(),
+      create: (context) => SemesterViewModel(
+        SemesterRepositoryImpl(SemesterRemoteDataSourceImpl()),
+      )..loadSemesters(),
       child: const SemestersView(),
     ),
     '/instructors': (_) => AdminInstructorsView(),

@@ -1,5 +1,5 @@
 import 'package:edusync_app/core/widgets/nav_bar_icons.dart';
-import 'package:edusync_app/feature/admin/home/view/alerts_view.dart';
+import 'package:edusync_app/feature/admin/home/view/profile_view.dart';
 import 'package:edusync_app/feature/admin/home/view/panel_view.dart';
 import 'package:edusync_app/feature/admin/home/view/reports_view.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +14,7 @@ class AdminHomeView extends StatefulWidget {
 }
 class _HomeAdminState extends State<AdminHomeView> {
   int currentIndex = 0;
-  List<Widget> taps = [PanelView(), AlertsView(), ReportsView()];
+  List<Widget> taps = [PanelView(), ProfileView(), ReportsView()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -37,9 +37,9 @@ class _HomeAdminState extends State<AdminHomeView> {
             label: 'Reports',
           ),
           BottomNavigationBarItem(
-            icon: NavBarIcons(iconName: 'alerts'),
-            activeIcon: NavBarIcons(iconName: 'alerts_active'),
-            label: 'Alerts',
+            icon: NavBarIcons(iconName: 'profile'),
+            activeIcon: NavBarIcons(iconName: 'profile_active'),
+            label: 'profile',
           ),
         ],
       ),

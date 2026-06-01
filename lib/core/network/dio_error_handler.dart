@@ -10,7 +10,7 @@ class DioErrorHandler {
       switch (message) {
         case 'NotDeletedMessage':
           return ApiException(
-            'This semester cannot be deleted because it is currently in use.',
+            'This item cannot be deleted because it is currently in use.',
           );
         case 'NotFoundMessage':
           return ApiException('The requested item was not found.');

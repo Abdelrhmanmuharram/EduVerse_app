@@ -71,6 +71,7 @@ class _AddDepartmentViewState extends State<AddDepartmentView> {
                     Navigator.pop(
                       context,
                       DepartmentModel(
+                        id: 0,
                         arabicName: arabicNameController.text,
                         englishName: englishNameController.text,
                       ),

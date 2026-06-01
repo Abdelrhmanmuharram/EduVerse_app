@@ -1,13 +1,16 @@
 import 'package:edusync_app/core/app_theme.dart';
 import 'package:edusync_app/core/widgets/default_text_field.dart';
 import 'package:edusync_app/core/widgets/empty_state_widget.dart';
+import 'package:edusync_app/core/widgets/loading_widget.dart';
 import 'package:edusync_app/core/widgets/primary_button.dart';
 import 'package:edusync_app/core/widgets/title_widget.dart';
 import 'package:edusync_app/feature/admin/departments/viewmodel/departement_viewmodel.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:lottie/lottie.dart';
 import 'package:provider/provider.dart';
 
+import '../../../../core/network/dio_client.dart';
 import '../../../../core/widgets/back_item.dart';
 import '../model/department_model.dart';
 import '../widgets/list_department_item.dart';
@@ -21,6 +24,9 @@ class DepartmentsView extends StatefulWidget {
 }
 
 class _DepartmentsViewState extends State<DepartmentsView> {
+  @override
+
+
   @override
   Widget build(BuildContext context) {
     final viewModel = Provider.of<DepartmentViewModel>(context);
@@ -57,7 +63,7 @@ class _DepartmentsViewState extends State<DepartmentsView> {
                       if (!context.mounted) return;
                       if (result != null) {
                         DepartmentModel department = result as DepartmentModel;
-                        viewModel.addDepartment(department);
+                        await viewModel.addDepartment(department);
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
                             backgroundColor: AppTheme.green,
@@ -73,71 +79,93 @@ class _DepartmentsViewState extends State<DepartmentsView> {
             ),
             SizedBox(height: 16),
             Expanded(
-              child: viewModel.isEmpty
+              child: viewModel.isLoading
+                  ? Center(child: LoadingWidget())
+                  : viewModel.isEmpty
                   ? EmptyStateWidget(
                       icon: Icons.menu_book_outlined,
-                      title: 'No Semesters Yet',
+                      title: 'No Departments Yet',
                       color: AppTheme.primaryLight,
                     )
                   : viewModel.departments.isEmpty
                   ? EmptyStateWidget(
                       icon: Icons.search_off_outlined,
-                      title: 'No Semesters Found',
+                      title: 'No Departments Found',
                     )
-                  : ListDepartmentItem(
-                      departments: viewModel.departments,
-                      onDelete: (department) async {
-                        final bool? confirmDelete = await showDialog<bool>(
-                          context: context,
-                          builder: (context) => AlertDialog(
-                            title: const Text('Delete Department'),
-                            content: const Text(
-                              'Are you sure you want to delete this department?',
-                            ),
-                            actions: [
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, false),
-                                child: Text(
-                                  'Cancel',
-                                  style: textTheme.titleMedium!.copyWith(
-                                    color: AppTheme.primaryLight,
+                  : RefreshIndicator(
+                      onRefresh: () async {
+                        await viewModel.loadDepartments();
+                      },
+                      color: AppTheme.primaryLight,
+                      backgroundColor: AppTheme.white,
+                      child: ListDepartmentItem(
+                        departments: viewModel.departments,
+                        onDelete: (department) async {
+                          final bool? confirmDelete = await showDialog<bool>(
+                            context: context,
+                            builder: (context) => AlertDialog(
+                              title: const Text('Delete Department'),
+                              content: const Text(
+                                'Are you sure you want to delete this department?',
+                              ),
+                              actions: [
+                                TextButton(
+                                  onPressed: () =>
+                                      Navigator.pop(context, false),
+                                  child: Text(
+                                    'Cancel',
+                                    style: textTheme.titleMedium!.copyWith(
+                                      color: AppTheme.primaryLight,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              TextButton(
-                                onPressed: () => Navigator.pop(context, true),
-                                child: Text(
-                                  'Delete',
-                                  style: textTheme.titleMedium!.copyWith(
-                                    color: AppTheme.red,
+                                TextButton(
+                                  onPressed: () => Navigator.pop(context, true),
+                                  child: Text(
+                                    'Delete',
+                                    style: textTheme.titleMedium!.copyWith(
+                                      color: AppTheme.red,
+                                    ),
                                   ),
                                 ),
-                              ),
-                            ],
-                          ),
-                        );
-                        if (confirmDelete == true) {
-                          viewModel.deleteDepartment(department);
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            SnackBar(
-                              backgroundColor: AppTheme.red,
-                              content: Text('Department deleted successfully'),
+                              ],
                             ),
                           );
-                        }
-                      },
-                      onEdit: (department, index) async {
-                        final result = await Navigator.pushNamed(
-                          context,
-                          '/edit-department',
-                          arguments: department,
-                        );
-                        if (result != null) {
-                          DepartmentModel updateDepartment =
-                              result as DepartmentModel;
-                          viewModel.editDepartment(index, updateDepartment);
-                        }
-                      },
+                          if (confirmDelete == true) {
+                            try {
+                              await viewModel.deleteDepartment(department);
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: AppTheme.red,
+                                  content: Text(
+                                    'Department deleted successfully',
+                                  ),
+                                ),
+                              );
+                            } catch (e) {
+                              if (!context.mounted) return;
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  backgroundColor: AppTheme.red,
+                                  content: Text(e.toString()),
+                                ),
+                              );
+                            }
+                          }
+                        },
+                        onEdit: (department, index) async {
+                          final result = await Navigator.pushNamed(
+                            context,
+                            '/edit-department',
+                            arguments: department,
+                          );
+                          if (result != null) {
+                            DepartmentModel updatedDepartment =
+                                result as DepartmentModel;
+                            await viewModel.updateDepartment(updatedDepartment);
+                          }
+                        },
+                      ),
                     ),
             ),
             SizedBox(height: 16),

@@ -151,7 +151,7 @@ class _AddStudentViewState extends State<AddStudentView> {
                   Expanded(
                     child: PrimaryButton(
                       color: AppTheme.flashWhite,
-                      textColor: AppTheme.blueGray,
+                      textColor: AppTheme.black,
                       label: 'Back',
                       onPressed: () => Navigator.pop(context),
                     ),

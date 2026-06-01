@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-class AlertsView extends StatelessWidget {
+class ProfileView extends StatelessWidget {
+  const ProfileView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(body: Text('data'));
