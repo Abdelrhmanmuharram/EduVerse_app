@@ -4,8 +4,11 @@ import 'package:edusync_app/feature/admin/student/view/add_student_view.dart';
 import 'package:edusync_app/feature/admin/home/view/admin_home_view.dart';
 import 'package:edusync_app/feature/admin/instructors/view/instructor_details.dart';
 import 'package:edusync_app/feature/admin/departments/view/departments_view.dart';
+import 'package:edusync_app/feature/admin/student/viewmodel/student_viewmodel.dart';
 import 'package:edusync_app/feature/onboarding/view/onboarding_view.dart';
 import 'package:edusync_app/feature/admin/student/view/students_view.dart';
+import 'package:edusync_app/feature/users/repository/users_repository.dart';
+import 'package:edusync_app/feature/users/repository/users_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -21,25 +24,48 @@ import '../../feature/admin/semesters/view/add_semester_view.dart';
 import '../../feature/admin/instructors/view/admin_instructors_view.dart';
 import '../../feature/admin/semesters/view/edit_semester_view.dart';
 import '../../feature/admin/student/view/student_details_view.dart';
+import '../../feature/years/data/remote/year_remote_data_source_impl.dart';
+import '../../feature/years/repository/year_repository_impl.dart';
+import '../../feature/years/viewmodel/year_viewmodel.dart';
 import '../../feature/auth/login/data/remote/auth_remote_data_source_impl.dart';
 import '../../feature/auth/login/repository/auth_repository.dart';
 import '../../feature/auth/login/view/login_view.dart';
 import '../../feature/instructors/view/screens/instructors_view.dart';
 import '../../feature/auth/login/viewmodel/login_view_model.dart';
 import '../../feature/students/view/student_view.dart';
+import '../../feature/users/data/remote/users_remote_data_source_impl.dart';
 import '../view/splash_view.dart';
 
 class AppRoutes {
   static Map<String, WidgetBuilder> routes = {
     OnboardingView.routeName: (_) => OnboardingView(),
     LoginView.routeName: (_) => ChangeNotifierProvider(
-      create: (_) => LoginViewModel(AuthRepository( AuthRemoteDataSourceImpl())),
+      create: (_) => LoginViewModel(AuthRepository(AuthRemoteDataSourceImpl())),
       child: LoginView(),
     ),
     AdminHomeView.routeName: (_) => AdminHomeView(),
     AddStudentView.routeName: (_) => AddStudentView(),
-    StudentDetailsView.routeName: (_) => StudentDetailsView(),
-    '/students': (_) => StudentsView(),
+
+    '/students': (_) => MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) =>
+              StudentViewModel(UsersRepositoryImpl(UsersRemoteDataSourceImpl()))
+                ..loadStudents(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DepartmentViewModel(
+            DepartmentRepositoryImpl(DepartmentRemoteDataSourceImpl()),
+          )..loadDepartments(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              YearViewmodel(YearRepositoryImpl(YearRemoteDataSourceImpl()))
+                ..loadYears(),
+        ),
+      ],
+      child: StudentsView(),
+    ),
     '/departments': (_) => ChangeNotifierProvider(
       create: (_) => DepartmentViewModel(
         DepartmentRepositoryImpl(DepartmentRemoteDataSourceImpl()),

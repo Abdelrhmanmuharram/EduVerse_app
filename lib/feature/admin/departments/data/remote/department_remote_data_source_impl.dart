@@ -25,9 +25,10 @@ class DepartmentRemoteDataSourceImpl implements DepartmentRemoteDataSource {
           DepartmentModel.fromJson(item)
       ).toList();
 
-    } catch (e) {
+    } catch (e, stackTrace) {
       debugPrint('GET DEPARTMENTS ERROR');
-      debugPrint(e as String?);
+      debugPrint(e.toString());
+      debugPrint(stackTrace.toString());
       rethrow;
     }
   }

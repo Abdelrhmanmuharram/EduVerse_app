@@ -1,41 +1,29 @@
+import 'package:edusync_app/core/widgets/loading_widget.dart';
 import 'package:edusync_app/feature/admin/student/view/add_student_view.dart';
 import 'package:edusync_app/core/widgets/default_text_field.dart';
 import 'package:edusync_app/feature/admin/student/model/student_model.dart';
 import 'package:edusync_app/feature/admin/student/view/student_details_view.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../../departments/model/department_model.dart';
+import '../../departments/viewmodel/departement_viewmodel.dart';
+import '../../../years/model/year_model.dart';
+import '../../../years/viewmodel/year_viewmodel.dart';
 import '../model/add_student_model.dart';
+import '../viewmodel/student_viewmodel.dart';
 import '../widgets/student_header.dart';
 import '../widgets/student_table.dart';
 
 class StudentsView extends StatefulWidget {
   static const String routeName = '/students';
+  const StudentsView({super.key});
 
   @override
   State<StudentsView> createState() => _StudentsViewState();
 }
 
 class _StudentsViewState extends State<StudentsView> {
-  Map<String, String> deptShort = {
-    "Computer Science": "CS",
-    "Information Systems": "IS",
-    "AI": "AI",
-    "Cyber Security": "CSec",
-  };
-  List<AddStudentModel> students = [];
-  String searchQuery = '';
-  int currentPage = 1;
-  List<AddStudentModel> get filteredStudents {
-    if (searchQuery.isEmpty) return students;
-    return students.where((student) {
-      return student.firstName.toLowerCase().contains(
-            searchQuery.toLowerCase(),
-          ) ||
-          student.code.toLowerCase().contains(searchQuery.toLowerCase()) ||
-          student.department.toLowerCase().contains(searchQuery.toLowerCase());
-    }).toList();
-  }
-
   void onRowTap(AddStudentModel student) {
     Navigator.pushNamed(
       context,
@@ -46,6 +34,9 @@ class _StudentsViewState extends State<StudentsView> {
 
   @override
   Widget build(BuildContext context) {
+    final departmentName = context.watch<DepartmentViewModel>();
+    final yearVm = context.watch<YearViewmodel>();
+    final viewModel = Provider.of<StudentViewModel>(context);
     return Scaffold(
       body: SafeArea(
         child: Padding(
@@ -60,30 +51,55 @@ class _StudentsViewState extends State<StudentsView> {
                 DefaultTextField(
                   hint: 'Search by name, code, or dept...',
                   prefixIcon: Icon(Icons.search),
-                  onChanged: (value) {
-                    setState(() {
-                      searchQuery = value;
-                      currentPage = 1;
-                    });
-                  },
+                  onChanged: viewModel.search,
                 ),
                 SizedBox(height: 12),
-                StudentTable(
-                  students: filteredStudents.map((student) {
-                    return Student(
-                      code: student.code,
-                      name: student.firstName,
-                      dept: deptShort[student.department] ?? student.department,
-                      year: student.academicYear,
-                    );
-                  }).toList(),
-                  onRowTap: (student) {
-                    final index = filteredStudents.indexWhere(
-                      (s) => s.code == student.code,
-                    );
-                    onRowTap(filteredStudents[index]);
-                  },
-                ),
+                viewModel.isLoading
+                    ? LoadingWidget()
+                    : viewModel.isEmpty
+                    ? Center(child: Text('No students found'))
+                    : RefreshIndicator(
+                        color: Colors.blue,
+                        onRefresh: () async {
+                          await viewModel.loadStudents();
+                        },
+                        child: StudentTable(
+                          students: viewModel.getTableStudents(
+                            departmentName.departments,
+                            yearVm.years,
+                          ),
+                          onRowTap: (student) async {
+                            final user = viewModel.students.firstWhere(
+                              (u) => u.id == student.id,
+                            );
+                            await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => MultiProvider(
+                                  providers: [
+                                    ChangeNotifierProvider.value(
+                                      value: context.read<StudentViewModel>(),
+                                    ),
+                                    ChangeNotifierProvider.value(
+                                      value: context
+                                          .read<DepartmentViewModel>(),
+                                    ),
+                                    ChangeNotifierProvider.value(
+                                      value: context.read<YearViewmodel>(),
+                                    ),
+                                  ],
+                                  child: const StudentDetailsView(),
+                                ),
+                                settings: RouteSettings(
+                                  arguments: {
+                                    'user': user,
+                                  },
+                                ),
+                              ),
+                            );
+                          },
+                        ),
+                      ),
               ],
             ),
           ),
@@ -95,17 +111,10 @@ class _StudentsViewState extends State<StudentsView> {
         child: Transform.translate(
           offset: Offset(-5, 20),
           child: FloatingActionButton(
-            onPressed: () async {
-              final student = await Navigator.of(
-                context,
-              ).pushNamed(AddStudentView.routeName);
-              if (student != null) {
-                setState(() {
-                  students.add(student as AddStudentModel);
-                });
-              }
+            onPressed: () {
+              Navigator.pushNamed(context, AddStudentView.routeName);
             },
-            child: Icon(Icons.add),
+            child: const Icon(Icons.add),
           ),
         ),
       ),

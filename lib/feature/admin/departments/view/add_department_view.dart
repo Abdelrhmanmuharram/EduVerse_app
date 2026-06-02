@@ -1,4 +1,5 @@
 import 'package:edusync_app/core/utils/validators.dart';
+import 'package:edusync_app/core/widgets/back_item.dart';
 import 'package:edusync_app/core/widgets/default_text_field.dart';
 import 'package:edusync_app/feature/admin/departments/model/department_model.dart';
 import 'package:flutter/material.dart';
@@ -27,10 +28,7 @@ class _AddDepartmentViewState extends State<AddDepartmentView> {
       appBar: AppBar(
         title: Text('Add Department', style: textTheme.headlineSmall),
         centerTitle: true,
-        leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: SvgPicture.asset('assets/icons/back.svg'),
-        ),
+        leading: BackItem()
       ),
       body: Padding(
         padding: const EdgeInsets.all(16),

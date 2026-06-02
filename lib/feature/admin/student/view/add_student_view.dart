@@ -2,7 +2,6 @@ import 'package:edusync_app/core/widgets/default_field_lable.dart';
 import 'package:edusync_app/feature/admin/student/widgets/student_avatar.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-
 import '../../../../core/app_theme.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../../../core/widgets/default_drop_down_field.dart';
@@ -12,7 +11,7 @@ import '../model/add_student_model.dart';
 class AddStudentView extends StatefulWidget {
   static const String routeName = '/add-student';
 
-  AddStudentView({super.key});
+  const AddStudentView({super.key});
 
   @override
   State<AddStudentView> createState() => _AddStudentViewState();
@@ -21,12 +20,10 @@ class AddStudentView extends StatefulWidget {
 class _AddStudentViewState extends State<AddStudentView> {
   String? selectedDepartment;
   String? selectedYear;
-  final TextEditingController codeController = TextEditingController();
-  final TextEditingController firstNameController = TextEditingController();
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController arabicNameController = TextEditingController();
-  final TextEditingController englishFullNameController =
-      TextEditingController();
+  final TextEditingController idController = TextEditingController();
+  final TextEditingController fullNameController = TextEditingController();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController roleController = TextEditingController();
 
 
   @override
@@ -58,7 +55,7 @@ class _AddStudentViewState extends State<AddStudentView> {
                   height: 24,
                   fit: .scaleDown,
                 ),
-                controller: codeController,
+                controller: idController,
                 keyboardType: TextInputType.text,
               ),
               SizedBox(height: 6),
@@ -72,7 +69,7 @@ class _AddStudentViewState extends State<AddStudentView> {
                   height: 24,
                   fit: .scaleDown,
                 ),
-                controller: firstNameController,
+                controller: fullNameController,
                 keyboardType: TextInputType.text,
               ),
               SizedBox(height: 6),
@@ -86,7 +83,7 @@ class _AddStudentViewState extends State<AddStudentView> {
                   height: 24,
                   fit: .scaleDown,
                 ),
-                controller: lastNameController,
+                controller: emailController,
                 keyboardType: TextInputType.text,
               ),
               SizedBox(height: 6),
@@ -100,19 +97,11 @@ class _AddStudentViewState extends State<AddStudentView> {
                   height: 24,
                   fit: .scaleDown,
                 ),
-                controller: arabicNameController,
+                controller: roleController,
                 keyboardType: TextInputType.text,
               ),
               SizedBox(height: 6),
               FieldLabel(label: 'English Full Name'),
-              SizedBox(height: 6),
-              DefaultTextField(
-                hint: 'Full name',
-                prefixIcon: Icon(Icons.person_outline),
-                controller: englishFullNameController,
-                keyboardType: TextInputType.text,
-              ),
-              SizedBox(height: 6),
               FieldLabel(label: 'Department'),
               SizedBox(height: 6),
               DefaultDropDownField(
@@ -163,11 +152,10 @@ class _AddStudentViewState extends State<AddStudentView> {
                       label: 'Add Student',
                       onPressed: () {
                         AddStudentModel student = AddStudentModel(
-                          code: codeController.text,
-                          firstName: firstNameController.text,
-                          lastName: lastNameController.text,
-                          arabicName: arabicNameController.text,
-                          englishFullName: englishFullNameController.text,
+                          id: idController.text,
+                          fullName: fullNameController.text,
+                          email: emailController.text,
+                          role: roleController.text,
                           department: selectedDepartment ?? '',
                           academicYear: selectedYear ?? '',
                         );

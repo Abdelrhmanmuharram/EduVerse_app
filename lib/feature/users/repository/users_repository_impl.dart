@@ -1,0 +1,19 @@
+import 'package:edusync_app/core/model/user_model.dart';
+import 'package:edusync_app/feature/users/repository/users_repository.dart';
+
+import '../../admin/student/model/update_student_model.dart';
+import '../data/remote/users_remote_data_source.dart';
+
+class UsersRepositoryImpl implements UsersRepository {
+  final UsersRemoteDataSource remoteDataSource;
+  UsersRepositoryImpl(this.remoteDataSource);
+
+  @override
+  Future<List<UserModel>> getUsersByRole(String role) {
+    return remoteDataSource.getUsersByRole(role);
+  }
+  @override
+  Future<void> updateStudent(UpdateStudentModel student) {
+    return remoteDataSource.updateStudent(student);
+  }
+}
