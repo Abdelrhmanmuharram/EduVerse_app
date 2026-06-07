@@ -3,6 +3,7 @@ import 'package:edusync_app/feature/users/data/remote/users_remote_data_source.d
 
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../admin/student/model/add_student_model.dart';
 import '../../../admin/student/model/update_student_model.dart';
 
 class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
@@ -13,6 +14,11 @@ class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
     );
     final List data = response.data['data'];
     return data.map((e) => UserModel.fromJson(e)).toList();
+  }
+
+  @override
+  Future<void> addStudent(AddStudentModel student) async {
+    await DioClient.dio.post(APIConstants.addUser, data: student.toJson());
   }
 
   @override

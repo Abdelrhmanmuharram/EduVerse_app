@@ -28,16 +28,6 @@ class StudentTableBody extends StatelessWidget {
                 ),
               ),
               Expanded(
-                flex: 2,
-                child: Text(
-                  "CODE",
-                  style: textTheme.titleSmall!.copyWith(
-                    fontSize: 11,
-                    fontWeight: .w600,
-                  ),
-                ),
-              ),
-              Expanded(
                 flex: 3,
                 child: Text(
                   "NAME",
@@ -96,13 +86,6 @@ class StudentTableBody extends StatelessWidget {
                           color: AppTheme.secondText,
                           fontWeight: .w500,
                         ),
-                      ),
-                    ),
-                    Expanded(
-                      flex: 2,
-                      child: Text(
-                        student.code,
-                        style: TextStyle(fontWeight: .bold),
                       ),
                     ),
                     Expanded(

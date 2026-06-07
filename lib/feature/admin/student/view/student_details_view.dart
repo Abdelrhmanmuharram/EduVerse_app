@@ -10,6 +10,7 @@ import '../../../../core/widgets/primary_button.dart';
 import '../../../../core/widgets/default_drop_down_field.dart';
 import '../../../../core/widgets/default_field_lable.dart';
 import '../../../../core/widgets/default_text_field.dart';
+import '../../../years/viewmodel/year_viewmodel.dart';
 import '../../departments/viewmodel/departement_viewmodel.dart';
 import '../model/add_student_model.dart';
 import '../model/update_student_model.dart';
@@ -28,9 +29,11 @@ class _StudentDetailsViewState extends State<StudentDetailsView> {
   String? originalFullName;
   int? originalDepartmentId;
   int? selectedDepartmentId;
-  String? originalYear;
-  String? selectedYear;
+  int? originalYearId;
+  int? selectedYearId;
   bool isInit = false;
+  bool showYearError = false;
+  String? selectedDepartmentName;
   final TextEditingController idController = TextEditingController();
   final TextEditingController fullNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
@@ -42,40 +45,29 @@ class _StudentDetailsViewState extends State<StudentDetailsView> {
       final args =
           ModalRoute.of(context)!.settings.arguments as Map<String, dynamic>;
       final user = args['user'] as UserModel;
-      selectedDepartmentId = user.departmentId;
-      originalDepartmentId = user.departmentId;
-      selectedYear = user.yearId?.toString();
-      originalYear = user.yearId?.toString();
-      idController.text = user.id;
       fullNameController.text = user.fullName;
+      selectedDepartmentId = user.departmentId;
+      selectedYearId = user.yearId;
+      idController.text = user.id;
       emailController.text = user.email;
-      roleController.text = user.roles[0];
-      originalFullName = user.fullName;
+      roleController.text = user.roles.isNotEmpty ? user.roles.first : '';
       isInit = true;
-
-
+      context.read<StudentViewModel>().initializeStudent(user);
     }
     super.didChangeDependencies();
   }
-
 
   @override
   Widget build(BuildContext context) {
     final studentVm = context.watch<StudentViewModel>();
     final departmentVm = context.watch<DepartmentViewModel>();
-    String? selectedDepartmentName;
-    if (departmentVm.departments.isNotEmpty) {
-      final department = departmentVm.departments.where(
-            (d) => d.id == selectedDepartmentId,
-      );
-      if (department.isNotEmpty) {
-        selectedDepartmentName = department.first.englishName;
-      }
-    }
+    final yearVm = context.watch<YearViewmodel>();
+
     TextTheme textTheme = Theme.of(context).textTheme;
     return Stack(
       children: [
         Scaffold(
+          resizeToAvoidBottomInset: false,
           appBar: AppBar(
             leading: BackItem(),
             title: Text('Update Student', style: textTheme.headlineSmall),
@@ -83,149 +75,129 @@ class _StudentDetailsViewState extends State<StudentDetailsView> {
           ),
           body: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24),
-            child: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: .start,
-                children: [
-                  SizedBox(height: 14),
-                  Center(child: StudentAvatar()),
-                  SizedBox(height: 12),
-                  Center(
-                    child: FieldLabel(
-                      label: 'Student ID: #${idController.text}',
-                    ),
+            child: Column(
+              crossAxisAlignment: .start,
+              children: [
+                SizedBox(height: 14),
+                Center(child: StudentAvatar()),
+                SizedBox(height: 24),
+                FieldLabel(label: 'Full Name'),
+                SizedBox(height: 6),
+                DefaultTextField(
+                  hint: 'Full Name',
+                  prefixIcon: SvgPicture.asset(
+                    'assets/icons/name.svg',
+                    width: 24,
+                    height: 24,
+                    fit: .scaleDown,
                   ),
-                  SizedBox(height: 24),
-                  FieldLabel(label: 'Student Code'),
-                  SizedBox(height: 6),
-                  DefaultTextField(
-                    hint: 'Enter your code',
-                    prefixIcon: SvgPicture.asset(
-                      'assets/icons/code.svg',
-                      width: 24,
-                      height: 24,
-                      fit: .scaleDown,
-                    ),
-                    controller: idController,
-                    keyboardType: TextInputType.text,
-                    readOnly: true,
+                  controller: fullNameController,
+                  keyboardType: TextInputType.text,
+                ),
+                SizedBox(height: 6),
+                FieldLabel(label: 'Email'),
+                SizedBox(height: 6),
+                DefaultTextField(
+                  hint: 'Enter your Email',
+                  prefixIcon: SvgPicture.asset(
+                    'assets/icons/name.svg',
+                    width: 24,
+                    height: 24,
+                    fit: .scaleDown,
                   ),
-                  SizedBox(height: 6),
-                  FieldLabel(label: 'Full Name'),
-                  SizedBox(height: 6),
-                  DefaultTextField(
-                    hint: 'Full Name',
-                    prefixIcon: SvgPicture.asset(
-                      'assets/icons/name.svg',
-                      width: 24,
-                      height: 24,
-                      fit: .scaleDown,
-                    ),
-                    controller: fullNameController,
-                    keyboardType: TextInputType.text,
+                  controller: emailController,
+                  keyboardType: TextInputType.text,
+                ),
+                SizedBox(height: 6),
+                FieldLabel(label: 'Role'),
+                SizedBox(height: 6),
+                DefaultTextField(
+                  readOnly: true,
+                  hint: '',
+                  prefixIcon: SvgPicture.asset(
+                    'assets/icons/user_role.svg',
+                    width: 24,
+                    height: 24,
+                    fit: .scaleDown,
                   ),
-                  SizedBox(height: 6),
-                  FieldLabel(label: 'Email'),
-                  SizedBox(height: 6),
-                  DefaultTextField(
-                    hint: 'Enter your Email',
-                    prefixIcon: SvgPicture.asset(
-                      'assets/icons/name.svg',
-                      width: 24,
-                      height: 24,
-                      fit: .scaleDown,
-                    ),
-                    controller: emailController,
-                    keyboardType: TextInputType.text,
+                  controller: roleController,
+                  keyboardType: TextInputType.text,
+                ),
+                SizedBox(height: 6),
+                FieldLabel(label: 'Department'),
+                SizedBox(height: 6),
+                DefaultDropDownField(
+                  icon: 'department',
+                  hint: 'Select department',
+                  items: departmentVm.departments
+                      .map((d) => d.englishName)
+                      .toList(),
+                  selectedItem: studentVm.getDepartmentName(
+                    selectedDepartmentId,
+                    departmentVm.departments,
                   ),
-                  SizedBox(height: 6),
-                  FieldLabel(label: 'Role'),
-                  SizedBox(height: 6),
-                  DefaultTextField(
-                    readOnly: true,
-                    hint: '',
-                    prefixIcon: SvgPicture.asset(
-                      'assets/icons/user_role.svg',
-                      width: 24,
-                      height: 24,
-                      fit: .scaleDown,
-                    ),
-                    controller: roleController,
-                    keyboardType: TextInputType.text,
+                  onChanged: (value) {
+                    final department = departmentVm.departments.firstWhere(
+                      (d) => d.englishName == value,
+                    );
+                    setState(() {
+                      selectedDepartmentId = department.id;
+                    });
+                  },
+                ),
+                SizedBox(height: 6),
+                FieldLabel(label: 'Academic Year'),
+                SizedBox(height: 6),
+                DefaultDropDownField(
+                  icon: 'year',
+                  hint: 'Select year',
+                  errorText: showYearError ? 'Please select a year' : null,
+                  items: yearVm.years.map((y) => y.englishName).toList(),
+                  selectedItem: studentVm.getYearName(
+                    selectedYearId,
+                    yearVm.years,
                   ),
-                  SizedBox(height: 6),
-                  FieldLabel(label: 'Department'),
-                  SizedBox(height: 6),
-                  DefaultDropDownField(
-                    icon: 'department',
-                    hint: 'Select department',
-                    items: departmentVm.departments
-                        .map((d) => d.englishName)
-                        .toList(),
-                    selectedItem: selectedDepartmentName,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedDepartmentId = departmentVm.departments
-                            .firstWhere((d) => d.englishName == value)
-                            .id;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 6),
-                  FieldLabel(label: 'Academic Year'),
-                  SizedBox(height: 6),
-                  DefaultDropDownField(
-                    icon: 'year',
-                    hint: 'Select year',
-                    items: ["Year 1", "Year 2", "Year 3", "Year 4"],
-                    selectedItem: selectedYear,
-                    onChanged: (value) {
-                      setState(() {
-                        selectedYear = value;
-                      });
-                    },
-                  ),
-                  SizedBox(height: 16),
-                  PrimaryButton(
-                    label: 'Update Student',
-                    onPressed: () async {
-                      final hasChanges =
-                          fullNameController.text != originalFullName ||
-                          selectedDepartmentId != originalDepartmentId ||
-                          selectedYear != originalYear;
-                      if (!hasChanges) {
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('No changes detected')),
-                        );
-                        return;
-                      }
-                      final args =
-                          ModalRoute.of(context)!.settings.arguments
-                              as Map<String, dynamic>;
-                      final departmentVm = context.read<DepartmentViewModel>();
-                      debugPrint('Selected Department = $selectedDepartmentId');
-                      for (final d in departmentVm.departments) {
-                        debugPrint('Department => ${d.id} | ${d.englishName}');
-                        debugPrint(
-                          'Selected Department = $selectedDepartmentId',
-                        );
-                      }
-                      final student = UpdateStudentModel(
-                        id: idController.text,
-                        fullName: fullNameController.text,
-                        departmentId: selectedDepartmentId!,
+                  onChanged: (value) {
+                    final year = yearVm.years.firstWhere(
+                      (y) => y.englishName == value,
+                    );
+                    setState(() {
+                      selectedYearId = year.id;
+                    });
+                  },
+                ),
+                SizedBox(height: 16),
+                Spacer(),
+                PrimaryButton(
+                  label: 'Save',
+                  onPressed: () async {
+                    final hasChanges = studentVm.hasChanges(
+                      currentName: fullNameController.text,
+                      currentDepartmentId: selectedDepartmentId,
+                      currentYearId: selectedYearId,
+                    );
+                    if (!hasChanges) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        const SnackBar(content: Text('No changes detected')),
                       );
-                      await context.read<StudentViewModel>().updateStudent(
-                        student,
-                      );
-                      if (context.mounted) {
-                        Navigator.pop(context);
-                      }
-                    },
-                  ),
-                  SizedBox(height: 14),
-                ],
-              ),
+                      return;
+                    }
+                    debugPrint('Selected Department = $selectedDepartmentId');
+                    final student = UpdateStudentModel(
+                      id: idController.text,
+                      fullName: fullNameController.text,
+                      email: emailController.text,
+                      departmentId: selectedDepartmentId!,
+                      yearId: selectedYearId!,
+                    );
+                    await studentVm.updateStudent(student);
+                    if (context.mounted) {
+                      Navigator.pop(context);
+                    }
+                  },
+                ),
+                SizedBox(height: 14),
+              ],
             ),
           ),
         ),

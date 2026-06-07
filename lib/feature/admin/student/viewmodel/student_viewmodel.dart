@@ -4,6 +4,8 @@ import '../../../../core/model/user_model.dart';
 import '../../../users/repository/users_repository.dart';
 import '../../../years/model/year_model.dart';
 import '../../departments/model/department_model.dart';
+import '../model/add_student_model.dart';
+import '../model/student_details_data_model.dart';
 import '../model/student_model.dart';
 import '../model/update_student_model.dart';
 
@@ -16,17 +18,24 @@ class StudentViewModel extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   String _searchQuery = '';
+  StudentDetailsData? studentDetails;
+  String? _originalFullName;
+  int? _originalDepartmentId;
+  int? _originalYearId;
+
+  String? get originalFullName => _originalFullName;
+  int? get originalDepartmentId => _originalDepartmentId;
+  int? get originalYearId => _originalYearId;
 
   List<UserModel> get students {
-    if (_searchQuery.isEmpty) {
+    if (_searchQuery.trim().isEmpty) {
       return _students;
     }
-
+    final query = _searchQuery.trim().toLowerCase();
     return _students.where((student) {
-      return student.fullName.toLowerCase().contains(
-            _searchQuery.toLowerCase(),
-          ) ||
-          student.email.toLowerCase().contains(_searchQuery.toLowerCase());
+      return student.fullName.toLowerCase().contains(query) ||
+          student.email.toLowerCase().contains(query) ||
+          student.id.toLowerCase().contains(query);
     }).toList();
   }
 
@@ -38,9 +47,12 @@ class StudentViewModel extends ChangeNotifier {
   Future<void> loadStudents() async {
     _isLoading = true;
     notifyListeners();
-    _students = await _repository.getUsersByRole('Student');
-    _isLoading = false;
-    notifyListeners();
+    try {
+      _students = await _repository.getUsersByRole('Student');
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 
   String getDepartmentName(
@@ -66,7 +78,7 @@ class StudentViewModel extends ChangeNotifier {
     List<DepartmentModel> departments,
     List<YearModel> years,
   ) {
-    return _students.map((student) {
+    return students.map((student) {
       return Student(
         id: student.id,
         code: '',
@@ -77,10 +89,21 @@ class StudentViewModel extends ChangeNotifier {
     }).toList();
   }
 
+  Future<void> addStudent(AddStudentModel student) async {
+    _isLoading = true;
+    notifyListeners();
+    try {
+      await _repository.addStudent(student);
+      await loadStudents();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> updateStudent(UpdateStudentModel student) async {
     _isLoading = true;
     notifyListeners();
-    await Future.delayed(Duration(seconds: 5));
     try {
       await _repository.updateStudent(student);
       await loadStudents();
@@ -88,5 +111,29 @@ class StudentViewModel extends ChangeNotifier {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  bool hasChanges({
+    required String currentName,
+    required int? currentDepartmentId,
+    required int? currentYearId,
+  }) {
+    return currentName.trim() != _originalFullName?.trim() ||
+        currentDepartmentId != _originalDepartmentId ||
+        currentYearId != _originalYearId;
+  }
+
+  void initializeStudent(UserModel user) {
+    _originalFullName = user.fullName;
+    _originalDepartmentId = user.departmentId;
+    _originalYearId = user.yearId;
+    studentDetails = StudentDetailsData(
+      originalFullName: user.fullName,
+      originalDepartmentId: user.departmentId,
+      originalYearId: user.yearId,
+      currentFullName: user.fullName,
+      currentDepartmentId: user.departmentId,
+      currentYearId: user.yearId,
+    );
   }
 }

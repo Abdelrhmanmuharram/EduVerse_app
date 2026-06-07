@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:edusync_app/core/services/local_storage_service.dart';
-import 'package:edusync_app/feature/auth/login/viewmodel/roles.dart';
+import 'package:edusync_app/core/helpers/roles.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/services/navigation_service.dart';
