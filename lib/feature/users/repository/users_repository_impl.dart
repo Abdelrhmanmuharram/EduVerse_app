@@ -1,4 +1,5 @@
 import 'package:edusync_app/core/model/user_model.dart';
+import 'package:edusync_app/feature/admin/instructors/model/update_instructor_model.dart';
 import 'package:edusync_app/feature/users/repository/users_repository.dart';
 
 import '../../admin/student/model/add_student_model.dart';
@@ -22,5 +23,10 @@ class UsersRepositoryImpl implements UsersRepository {
   @override
   Future<void> updateStudent(UpdateStudentModel student) {
     return remoteDataSource.updateStudent(student);
+  }
+
+  @override
+  Future<void> updateInstructor(UpdateInstructorModel instructor) async {
+    await remoteDataSource.updateInstructor(instructor);
   }
 }

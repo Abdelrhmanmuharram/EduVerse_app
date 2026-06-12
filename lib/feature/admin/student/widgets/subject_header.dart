@@ -2,9 +2,10 @@ import 'package:edusync_app/feature/admin/student/model/subject_model.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/app_theme.dart';
+import '../../instructors/model/instructor_subject_model.dart';
 
 class SubjectHeader extends StatelessWidget {
-  final List<SubjectModel> subjects;
+  final List<InstructorSubjectModel> subjects;
   final Function(int) onDelete;
 
   const SubjectHeader({
@@ -51,68 +52,65 @@ class SubjectHeader extends StatelessWidget {
           ),
           subjects.isEmpty
               ? Padding(
-            padding: const EdgeInsets.all(16),
-            child: Text(
-              "No subjects assigned",
-              style: textTheme.titleSmall,
-            ),
-          )
-              : SizedBox(
-            height: subjects.length > 2 ? 120 : subjects.length * 60,
-            child: ListView.builder(
-              itemCount: subjects.length,
-              itemBuilder: (context, index) {
-                final subject = subjects[index];
-
-                return Column(
-                  children: [
-                    const Divider(height: 1),
-
-                    Padding(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 16,
-                        vertical: 14,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              subject.name,
-                              style: textTheme.titleSmall!.copyWith(
-                                fontWeight: FontWeight.bold,
-                                color: AppTheme.black,
+                  padding: const EdgeInsets.all(16),
+                  child: Text(
+                    "No subjects assigned",
+                    style: textTheme.titleSmall,
+                  ),
+                )
+              : ListView.builder(
+                  shrinkWrap: true,
+                  physics:
+                      const NeverScrollableScrollPhysics(),
+                  itemCount: subjects.length,
+                  itemBuilder: (context, index) {
+                    final subject = subjects[index];
+                    return Column(
+                      children: [
+                        const Divider(height: 1),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 16,
+                            vertical: 14,
+                          ),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  subject.subject.name,
+                                  style: textTheme.titleSmall!.copyWith(
+                                    fontWeight: FontWeight.bold,
+                                    color: AppTheme.black,
+                                  ),
+                                ),
                               ),
-                            ),
+                              Text(
+                                subject.subject.code,
+                                style: textTheme.titleSmall!.copyWith(
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const SizedBox(width: 12),
+                              GestureDetector(
+                                onTap: () => onDelete(index),
+                                child: const Icon(
+                                  Icons.delete,
+                                  color: AppTheme.red,
+                                ),
+                              ),
+                            ],
                           ),
-                          Text(
-                            subject.code,
-                            style: textTheme.titleSmall!.copyWith(
-                              fontWeight: FontWeight.bold,
-                            ),
-                          ),
-                          const SizedBox(width: 12),
-                          GestureDetector(
-                            onTap: () => onDelete(index),
-                            child: const Icon(
-                              Icons.delete,
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                  ],
-                );
-              },
-            ),
-          ),
+                        ),
+                      ],
+                    );
+                  },
+                ),
+
           Padding(
             padding: const EdgeInsets.all(12),
             child: Text(
               "Assigned teachers for this session will appear here",
-              style: textTheme.titleSmall!.copyWith(
-                color: AppTheme.hintText,
-              ),
+              style: textTheme.titleSmall!.copyWith(color: AppTheme.hintText),
             ),
           ),
         ],

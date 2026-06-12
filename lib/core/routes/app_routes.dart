@@ -7,7 +7,6 @@ import 'package:edusync_app/feature/admin/departments/view/departments_view.dart
 import 'package:edusync_app/feature/admin/student/viewmodel/student_viewmodel.dart';
 import 'package:edusync_app/feature/onboarding/view/onboarding_view.dart';
 import 'package:edusync_app/feature/admin/student/view/students_view.dart';
-import 'package:edusync_app/feature/users/repository/users_repository.dart';
 import 'package:edusync_app/feature/users/repository/users_repository_impl.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -17,6 +16,12 @@ import '../../feature/admin/departments/repository/department_repository_impl.da
 import '../../feature/admin/departments/view/add_department_view.dart';
 import '../../feature/admin/departments/view/edit_department_view.dart';
 import '../../feature/admin/departments/viewmodel/departement_viewmodel.dart';
+import '../../feature/admin/instructors/data/remote/instructor_subject_remote_data_source_impl.dart';
+import '../../feature/admin/instructors/data/remote/subject_remote_data_source_impl.dart';
+import '../../feature/admin/instructors/repository/instructor_repository.dart';
+import '../../feature/admin/instructors/repository/instructor_subject_repository_impl.dart';
+import '../../feature/admin/instructors/repository/subject_repository_impl.dart';
+import '../../feature/admin/instructors/viewmodel/instructor_viewmodel.dart';
 import '../../feature/admin/semesters/data/remote/semester_remote_data_source_impl.dart';
 import '../../feature/admin/semesters/view/semesters_view.dart';
 import '../../feature/admin/instructors/view/add_instructor_view.dart';
@@ -45,7 +50,6 @@ class AppRoutes {
     ),
     AdminHomeView.routeName: (_) => AdminHomeView(),
     AddStudentView.routeName: (_) => AddStudentView(),
-
     '/students': (_) => MultiProvider(
       providers: [
         ChangeNotifierProvider(
@@ -78,10 +82,32 @@ class AppRoutes {
       )..loadSemesters(),
       child: const SemestersView(),
     ),
-    '/instructors': (_) => AdminInstructorsView(),
+    '/instructors': (_) => MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => InstructorViewModel(
+            UsersRepositoryImpl(UsersRemoteDataSourceImpl()),
+            InstructorRepository(),
+            InstructorSubjectRepositoryImpl(
+              InstructorSubjectRemoteDataSourceImpl(),
+            ),
+            SubjectRepositoryImpl(
+              SubjectRemoteDataSourceImpl(),
+            ),
+          )..loadInstructors(),
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => DepartmentViewModel(
+            DepartmentRepositoryImpl(DepartmentRemoteDataSourceImpl()),
+          )..loadDepartments(),
+        ),
+      ],
+      child: const AdminInstructorsView(),
+    ),
+    '/instructors-view': (_) => InstructorsView(),
     '/add-instructor': (_) => AddInstructorView(),
     '/instructor-details': (_) => InstructorDetails(),
-    '/instructors-view': (_) => InstructorsView(),
     '/student': (_) => StudentView(),
     '/splash': (_) => SplashView(),
     '/add-semester': (_) => AddSemester(),

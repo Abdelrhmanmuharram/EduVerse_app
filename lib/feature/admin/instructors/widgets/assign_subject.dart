@@ -1,26 +1,34 @@
 import 'package:edusync_app/core/app_theme.dart';
 import 'package:edusync_app/core/widgets/default_drop_down_field.dart';
+import 'package:edusync_app/feature/admin/instructors/model/instructor_subject_model.dart';
 import 'package:edusync_app/feature/admin/student/widgets/subject_header.dart';
 import 'package:flutter/material.dart';
 
 import '../../student/model/subject_model.dart';
 
 class AssignSubject extends StatefulWidget {
-  final List<SubjectModel> subjects;
-  final Function(List<SubjectModel>) onChanged;
+  final List<InstructorSubjectModel> subjects;
+  final List<SubjectModel> allSubjects;
+  final Function(List<InstructorSubjectModel>) onChanged;
+
   const AssignSubject({
     super.key,
     required this.subjects,
     required this.onChanged,
+    required this.allSubjects,
   });
+
   @override
   State<AssignSubject> createState() => _AssignSubjectState();
 }
+
 class _AssignSubjectState extends State<AssignSubject> {
   String? selectedSubject;
+
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -39,8 +47,9 @@ class _AssignSubjectState extends State<AssignSubject> {
               ),
               child: Text(
                 '${widget.subjects.length} Selected',
-                style: textTheme.titleSmall!
-                    .copyWith(fontWeight: FontWeight.bold),
+                style: textTheme.titleSmall!.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
               ),
             ),
           ],
@@ -51,13 +60,9 @@ class _AssignSubjectState extends State<AssignSubject> {
             Expanded(
               flex: 4,
               child: DefaultDropDownField(
-                items: [
-                  "Software Engineering",
-                  "Computer Graphics",
-                  "Artificial Intelligence",
-                  "Data Science",
-                  "Machine Learning",
-                ],
+                items: widget.allSubjects
+                    .map((subject) => subject.name)
+                    .toList(),
                 hint: selectedSubject ?? 'Select Subject',
                 icon: 'department',
                 onChanged: (value) {
@@ -80,15 +85,21 @@ class _AssignSubjectState extends State<AssignSubject> {
                   onPressed: selectedSubject == null
                       ? null
                       : () {
-                    if (!widget.subjects.any(
-                            (s) => s.name == selectedSubject)) {
+                    final alreadyAdded = widget.subjects.any(
+                          (s) => s.subject.name == selectedSubject,
+                    );
+                    if (!alreadyAdded) {
                       final newList =
-                      List<SubjectModel>.from(widget.subjects);
+                      List<InstructorSubjectModel>.from(widget.subjects);
+                      final subject = widget.allSubjects.firstWhere(
+                            (s) => s.name == selectedSubject,
+                      );
                       newList.add(
-                        SubjectModel(
-                          name: selectedSubject!,
-                          code:
-                          "${selectedSubject!.substring(0, 2).toUpperCase()}101",
+                        InstructorSubjectModel(
+                          id: 0,
+                          instructorId: '',
+                          subjectId: subject.id,
+                          subject: subject,
                         ),
                       );
                       widget.onChanged(newList);
@@ -105,14 +116,14 @@ class _AssignSubjectState extends State<AssignSubject> {
         const SizedBox(height: 16),
         Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: AppTheme.white,
             borderRadius: BorderRadius.circular(16),
           ),
           child: SubjectHeader(
             subjects: widget.subjects,
             onDelete: (index) {
               final newList =
-              List<SubjectModel>.from(widget.subjects);
+              List<InstructorSubjectModel>.from(widget.subjects);
               newList.removeAt(index);
               widget.onChanged(newList);
             },

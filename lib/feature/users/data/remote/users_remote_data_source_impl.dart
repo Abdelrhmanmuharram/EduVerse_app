@@ -1,8 +1,10 @@
+import 'package:dio/dio.dart';
 import 'package:edusync_app/core/model/user_model.dart';
 import 'package:edusync_app/feature/users/data/remote/users_remote_data_source.dart';
 
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
+import '../../../admin/instructors/model/update_instructor_model.dart';
 import '../../../admin/student/model/add_student_model.dart';
 import '../../../admin/student/model/update_student_model.dart';
 
@@ -24,5 +26,22 @@ class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
   @override
   Future<void> updateStudent(UpdateStudentModel student) async {
     await DioClient.dio.put(APIConstants.updateProfile, data: student.toJson());
+  }
+
+  @override
+  Future<void> updateInstructor(UpdateInstructorModel instructor) async {
+    try {
+      print('REQUEST = ${instructor.toJson()}');
+
+      final response = await DioClient.dio.put(
+        '${APIConstants.baseUrl}${APIConstants.updateProfile}',
+        data: instructor.toJson(),
+      );
+      print('SUCCESS = ${response.data}');
+    } on DioException catch (e) {
+      print('STATUS = ${e.response?.statusCode}');
+      print('ERROR = ${e.response?.data}');
+      rethrow;
+    }
   }
 }

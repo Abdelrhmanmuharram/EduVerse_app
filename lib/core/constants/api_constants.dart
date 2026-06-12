@@ -10,4 +10,9 @@ class APIConstants {
   static const String usersByRole = '/Users/GetUsersByRole';
   static const String years = '/Years';
   static const String updateProfile = '/Users/profile';
+  static const String instructorSubjects = '/InstructorSubjects';
+  static const String getInstructorSubjects =
+      '/InstructorSubjects/GetInstructorSubjects';
+  static const String getSubjectInstructors =
+      '/InstructorSubjects/GetSubjectInstructors';
 }

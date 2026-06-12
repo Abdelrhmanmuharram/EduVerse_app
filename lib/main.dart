@@ -5,8 +5,6 @@ import 'package:edusync_app/feature/auth/login/data/remote/auth_remote_data_sour
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'core/services/navigation_service.dart';
-import 'feature/admin/instructors/repository/instructor_repository.dart';
-import 'feature/admin/instructors/viewmodel/instructor_viewmodel.dart';
 import 'feature/auth/login/repository/auth_repository.dart';
 import 'feature/auth/login/viewmodel/login_view_model.dart';
 
@@ -14,9 +12,6 @@ void main() {
   runApp(
     MultiProvider(
       providers: [
-        ChangeNotifierProvider(
-          create: (_) => InstructorViewModel(InstructorRepository()),
-        ),
         ChangeNotifierProvider(
           create: (_) =>
               LoginViewModel(AuthRepository(AuthRemoteDataSourceImpl())),

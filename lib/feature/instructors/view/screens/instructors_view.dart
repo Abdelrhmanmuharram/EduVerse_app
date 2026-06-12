@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:edusync_app/core/app_theme.dart';
+import 'package:provider/provider.dart';
 
+import '../../../admin/instructors/viewmodel/instructor_viewmodel.dart';
 import '../../viewmodel/instructors_viewmodel.dart';
 import '../widgets/instructor_header_widget.dart';
 import '../widgets/attendance_card_widget.dart';
@@ -8,16 +10,15 @@ import '../widgets/instructor_menu_card.dart';
 
 class InstructorsView extends StatelessWidget {
   static const String routeName = '/instructors-view';
-
   final viewModel = InstructorsViewModel();
 
   InstructorsView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final vm = context.watch<InstructorViewModel>();
     return Scaffold(
       backgroundColor: AppTheme.backgroundLight,
-
       body: SafeArea(
         child: Column(
           children: [
@@ -35,9 +36,7 @@ class InstructorsView extends StatelessWidget {
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
                 ),
-
                 itemCount: viewModel.menu.length,
-
                 itemBuilder: (context, index) {
                   final item = viewModel.menu[index];
                   return InstructorMenuCard(
