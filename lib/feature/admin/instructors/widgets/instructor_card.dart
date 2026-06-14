@@ -57,9 +57,10 @@ class _InstructorCardState extends State<InstructorCard> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            // if (instructor.subjects.isNotEmpty)
                               Text(
                                 instructor.email,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
                                 style: textTheme.titleSmall!.copyWith(
                                   color: AppTheme.secondText,
                                 ),
@@ -88,7 +89,7 @@ class _InstructorCardState extends State<InstructorCard> {
                                   ),
                                 );
                               },
-                              child: Icon(Icons.edit),
+                              child: Icon(Icons.edit, color: AppTheme.primaryLight),
                             ),
                             SizedBox(width: 8),
                             GestureDetector(
@@ -97,33 +98,32 @@ class _InstructorCardState extends State<InstructorCard> {
                                   widget.instructors.removeAt(index);
                                 });
                               },
-                                child: Icon(Icons.delete)),
+                                child: Icon(Icons.delete, color: AppTheme.red),),
                             SizedBox(width: 8),
-                            // GestureDetector(
-                            //   onTap: () {
-                            //     setState(() {
-                            //       // instructor.isLocked = !instructor.isLocked;
-                            //     });
-                            //     ScaffoldMessenger.of(context).showSnackBar(
-                            //       SnackBar(
-                            //         content: Text(
-                            //           instructor.isLocked
-                            //               ? 'Instructor account unlocked'
-                            //               : 'Instructor account locked',
-                            //         ),
-                            //         duration: const Duration(seconds: 2),
-                            //       ),
-                            //     );
-                            //   },
-                            //   child: Icon(
-                            //     instructor.isLocked
-                            //         ? Icons.lock
-                            //         : Icons.lock_open,
-                            //     color: instructor.isLocked
-                            //         ? AppTheme.red
-                            //         : Colors.green,
-                            //   ),
-                            // ),
+                            GestureDetector(
+                              onTap: () {
+                                setState(() {
+                                });
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(
+                                    content: Text(
+                                      instructor.isActive
+                                          ? 'Instructor account unlocked'
+                                          : 'Instructor account locked',
+                                    ),
+                                    duration: const Duration(seconds: 2),
+                                  ),
+                                );
+                              },
+                              child: Icon(
+                                instructor.isActive
+                                    ? Icons.lock
+                                    : Icons.lock_open,
+                                color: instructor.isActive
+                                    ? AppTheme.red
+                                    : Colors.green,
+                              ),
+                            ),
                           ],
                         ),
                       ),

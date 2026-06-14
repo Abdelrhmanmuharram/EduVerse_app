@@ -1,4 +1,5 @@
 import 'package:edusync_app/core/widgets/default_text_field.dart';
+import 'package:edusync_app/core/widgets/loading_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
@@ -21,6 +22,14 @@ class AdminInstructorsView extends StatefulWidget {
 
 class _AdminInstructorsViewState extends State<AdminInstructorsView> {
   List<InstructorsModel> instructors = [];
+  final searchController = TextEditingController();
+
+  @override
+  void dispose() {
+    searchController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
@@ -47,7 +56,11 @@ class _AdminInstructorsViewState extends State<AdminInstructorsView> {
                 Expanded(
                   flex: 3,
                   child: DefaultTextField(
-                    hint: 'Search by username, code',
+                    onChanged: (value) {
+                      viewmodel.searchInstructors(value);
+                    },
+                    controller: searchController,
+                    hint: 'Search by username',
                     prefixIcon: Icon(Icons.search, color: AppTheme.hintText),
                   ),
                 ),
@@ -82,7 +95,12 @@ class _AdminInstructorsViewState extends State<AdminInstructorsView> {
                 ),
               ],
             ),
-            InstructorCard(instructors: viewmodel.instructors),
+            viewmodel.isLoading
+                ? Padding(
+                  padding: EdgeInsets.only(top: MediaQuery.of(context).size.height * 0.25),
+                  child: const LoadingWidget(),
+                )
+                : InstructorCard(instructors: viewmodel.filteredInstructors),
           ],
         ),
       ),

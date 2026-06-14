@@ -19,4 +19,9 @@ class InstructorSubjectRepositoryImpl implements InstructorSubjectRepository {
   ) async {
     await remoteDataSource.bulkUpsertSubjects(subjects);
   }
+
+  @override
+  Future<void> deleteInstructorSubject(int id) async {
+    await remoteDataSource.deleteInstructorSubject(id);
+  }
 }

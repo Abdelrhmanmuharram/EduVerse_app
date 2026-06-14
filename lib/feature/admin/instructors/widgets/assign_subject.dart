@@ -3,8 +3,10 @@ import 'package:edusync_app/core/widgets/default_drop_down_field.dart';
 import 'package:edusync_app/feature/admin/instructors/model/instructor_subject_model.dart';
 import 'package:edusync_app/feature/admin/student/widgets/subject_header.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../student/model/subject_model.dart';
+import '../viewmodel/instructor_viewmodel.dart';
 
 class AssignSubject extends StatefulWidget {
   final List<InstructorSubjectModel> subjects;

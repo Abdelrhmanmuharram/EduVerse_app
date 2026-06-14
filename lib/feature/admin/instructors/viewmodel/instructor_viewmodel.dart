@@ -26,6 +26,11 @@ class InstructorViewModel extends ChangeNotifier {
   bool isLoading = false;
   List<UserModel> _instructors = [];
   List<UserModel> get instructors => _instructors;
+  List<UserModel> _filteredInstructors = [];
+  bool _isSearching = false;
+
+  List<UserModel> get filteredInstructors =>
+      _isSearching ? _filteredInstructors : _instructors;
   bool get isEmpty => _instructors.isEmpty;
   List<InstructorSubjectModel> _subjects = [];
   List<InstructorSubjectModel> _originalSubjects = [];
@@ -45,6 +50,22 @@ class InstructorViewModel extends ChangeNotifier {
     }
   }
 
+  void searchInstructors(String query) {
+    final searchText = query.trim().toLowerCase();
+
+    if (searchText.isEmpty) {
+      _isSearching = false;
+      _filteredInstructors = [];
+    } else {
+      _isSearching = true;
+      _filteredInstructors = _instructors.where((instructor) {
+        return instructor.fullName.toLowerCase().contains(searchText);
+      }).toList();
+    }
+
+    notifyListeners();
+  }
+
   Future<String?> addInstructor({
     required String email,
     required String fullName,
@@ -60,7 +81,6 @@ class InstructorViewModel extends ChangeNotifier {
         password: password,
         departmentId: departmentId,
       );
-      debugPrint("NEW INSTRUCTOR ID = $instructorId");
       await loadInstructors();
       return instructorId;
     } catch (e) {
@@ -72,17 +92,24 @@ class InstructorViewModel extends ChangeNotifier {
   }
 
   Future<void> loadInstructorSubjects(String instructorId) async {
-    _subjects = await instructorSubjectRepository.getInstructorSubjects(
-      instructorId,
-    );
-    _originalSubjects = List<InstructorSubjectModel>.from(_subjects);
-    debugPrint('Subjects Count = ${_subjects.length}');
-    notifyListeners();
+    try {
+      isLoading = true;
+      _subjects = [];
+      _originalSubjects = [];
+      notifyListeners();
+      _subjects = await instructorSubjectRepository.getInstructorSubjects(
+        instructorId,
+      );
+      _originalSubjects = List<InstructorSubjectModel>.from(_subjects);
+      debugPrint('Subjects Count = ${_subjects.length}');
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 
   Future<void> loadAllSubjects() async {
     _allSubjects = await subjectsRepository.getSubjects();
-    debugPrint('All Subjects Count = ${_allSubjects.length}');
     notifyListeners();
   }
 
@@ -109,9 +136,7 @@ class InstructorViewModel extends ChangeNotifier {
     final addedSubjects = _subjects
         .where((e) => !oldSubjectIds.contains(e.subjectId))
         .toList();
-    debugPrint('Added Subjects Count = ${addedSubjects.length}');
     if (addedSubjects.isEmpty) {
-      debugPrint('No new subjects to add');
       return;
     }
     final subjectModels = addedSubjects.map((subject) {
@@ -122,9 +147,60 @@ class InstructorViewModel extends ChangeNotifier {
       );
     }).toList();
 
-    for (final item in subjectModels) {
-      debugPrint('Instructor=${item.instructorId} Subject=${item.subjectId}');
-    }
+    for (final item in subjectModels) {}
     await instructorSubjectRepository.bulkUpsertSubjects(subjectModels);
+  }
+
+  bool hasSubjectsChanged() {
+    final originalIds = _originalSubjects.map((e) => e.subjectId).toSet();
+    final currentIds = _subjects.map((e) => e.subjectId).toSet();
+    if (originalIds.length != currentIds.length) {
+      return true;
+    }
+    return !originalIds.containsAll(currentIds);
+  }
+
+  Future<void> deleteRemovedSubjects() async {
+    final deletedSubjects = _originalSubjects
+        .where(
+          (original) => !_subjects.any((current) => current.id == original.id),
+        )
+        .toList();
+    for (final subject in deletedSubjects) {
+      await instructorSubjectRepository.deleteInstructorSubject(subject.id);
+    }
+  }
+
+  void syncSubjectsSnapshot() {
+    _originalSubjects = List<InstructorSubjectModel>.from(_subjects);
+  }
+
+  Future<bool> saveInstructor({
+    required String instructorId,
+    required String fullName,
+    required String email,
+    required int? departmentId,
+  }) async {
+    final instructor = UpdateInstructorModel(
+      id: instructorId,
+      fullName: fullName,
+      email: email,
+      departmentId: departmentId,
+    );
+    try {
+      isLoading = true;
+      notifyListeners();
+      await usersRepository.updateInstructor(instructor);
+      await deleteRemovedSubjects();
+      await bulkUpsertSubjects(instructorId);
+      syncSubjectsSnapshot();
+      await loadInstructors();
+      return true;
+    } catch (e) {
+      return false;
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
   }
 }

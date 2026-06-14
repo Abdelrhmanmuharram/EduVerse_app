@@ -10,7 +10,9 @@ import '../../model/instructor_subject_upsert_model.dart';
 class InstructorSubjectRemoteDataSourceImpl
     implements InstructorSubjectRemoteDataSource {
   @override
-  Future<List<InstructorSubjectModel>> getInstructorSubjects(String instructorId) async {
+  Future<List<InstructorSubjectModel>> getInstructorSubjects(
+    String instructorId,
+  ) async {
     final response = await DioClient.dio.get(
       '${APIConstants.baseUrl}'
       '${APIConstants.getInstructorSubjects}'
@@ -39,6 +41,24 @@ class InstructorSubjectRemoteDataSourceImpl
         data: body,
       );
       print(response.data);
+    } on DioException catch (e) {
+      print('STATUS = ${e.response?.statusCode}');
+      print('ERROR = ${e.response?.data}');
+      rethrow;
+    }
+  }
+
+  @override
+  Future<void> deleteInstructorSubject(int id) async {
+    try {
+      print('DELETE REQUEST ID = $id');
+
+      final response = await DioClient.dio.delete(
+        '${APIConstants.baseUrl}/InstructorSubjects/$id',
+      );
+
+      print('DELETE STATUS = ${response.statusCode}');
+      print('DELETE RESPONSE = ${response.data}');
     } on DioException catch (e) {
       print('STATUS = ${e.response?.statusCode}');
       print('ERROR = ${e.response?.data}');
