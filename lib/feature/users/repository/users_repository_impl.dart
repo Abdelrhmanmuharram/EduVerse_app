@@ -29,4 +29,19 @@ class UsersRepositoryImpl implements UsersRepository {
   Future<void> updateInstructor(UpdateInstructorModel instructor) async {
     await remoteDataSource.updateInstructor(instructor);
   }
+
+  @override
+  Future<void> reactivateAccount(String userId) async {
+    await remoteDataSource.reactivateAccount(userId);
+  }
+
+  @override
+  Future<void> deactivateAccount(String userId) async {
+    await remoteDataSource.deactivateAccount(userId);
+  }
+
+  @override
+  Future<void> deleteUsers(String userId) async {
+    await remoteDataSource.deleteUsers(userId);
+  }
 }

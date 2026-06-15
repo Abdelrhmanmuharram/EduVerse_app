@@ -31,6 +31,27 @@ class UserModel {
       isActive: json['isActive'] ?? false,
     );
   }
+  UserModel copyWith({
+    String? id,
+    String? fullName,
+    String? email,
+    bool? emailConfirmed,
+    int? departmentId,
+    int? yearId,
+    List<String>? roles,
+    bool? isActive,
+  }) {
+    return UserModel(
+      id: id ?? this.id,
+      fullName: fullName ?? this.fullName,
+      email: email ?? this.email,
+      emailConfirmed: emailConfirmed ?? this.emailConfirmed,
+      departmentId: departmentId ?? this.departmentId,
+      yearId: yearId ?? this.yearId,
+      roles: roles ?? this.roles,
+      isActive: isActive ?? this.isActive,
+    );
+  }
 
   Map<String, dynamic> toJson() {
     return {

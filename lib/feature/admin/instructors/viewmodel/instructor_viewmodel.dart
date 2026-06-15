@@ -203,4 +203,39 @@ class InstructorViewModel extends ChangeNotifier {
       notifyListeners();
     }
   }
+
+  Future<void> toggleInstructorStatus(String userId, bool isActive) async {
+    try {
+      if (isActive) {
+        await usersRepository.deactivateAccount(userId);
+      } else {
+        await usersRepository.reactivateAccount(userId);
+      }
+      final index = _instructors.indexWhere((e) => e.id == userId);
+      if (index != -1) {
+        _instructors[index] = _instructors[index].copyWith(isActive: !isActive);
+      }
+      final filteredIndex = _filteredInstructors.indexWhere(
+        (e) => e.id == userId,
+      );
+      if (filteredIndex != -1) {
+        _filteredInstructors[filteredIndex] =
+            _filteredInstructors[filteredIndex].copyWith(isActive: !isActive);
+      }
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
+
+  Future<void> deleteInstructor(String userId) async {
+    try {
+      await usersRepository.deleteUsers(userId);
+      _instructors.removeWhere((instructor) => instructor.id == userId);
+      _filteredInstructors.removeWhere((instructor) => instructor.id == userId);
+      notifyListeners();
+    } catch (e) {
+      rethrow;
+    }
+  }
 }

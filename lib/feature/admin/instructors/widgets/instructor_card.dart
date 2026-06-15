@@ -28,12 +28,12 @@ class _InstructorCardState extends State<InstructorCard> {
               ),
             )
           : RefreshIndicator(
-            onRefresh: () async {
-              await vm.loadInstructors();
-            },
-            color: AppTheme.primaryLight,
-            backgroundColor: AppTheme.white,
-            child: ListView.builder(
+              onRefresh: () async {
+                await vm.loadInstructors();
+              },
+              color: AppTheme.primaryLight,
+              backgroundColor: AppTheme.white,
+              child: ListView.builder(
                 itemCount: widget.instructors.length,
                 itemBuilder: (context, index) {
                   final instructor = widget.instructors[index];
@@ -47,8 +47,13 @@ class _InstructorCardState extends State<InstructorCard> {
                       child: ListTile(
                         leading: CircleAvatar(
                           radius: 24,
-                          backgroundColor: AppTheme.primaryLight.withOpacity(0.2),
-                          child: Icon(Icons.person, color: AppTheme.primaryLight),
+                          backgroundColor: AppTheme.primaryLight.withOpacity(
+                            0.2,
+                          ),
+                          child: Icon(
+                            Icons.person,
+                            color: AppTheme.primaryLight,
+                          ),
                         ),
                         title: Text(
                           instructor.fullName,
@@ -57,14 +62,14 @@ class _InstructorCardState extends State<InstructorCard> {
                         subtitle: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                              Text(
-                                instructor.email,
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: textTheme.titleSmall!.copyWith(
-                                  color: AppTheme.secondText,
-                                ),
+                            Text(
+                              instructor.email,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: textTheme.titleSmall!.copyWith(
+                                color: AppTheme.secondText,
                               ),
+                            ),
                           ],
                         ),
                         trailing: Row(
@@ -78,7 +83,8 @@ class _InstructorCardState extends State<InstructorCard> {
                                     builder: (_) => MultiProvider(
                                       providers: [
                                         ChangeNotifierProvider.value(
-                                          value: context.read<InstructorViewModel>(),
+                                          value: context
+                                              .read<InstructorViewModel>(),
                                         ),
                                       ],
                                       child: const InstructorDetails(),
@@ -89,21 +95,75 @@ class _InstructorCardState extends State<InstructorCard> {
                                   ),
                                 );
                               },
-                              child: Icon(Icons.edit, color: AppTheme.primaryLight),
+                              child: Icon(
+                                Icons.edit,
+                                color: AppTheme.primaryLight,
+                              ),
                             ),
                             SizedBox(width: 8),
                             GestureDetector(
-                              onTap: (){
-                                setState(() {
-                                  widget.instructors.removeAt(index);
-                                });
+                              onTap: () async {
+                                final confirm = await showDialog<bool>(
+                                  context: context,
+                                  builder: (context) {
+                                    return AlertDialog(
+                                      title: const Text('Delete Instructor'),
+                                      content: const Text(
+                                        'Are you sure you want to delete this instructor?',
+                                      ),
+                                      actions: [
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, false),
+                                          child: const Text('Cancel', style: TextStyle(color: AppTheme.primaryLight)),
+                                        ),
+                                        TextButton(
+                                          onPressed: () =>
+                                              Navigator.pop(context, true),
+                                          child: const Text('Delete', style: TextStyle(color: AppTheme.red)),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                );
+                                if (confirm != true) return;
+                                try {
+                                  await context
+                                      .read<InstructorViewModel>()
+                                      .deleteInstructor(
+                                        widget.instructors[index].id,
+                                      );
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Instructor deleted successfully',
+                                      ),
+                                    ),
+                                  );
+                                } catch (e) {
+                                  if (!context.mounted) return;
+                                  ScaffoldMessenger.of(context).showSnackBar(
+                                    const SnackBar(
+                                      content: Text(
+                                        'Failed to delete instructor',
+                                      ),
+                                    ),
+                                  );
+                                }
                               },
-                                child: Icon(Icons.delete, color: AppTheme.red),),
+                              child: Icon(Icons.delete, color: AppTheme.red),
+                            ),
                             SizedBox(width: 8),
                             GestureDetector(
-                              onTap: () {
-                                setState(() {
-                                });
+                              onTap: () async {
+                                await context
+                                    .read<InstructorViewModel>()
+                                    .toggleInstructorStatus(
+                                      instructor.id,
+                                      instructor.isActive,
+                                    );
+                                if (!context.mounted) return;
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(
@@ -121,7 +181,7 @@ class _InstructorCardState extends State<InstructorCard> {
                                     : Icons.lock_open,
                                 color: instructor.isActive
                                     ? AppTheme.red
-                                    : Colors.green,
+                                    : AppTheme.green,
                               ),
                             ),
                           ],
@@ -131,7 +191,7 @@ class _InstructorCardState extends State<InstructorCard> {
                   );
                 },
               ),
-          ),
+            ),
     );
   }
 }

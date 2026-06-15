@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:edusync_app/core/model/user_model.dart';
 import 'package:edusync_app/feature/users/data/remote/users_remote_data_source.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../../../core/constants/api_constants.dart';
 import '../../../../core/network/dio_client.dart';
@@ -31,17 +32,39 @@ class UsersRemoteDataSourceImpl implements UsersRemoteDataSource {
   @override
   Future<void> updateInstructor(UpdateInstructorModel instructor) async {
     try {
-      print('REQUEST = ${instructor.toJson()}');
-
       final response = await DioClient.dio.put(
         '${APIConstants.baseUrl}${APIConstants.updateProfile}',
         data: instructor.toJson(),
       );
-      print('SUCCESS = ${response.data}');
     } on DioException catch (e) {
-      print('STATUS = ${e.response?.statusCode}');
-      print('ERROR = ${e.response?.data}');
       rethrow;
     }
+  }
+
+  @override
+  Future<void> reactivateAccount(String userId) async {
+    await DioClient.dio.post(
+      '${APIConstants.baseUrl}/Users/reactivateAccount',
+      data: {
+        'userId': userId,
+      }
+    );
+  }
+
+  @override
+  Future<void> deactivateAccount(String userId) async {
+    await DioClient.dio.post(
+      '${APIConstants.baseUrl}/Users/deactivateAccount',
+      data: {
+        'userId': userId,
+      }
+    );
+  }
+
+  @override
+  Future<void> deleteUsers(String userId) async {
+    await DioClient.dio.delete(
+      '${APIConstants.baseUrl}/Users/$userId',
+    );
   }
 }

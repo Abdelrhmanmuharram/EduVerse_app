@@ -8,4 +8,7 @@ abstract class UsersRepository {
   Future<void> updateStudent(UpdateStudentModel student);
   Future<void> addStudent(AddStudentModel student);
   Future<void> updateInstructor(UpdateInstructorModel instructor);
+  Future<void> reactivateAccount(String userId);
+  Future<void> deactivateAccount(String userId);
+  Future<void> deleteUsers(String userId);
 }
