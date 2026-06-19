@@ -18,7 +18,7 @@ class DefaultDropDownField extends StatelessWidget {
     required this.hint,
     this.selectedItem,
     this.onChanged,
-    required this.icon,
+    this.icon,
     this.errorText,
   });
   @override

@@ -1,22 +1,22 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:edusync_app/core/app_theme.dart';
 import 'package:provider/provider.dart';
 
-import '../../../admin/instructors/viewmodel/instructor_viewmodel.dart';
+import '../../../../core/app_theme.dart';
 import '../../viewmodel/instructors_viewmodel.dart';
-import '../widgets/instructor_header_widget.dart';
+import '../../viewmodel/students_list_viewmodel.dart';
 import '../widgets/attendance_card_widget.dart';
+import '../widgets/instructor_header_widget.dart';
 import '../widgets/instructor_menu_card.dart';
 
-class InstructorsView extends StatelessWidget {
-  static const String routeName = '/instructors-view';
+class InstructorsHomeView extends StatelessWidget {
+  static const String routeName = '/instructors-home';
   final viewModel = InstructorsViewModel();
-
-  InstructorsView({super.key});
+  InstructorsHomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final vm = context.watch<InstructorViewModel>();
+    final studentsViewModel = context.watch<StudentsListViewModel>();
     return Scaffold(
       backgroundColor: AppTheme.backgroundLight,
       body: SafeArea(
@@ -30,8 +30,7 @@ class InstructorsView extends StatelessWidget {
             Expanded(
               child: GridView.builder(
                 padding: const EdgeInsets.symmetric(horizontal: 20),
-                gridDelegate:
-                const SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 2,
                   crossAxisSpacing: 16,
                   mainAxisSpacing: 16,
@@ -39,41 +38,26 @@ class InstructorsView extends StatelessWidget {
                 itemCount: viewModel.menu.length,
                 itemBuilder: (context, index) {
                   final item = viewModel.menu[index];
+                  final subtitle = item["title"] == "Students List"
+                      ? "${studentsViewModel.studentsCount} total students"
+                      : item["subtitle"];
                   return InstructorMenuCard(
                     title: item["title"],
-                    subtitle: item["subtitle"],
+                    subtitle: subtitle,
                     icon: item["icon"],
                     onTap: () {
                       switch (item["title"]) {
-                        case "Subjects":
-                          Navigator.pushNamed(context, '/subjects');
-                          break;
                         case "Materials":
+                          Navigator.pushNamed(context, '/materials');
                           break;
                         case "Students List":
                           Navigator.pushNamed(context, '/students_list');
-                          break;
-                        case "Reports":
                           break;
                       }
                     },
                   );
                 },
               ),
-            ),
-            const SizedBox(height: 10),
-            BottomNavigationBar(
-              currentIndex: 0,
-              items: const [
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.grid_view),
-                  label: "Home",
-                ),
-                BottomNavigationBarItem(
-                  icon: Icon(Icons.person_outline),
-                  label: "Profile",
-                ),
-              ],
             ),
           ],
         ),

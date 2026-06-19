@@ -5,6 +5,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/app_theme.dart';
+import '../../../../core/widgets/back_item.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../departments/viewmodel/departement_viewmodel.dart';
 import '../model/instructor_model.dart';
@@ -36,15 +37,7 @@ class _AdminInstructorsViewState extends State<AdminInstructorsView> {
     final viewmodel = context.watch<InstructorViewModel>();
     return Scaffold(
       appBar: AppBar(
-        leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: SvgPicture.asset(
-            'assets/icons/back.svg',
-            width: 24,
-            height: 24,
-            fit: .scaleDown,
-          ),
-        ),
+        leading: BackItem(),
         title: Text('Instructors', style: textTheme.headlineSmall),
       ),
       body: Padding(

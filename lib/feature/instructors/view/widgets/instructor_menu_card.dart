@@ -6,22 +6,20 @@ class InstructorMenuCard extends StatelessWidget {
   final String title;
   final String subtitle;
   final IconData icon;
-  final VoidCallback? onTap; // 🔥 ضيف دي
+  final VoidCallback? onTap;
 
   const InstructorMenuCard({
     super.key,
     required this.title,
     required this.subtitle,
     required this.icon,
-    this.onTap, // 🔥 ضيف دي
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-
     return GestureDetector(
-      onTap: onTap, // 🔥 هنا بقى الكليك
-
+      onTap: onTap,
       child: Container(
         padding: const EdgeInsets.all(16),
 
@@ -32,9 +30,7 @@ class InstructorMenuCard extends StatelessWidget {
 
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-
           children: [
-
             Container(
               width: 40,
               height: 40,
@@ -44,18 +40,14 @@ class InstructorMenuCard extends StatelessWidget {
               ),
               child: Icon(icon, color: AppTheme.primaryLight),
             ),
-
             const SizedBox(height: 14),
-
             Text(
               title,
               style: const TextStyle(
                 fontWeight: FontWeight.w600,
               ),
             ),
-
             const SizedBox(height: 4),
-
             Text(
               subtitle,
               style: const TextStyle(

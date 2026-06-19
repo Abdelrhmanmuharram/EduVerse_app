@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:edusync_app/core/app_theme.dart';
 
+import '../../../../core/services/local_storage_service.dart';
+
 class InstructorHeaderWidget extends StatelessWidget {
   const InstructorHeaderWidget({super.key});
   @override
@@ -27,16 +29,23 @@ class InstructorHeaderWidget extends StatelessWidget {
                     style: textTheme.titleSmall!
                         .copyWith(color: AppTheme.secondText),
                   ),
-
-                  Text(
-                    "Dr. Julian Vance",
-                    style: textTheme.headlineSmall,
+                  FutureBuilder(
+                    future: LocalStorageService.getUser(),
+                    builder: (context, snapshot) {
+                      if (!snapshot.hasData) {
+                        return const SizedBox();
+                      }
+                      final user = snapshot.data!;
+                      return Text(
+                        user.fullName,
+                        style: textTheme.headlineSmall,
+                      );
+                    },
                   ),
                 ],
               )
             ],
           ),
-
           Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(

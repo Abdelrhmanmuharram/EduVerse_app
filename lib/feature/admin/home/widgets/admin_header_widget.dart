@@ -3,6 +3,8 @@ import 'package:edusync_app/core/widgets/default_text_field.dart';
 import 'package:flutter/material.dart';
 
 class AdminHeader extends StatefulWidget {
+  const AdminHeader({super.key});
+
   @override
   State<AdminHeader> createState() => _AdminHeaderState();
 }
@@ -38,12 +40,6 @@ class _AdminHeaderState extends State<AdminHeader> {
                 backgroundImage: AssetImage('assets/images/admin-profile.png'),
               ),
             ],
-          ),
-          const SizedBox(height: 24),
-          DefaultTextField(
-            hint: 'Search...',
-            prefixIcon: Icon(Icons.search),
-            controller: _searchController,
           ),
           const SizedBox(height: 24),
         ],

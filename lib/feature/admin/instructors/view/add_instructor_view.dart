@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
+import '../../../../core/widgets/back_item.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../viewmodel/instructor_viewmodel.dart';
 import '../widgets/assign_subject.dart';
@@ -25,7 +26,6 @@ class _AddInstructorViewState extends State<AddInstructorView> {
   @override
   void initState() {
     super.initState();
-    // بننتظر الـ frame الأول يخلص الأول عشان نعمل notifyListeners بأمان
     WidgetsBinding.instance.addPostFrameCallback((_) {
       final viewModel = context.read<InstructorViewModel>();
       viewModel.updateSubjects([]);
@@ -38,27 +38,28 @@ class _AddInstructorViewState extends State<AddInstructorView> {
     final viewModel = context.read<InstructorViewModel>();
     viewModel
         .addInstructor(
-      email: emailController.text.trim(),
-      fullName: fullNameController.text.trim(),
-      password: passwordController.text.trim(),
-      departmentId: null,
-    ).then((instructorId) async {
-      if (instructorId != null) {
-        await viewModel.bulkUpsertSubjects(instructorId);
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Instructor added successfully')),
-          );
-          Navigator.pop(context);
-        }
-      } else {
-        if (mounted) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(content: Text('Failed to add instructor')),
-          );
-        }
-      }
-    });
+          email: emailController.text.trim(),
+          fullName: fullNameController.text.trim(),
+          password: passwordController.text.trim(),
+          departmentId: null,
+        )
+        .then((instructorId) async {
+          if (instructorId != null) {
+            await viewModel.bulkUpsertSubjects(instructorId);
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Instructor added successfully')),
+              );
+              Navigator.pop(context);
+            }
+          } else {
+            if (mounted) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                const SnackBar(content: Text('Failed to add instructor')),
+              );
+            }
+          }
+        });
   }
 
   @override
@@ -77,15 +78,7 @@ class _AddInstructorViewState extends State<AddInstructorView> {
     return Scaffold(
       appBar: AppBar(
         title: Text('Add Instructor', style: textTheme.headlineSmall),
-        leading: InkWell(
-          onTap: () => Navigator.pop(context),
-          child: SvgPicture.asset(
-            'assets/icons/back.svg',
-            width: 24,
-            height: 24,
-            fit: BoxFit.scaleDown,
-          ),
-        ),
+        leading: BackItem(),
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),

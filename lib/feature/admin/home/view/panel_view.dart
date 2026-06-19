@@ -8,6 +8,8 @@ import '../widgets/admin_header_widget.dart';
 class PanelView extends StatelessWidget {
   final viewModel = PanelViewModel();
 
+  PanelView({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

@@ -22,11 +22,8 @@ class InstructorRepository {
           "departmentId": departmentId,
         },
       );
-      print("ADD RESPONSE = ${response.data}");
       return response.data['data']['id'];
     } on DioException catch (e) {
-      print("ADD ERROR = ${e.response?.data}");
-      print("ADD STATUS = ${e.response?.statusCode}");
       rethrow;
     }
   }
@@ -42,8 +39,6 @@ class InstructorRepository {
           .where((user) => user.roles.contains(role))
           .toList();
     } on DioException catch (e) {
-      print(e.response?.data);
-      print(e.response?.statusCode);
       rethrow;
     }
   }

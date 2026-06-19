@@ -15,12 +15,11 @@ class DefaultTextField extends StatefulWidget {
   final Function(String)? onChanged;
   final TextInputAction? textInputAction;
 
-
   const DefaultTextField({
     super.key,
     this.readOnly = false,
     required this.hint,
-    required this.prefixIcon,
+    this.prefixIcon,
     this.isPassword = false,
     this.controller,
     this.keyboardType = TextInputType.text,
@@ -43,7 +42,6 @@ class _UmsTextFieldState extends State<DefaultTextField> {
     return TextFormField(
       textInputAction: widget.textInputAction,
       onChanged: (value) {
-
         widget.onChanged?.call(value);
       },
       style: TextStyle(
@@ -59,7 +57,9 @@ class _UmsTextFieldState extends State<DefaultTextField> {
           fontWeight: FontWeight.w400,
         ),
         prefixIcon: widget.prefixSvg != null
-            ? SvgPicture.asset(widget.prefixSvg!)
+            ? SvgPicture.asset(
+                widget.prefixSvg!,
+              )
             : widget.prefixIcon,
         suffixIcon: widget.isPassword
             ? IconButton(

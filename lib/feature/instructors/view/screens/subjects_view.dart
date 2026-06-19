@@ -1,23 +1,30 @@
 import 'package:flutter/material.dart';
 import 'package:edusync_app/core/app_theme.dart';
+import '../../../admin/instructors/data/remote/instructor_subject_remote_data_source_impl.dart';
+import '../../../admin/instructors/repository/instructor_subject_repository_impl.dart';
+import '../../data/remote/materials_remote_data_source_impl.dart';
+import '../../repository/materials_repository_impl.dart';
+import '../../viewmodel/materials_viewmodel.dart';
 import '../widgets/attendance_summary_card.dart';
 import 'package:edusync_app/feature/instructors/view/widgets/materials_section.dart';
 import 'package:edusync_app/feature/instructors/viewmodel/materials_viewmodel.dart';
+
 class SubjectsView extends StatelessWidget {
   static const routeName = "/subjects";
 
-  final viewModel = MaterialsViewModel();
+  final viewModel = MaterialsViewModel(
+    MaterialsRepositoryImpl(MaterialsRemoteDataSourceImpl()),
+    InstructorSubjectRepositoryImpl(InstructorSubjectRemoteDataSourceImpl()),
+  );
 
   SubjectsView({super.key});
 
   @override
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
-
     return Scaffold(
       resizeToAvoidBottomInset: true,
       backgroundColor: AppTheme.backgroundLight,
-
       appBar: AppBar(
         title: Text(
           "Subject: Advanced Calculus",
@@ -40,28 +47,12 @@ class SubjectsView extends StatelessWidget {
           child: Column(
             children: [
               const SizedBox(height: 16),
-
-              /// Subjects List
-              MaterialsSection(
-                materials: viewModel.materials,
-              ),
-
+              MaterialsSection(materials: viewModel.materials),
               const SizedBox(height: 20),
-
-              /// Attendance History
               AttendanceSummaryCard(),
-
               const SizedBox(height: 20),
-
-              /// TOTAL STUDENTS
-              _StatCard(
-                title: "TOTAL STUDENTS",
-                value: "42",
-              ),
-
+              _StatCard(title: "TOTAL STUDENTS", value: "42"),
               const Spacer(),
-
-              /// Take Attendance Button
               SizedBox(
                 width: double.infinity,
                 child: ElevatedButton.icon(
@@ -77,7 +68,6 @@ class SubjectsView extends StatelessWidget {
                   onPressed: () {},
                 ),
               ),
-
               const SizedBox(height: 20),
             ],
           ),
@@ -92,11 +82,7 @@ class _StatCard extends StatelessWidget {
   final String value;
   final Color? color;
 
-  const _StatCard({
-    required this.title,
-    required this.value,
-    this.color,
-  });
+  const _StatCard({required this.title, required this.value, this.color});
 
   @override
   Widget build(BuildContext context) {
@@ -114,10 +100,7 @@ class _StatCard extends StatelessWidget {
             title,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: const TextStyle(
-              color: AppTheme.secondText,
-              fontSize: 12,
-            ),
+            style: const TextStyle(color: AppTheme.secondText, fontSize: 12),
           ),
           const SizedBox(height: 8),
           Text(

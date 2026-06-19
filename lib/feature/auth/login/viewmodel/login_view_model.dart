@@ -41,28 +41,32 @@ class LoginViewModel extends ChangeNotifier {
       }
       return null;
     } on DioException catch (e) {
-      String message = 'Something went wrong';
+      debugPrint('TYPE: ${e.type}');
+      debugPrint('MESSAGE: ${e.message}');
+      debugPrint('ERROR: ${e.error}');
+      debugPrint('STATUS: ${e.response?.statusCode}');
+      debugPrint('DATA: ${e.response?.data}');
       if (e.type == DioExceptionType.connectionTimeout ||
           e.type == DioExceptionType.receiveTimeout ||
           e.type == DioExceptionType.sendTimeout) {
-        message = 'Connection timeout';
-      } else if (e.type == DioExceptionType.connectionError) {
-        message = 'Check your internet connection';
-      } else if (e.response != null) {
-        final statusCode = e.response?.statusCode;
-        final data = e.response?.data;
-        if (statusCode == 401) {
-          message = 'Invalid email or password';
-        } else if (statusCode == 404) {
-          message = 'User not found';
-        } else if (statusCode == 400) {
-          message = data['message'] ?? 'Invalid input data';
-        } else if (statusCode == 500) {
-          message = 'Server error';
-        }
+        throw 'Connection timeout';
       }
-      throw message;
-    } catch (e) {
+      if (e.type == DioExceptionType.connectionError) {
+        throw 'Check your internet connection';
+      }
+      switch (e.response?.statusCode) {
+        case 400:
+          throw 'Invalid input data';
+        case 401:
+          throw 'Invalid email or password';
+        case 404:
+          throw 'User not found';
+        case 500:
+          throw 'Server error';
+        default:
+          throw 'Something went wrong';
+      }
+    }catch (e) {
       String message = e
           .toString()
           .toLowerCase()

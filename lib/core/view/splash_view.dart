@@ -2,10 +2,10 @@ import 'package:edusync_app/core/widgets/loading_widget.dart';
 import 'package:edusync_app/feature/students/view/student_view.dart';
 import 'package:flutter/material.dart';
 import '../../feature/auth/login/view/login_view.dart';
+import '../../feature/instructors/view/screens/instructor_view.dart';
 import '../../feature/onboarding/view/onboarding_view.dart';
 import '../services/local_storage_service.dart';
 import '../../feature/admin/home/view/admin_home_view.dart';
-import '../../feature/instructors/view/screens/instructors_view.dart';
 
 class SplashView extends StatefulWidget {
   static const routeName = "/splash";
@@ -37,7 +37,7 @@ class _SplashViewState extends State<SplashView> {
       if (role == "Admin") {
         Navigator.pushReplacementNamed(context, AdminHomeView.routeName);
       } else if (role == "Instructor") {
-        Navigator.pushReplacementNamed(context, InstructorsView.routeName);
+        Navigator.pushReplacementNamed(context, InstructorView.routeName);
       } else if (role == "Student") {
         Navigator.pushReplacementNamed(context, StudentView.routeName);
       }
