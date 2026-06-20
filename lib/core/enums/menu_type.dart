@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-enum MenuType { semesters, departments, students, instructors , years}
+enum MenuType { semesters, departments, students, instructors , years, subjects }
 
 extension MenuTypeExtension on MenuType {
   String get route {
@@ -15,6 +15,8 @@ extension MenuTypeExtension on MenuType {
         return '/instructors';
       case MenuType.years:
         return '/years';
+      case MenuType.subjects:
+        return '/subjects';
     }
   }
 
@@ -30,6 +32,8 @@ extension MenuTypeExtension on MenuType {
         return 'Instructors';
       case MenuType.years:
         return 'Years';
+      case MenuType.subjects:
+        return 'Subjects';
     }
   }
 
@@ -44,6 +48,8 @@ extension MenuTypeExtension on MenuType {
       case MenuType.instructors:
         return Icons.badge_outlined;
       case MenuType.years:
+        return Icons.calendar_month_outlined;
+      case MenuType.subjects:
         return Icons.book_outlined;
     }
   }
@@ -60,6 +66,8 @@ extension MenuTypeExtension on MenuType {
         return 'Profiles & assignments';
       case MenuType.years:
         return 'Academic years';
+      case MenuType.subjects:
+        return 'Subjects';
     }
   }
 }

@@ -30,6 +30,7 @@ import '../../feature/admin/instructors/view/add_instructor_view.dart';
 import '../../feature/admin/semesters/view/add_semester_view.dart';
 import '../../feature/admin/instructors/view/admin_instructors_view.dart';
 import '../../feature/admin/semesters/view/edit_semester_view.dart';
+import '../../feature/admin/subject/view/subjects_view.dart';
 import '../../feature/admin/years/view/add_years_view.dart';
 import '../../feature/admin/years/view/years_details_view.dart';
 import '../../feature/instructors/data/remote/materials_remote_data_source_impl.dart';
@@ -174,5 +175,6 @@ class AppRoutes {
             ..loadYears(),
       child: const AddYearsView(),
     ),
+    '/subjects' : (_) => const SubjectsView(),
   };
 }
