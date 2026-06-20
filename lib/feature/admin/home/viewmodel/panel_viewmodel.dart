@@ -8,6 +8,7 @@ class PanelViewModel {
     MenuItem(type: MenuType.departments),
     MenuItem(type: MenuType.students),
     MenuItem(type: MenuType.instructors),
+    MenuItem(type: MenuType.years),
   ];
 
   void onItemClicked(BuildContext context, MenuItem item) {

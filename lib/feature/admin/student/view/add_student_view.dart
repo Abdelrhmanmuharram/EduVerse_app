@@ -144,18 +144,18 @@ class _AddStudentViewState extends State<AddStudentView> {
                     icon: 'year',
                     hint: 'Select year',
                     errorText: showYearError ? 'Please select a year' : null,
-                    items: yearVm.years.map((y) => y.englishName).toList(),
+                    items: yearVm.years.map((y) => y.engName).toList(),
                     selectedItem:
                         yearVm.years
                             .where((y) => y.id == selectedYearId)
                             .isNotEmpty
                         ? yearVm.years
                               .firstWhere((y) => y.id == selectedYearId)
-                              .englishName
+                              .engName
                         : null,
                     onChanged: (value) {
                       final year = yearVm.years.firstWhere(
-                        (y) => y.englishName == value,
+                        (y) => y.engName == value,
                       );
                       setState(() {
                         selectedYearId = year.id;

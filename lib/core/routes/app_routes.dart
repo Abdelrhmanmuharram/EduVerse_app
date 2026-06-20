@@ -5,6 +5,7 @@ import 'package:edusync_app/feature/admin/home/view/admin_home_view.dart';
 import 'package:edusync_app/feature/admin/instructors/view/instructor_details.dart';
 import 'package:edusync_app/feature/admin/departments/view/departments_view.dart';
 import 'package:edusync_app/feature/admin/student/viewmodel/student_viewmodel.dart';
+import 'package:edusync_app/feature/admin/years/view/years_view.dart';
 import 'package:edusync_app/feature/instructors/view/screens/instructors_home_view.dart';
 import 'package:edusync_app/feature/onboarding/view/onboarding_view.dart';
 import 'package:edusync_app/feature/admin/student/view/students_view.dart';
@@ -29,6 +30,8 @@ import '../../feature/admin/instructors/view/add_instructor_view.dart';
 import '../../feature/admin/semesters/view/add_semester_view.dart';
 import '../../feature/admin/instructors/view/admin_instructors_view.dart';
 import '../../feature/admin/semesters/view/edit_semester_view.dart';
+import '../../feature/admin/years/view/add_years_view.dart';
+import '../../feature/admin/years/view/years_details_view.dart';
 import '../../feature/instructors/data/remote/materials_remote_data_source_impl.dart';
 import '../../feature/instructors/repository/materials_repository_impl.dart';
 import '../../feature/instructors/view/screens/instructor_view.dart';
@@ -152,6 +155,24 @@ class AppRoutes {
         ),
       )..loadSubjects(),
       child: MaterialAddView(),
+    ),
+    '/years': (_) => ChangeNotifierProvider(
+      create: (_) =>
+          YearViewmodel(YearRepositoryImpl(YearRemoteDataSourceImpl()))
+            ..loadYears(),
+      child: YearsView(),
+    ),
+    '/years-details': (_) => ChangeNotifierProvider(
+      create: (_) =>
+          YearViewmodel(YearRepositoryImpl(YearRemoteDataSourceImpl()))
+            ..loadYears(),
+      child: YearsDetailsView(),
+    ),
+    '/add-years': (_) => ChangeNotifierProvider(
+      create: (_) =>
+          YearViewmodel(YearRepositoryImpl(YearRemoteDataSourceImpl()))
+            ..loadYears(),
+      child: const AddYearsView(),
     ),
   };
 }

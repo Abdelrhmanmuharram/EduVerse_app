@@ -10,4 +10,19 @@ class YearRepositoryImpl implements YearRepository {
   Future<List<YearModel>> getYears() {
     return _remoteDataSource.getYears();
   }
+
+  @override
+  Future<void> addYear(YearModel year) {
+    return _remoteDataSource.addYear(year);
+  }
+
+  @override
+  Future<void> deleteYear(int id) {
+    return _remoteDataSource.deleteYear(id);
+  }
+
+  @override
+  Future<void> updateYear(int id,YearModel year) {
+    return _remoteDataSource.updateYear(id, year);
+  }
 }

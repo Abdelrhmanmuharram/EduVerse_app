@@ -152,14 +152,14 @@ class _StudentDetailsViewState extends State<StudentDetailsView> {
                   icon: 'year',
                   hint: 'Select year',
                   errorText: showYearError ? 'Please select a year' : null,
-                  items: yearVm.years.map((y) => y.englishName).toList(),
+                  items: yearVm.years.map((y) => y.engName).toList(),
                   selectedItem: studentVm.getYearName(
                     selectedYearId,
                     yearVm.years,
                   ),
                   onChanged: (value) {
                     final year = yearVm.years.firstWhere(
-                      (y) => y.englishName == value,
+                      (y) => y.engName == value,
                     );
                     setState(() {
                       selectedYearId = year.id;

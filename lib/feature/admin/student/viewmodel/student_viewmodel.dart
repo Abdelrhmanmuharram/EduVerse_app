@@ -65,10 +65,9 @@ class StudentViewModel extends ChangeNotifier {
       return '-';
     }
   }
-
   String getYearName(int? yearId, List<YearModel> years) {
     try {
-      return years.firstWhere((y) => y.id == yearId).englishName;
+      return years.firstWhere((y) => y.id == yearId).engName;
     } catch (_) {
       return '-';
     }

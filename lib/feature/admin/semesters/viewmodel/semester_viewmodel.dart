@@ -10,6 +10,8 @@ class SemesterViewModel extends ChangeNotifier {
   bool _isLoading = false;
   bool get isLoading => _isLoading;
   String _searchQuery = '';
+
+
   List<SemesterModel> get semesters {
     final semesters = _semesters;
     if (_searchQuery.isEmpty) {
