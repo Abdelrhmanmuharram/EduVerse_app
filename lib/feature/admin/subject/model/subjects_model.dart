@@ -10,9 +10,9 @@ class SubjectsModel {
   final int yearId;
   final int semesterId;
   final int departmentId;
-  final YearModel year;
-  final SemesterModel semester;
-  final DepartmentModel department;
+  final YearModel? year;
+  final SemesterModel? semester;
+  final DepartmentModel? department;
 
   SubjectsModel({
     required this.id,
@@ -22,9 +22,9 @@ class SubjectsModel {
     required this.yearId,
     required this.semesterId,
     required this.departmentId,
-    required this.year,
-    required this.semester,
-    required this.department,
+    this.year,
+    this.semester,
+    this.department,
   });
 
   factory SubjectsModel.fromJson(Map<String, dynamic> json) {
@@ -36,14 +36,19 @@ class SubjectsModel {
       yearId: json['yearId'],
       semesterId: json['semesterId'],
       departmentId: json['departmentId'],
-      year: YearModel.fromJson(json['year']),
-      semester: SemesterModel.fromJson(json['semester']),
-      department: DepartmentModel.fromJson(json['department']),
+      year: json['year'] != null ? YearModel.fromJson(json['year']) : null,
+      semester: json['semester'] != null
+          ? SemesterModel.fromJson(json['semester'])
+          : null,
+      department: json['department'] != null
+          ? DepartmentModel.fromJson(json['department'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'id': id,
       'code': code,
       'arbName': arbName,
       'engName': engName,

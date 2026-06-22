@@ -5,6 +5,7 @@ import 'package:edusync_app/feature/admin/home/view/admin_home_view.dart';
 import 'package:edusync_app/feature/admin/instructors/view/instructor_details.dart';
 import 'package:edusync_app/feature/admin/departments/view/departments_view.dart';
 import 'package:edusync_app/feature/admin/student/viewmodel/student_viewmodel.dart';
+import 'package:edusync_app/feature/admin/subject/repository/subjects_repository.dart';
 import 'package:edusync_app/feature/admin/years/view/years_view.dart';
 import 'package:edusync_app/feature/instructors/view/screens/instructors_home_view.dart';
 import 'package:edusync_app/feature/onboarding/view/onboarding_view.dart';
@@ -30,7 +31,12 @@ import '../../feature/admin/instructors/view/add_instructor_view.dart';
 import '../../feature/admin/semesters/view/add_semester_view.dart';
 import '../../feature/admin/instructors/view/admin_instructors_view.dart';
 import '../../feature/admin/semesters/view/edit_semester_view.dart';
+import '../../feature/admin/subject/data/remote/subjects_remote_data_source_impl.dart';
+import '../../feature/admin/subject/repository/subjects_repository_impl.dart';
+import '../../feature/admin/subject/view/add_subjects.dart';
+import '../../feature/admin/subject/view/subjects_details.dart';
 import '../../feature/admin/subject/view/subjects_view.dart';
+import '../../feature/admin/subject/view_model/subject_view_model.dart';
 import '../../feature/admin/years/view/add_years_view.dart';
 import '../../feature/admin/years/view/years_details_view.dart';
 import '../../feature/instructors/data/remote/materials_remote_data_source_impl.dart';
@@ -175,6 +181,69 @@ class AppRoutes {
             ..loadYears(),
       child: const AddYearsView(),
     ),
-    '/subjects' : (_) => const SubjectsView(),
+    '/subjects': (_) => ChangeNotifierProvider(
+      create: (_) => SubjectsViewModel(
+        SubjectsRepositoryImpl(SubjectsRemoteDataSourceImpl()),
+      )..loadSubjects(),
+      child: SubjectsView(),
+    ),
+    '/subjects-details': (_) => MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => SubjectsViewModel(
+            SubjectsRepositoryImpl(SubjectsRemoteDataSourceImpl()),
+          )..loadSubjects(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DepartmentViewModel(
+            DepartmentRepositoryImpl(DepartmentRemoteDataSourceImpl()),
+          )..loadDepartments(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) =>
+              YearViewmodel(YearRepositoryImpl(YearRemoteDataSourceImpl()))
+                ..loadYears(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SemesterViewModel(
+            SemesterRepositoryImpl(SemesterRemoteDataSourceImpl()),
+          )..loadSemesters(),
+        ),
+      ],
+      child: const SubjectsDetails(),
+    ),
+    '/add-subjects': (_) => MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => SubjectsViewModel(
+            SubjectsRepositoryImpl(
+              SubjectsRemoteDataSourceImpl(),
+            ),
+          )..loadSubjects(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => DepartmentViewModel(
+            DepartmentRepositoryImpl(
+              DepartmentRemoteDataSourceImpl(),
+            ),
+          )..loadDepartments(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => YearViewmodel(
+            YearRepositoryImpl(
+              YearRemoteDataSourceImpl(),
+            ),
+          )..loadYears(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => SemesterViewModel(
+            SemesterRepositoryImpl(
+              SemesterRemoteDataSourceImpl(),
+            ),
+          )..loadSemesters(),
+        ),
+      ],
+      child: const AddSubjects(), // ✅ هنا
+    ),
   };
 }

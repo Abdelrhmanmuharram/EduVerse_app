@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/constants/api_constants.dart';
 import '../model/subjects_model.dart';
-import '../repository/subject_repository.dart';
+import '../repository/subjects_repository.dart';
 
 class SubjectsViewModel extends ChangeNotifier {
-  final SubjectRepository _repository;
+  final SubjectsRepository _repository;
   SubjectsViewModel(this._repository);
 
   bool _isLoading = false;
@@ -39,10 +40,49 @@ class SubjectsViewModel extends ChangeNotifier {
       _isLoading = true;
       notifyListeners();
       _subjects = await _repository.getSubjects();
-
     } finally {
       _isLoading = false;
       notifyListeners();
     }
+  }
+
+  Future<void> deleteSubject(int id) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      await _repository.deleteSubject(id);
+      await loadSubjects();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateSubject(int id, SubjectsModel subject) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      await _repository.updateSubject(id, subject);
+      await loadSubjects();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> addSubject(SubjectsModel subject) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      await _repository.addSubject(subject);
+      await loadSubjects();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<String> getNextCode() async {
+    return await _repository.getNextCode();
   }
 }
