@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:edusync_app/core/services/local_storage_service.dart';
-import 'package:edusync_app/feature/admin/student/model/subject_model.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 

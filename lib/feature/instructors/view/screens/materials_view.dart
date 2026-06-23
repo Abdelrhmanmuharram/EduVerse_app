@@ -18,6 +18,7 @@ class MaterialsView extends StatelessWidget {
         title: Text('Materials', style: textTheme.headlineSmall),
         centerTitle: true,
         leading: BackItem(),
+
       ),
       body: Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16),

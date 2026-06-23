@@ -24,7 +24,7 @@ class _OnboardingViewState extends State<OnboardingView> {
     TextTheme textTheme = Theme.of(context).textTheme;
     return Scaffold(
       appBar: AppBar(
-        title: Text('EduSync', style: textTheme.headlineSmall),
+        title: Text('EduVerse', style: textTheme.headlineSmall),
         leading: SizedBox(),
       ),
       body: Column(

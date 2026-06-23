@@ -92,7 +92,7 @@ class _LoginViewState extends State<LoginView> {
                                 ),
                               ),
                               TextSpan(
-                                text: "Sync",
+                                text: "Verse",
                                 style: TextStyle(
                                   color: AppTheme.primaryLight,
                                   fontSize: 32,

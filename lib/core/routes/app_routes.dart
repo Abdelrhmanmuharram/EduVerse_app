@@ -1,3 +1,4 @@
+import 'package:edusync_app/feature/admin/materials/view/materials_view.dart';
 import 'package:edusync_app/feature/admin/semesters/repository/semester_repository_Impl.dart';
 import 'package:edusync_app/feature/admin/semesters/viewmodel/semester_viewmodel.dart';
 import 'package:edusync_app/feature/admin/student/view/add_student_view.dart';
@@ -5,7 +6,6 @@ import 'package:edusync_app/feature/admin/home/view/admin_home_view.dart';
 import 'package:edusync_app/feature/admin/instructors/view/instructor_details.dart';
 import 'package:edusync_app/feature/admin/departments/view/departments_view.dart';
 import 'package:edusync_app/feature/admin/student/viewmodel/student_viewmodel.dart';
-import 'package:edusync_app/feature/admin/subject/repository/subjects_repository.dart';
 import 'package:edusync_app/feature/admin/years/view/years_view.dart';
 import 'package:edusync_app/feature/instructors/view/screens/instructors_home_view.dart';
 import 'package:edusync_app/feature/onboarding/view/onboarding_view.dart';
@@ -25,6 +25,11 @@ import '../../feature/admin/instructors/repository/instructor_repository.dart';
 import '../../feature/admin/instructors/repository/instructor_subject_repository_impl.dart';
 import '../../feature/admin/instructors/repository/subject_repository_impl.dart';
 import '../../feature/admin/instructors/viewmodel/instructor_viewmodel.dart';
+import '../../feature/admin/materials/data/remote/materials_admin_remote_source_imp.dart';
+import '../../feature/admin/materials/repository/materials_admin_repository_impl.dart';
+import '../../feature/admin/materials/view/pdf_viewer_screen.dart';
+import '../../feature/admin/materials/view_model/materials_admin_view_model.dart';
+import '../../feature/admin/materials/view_model/pdf_viewer_view_model.dart';
 import '../../feature/admin/semesters/data/remote/semester_remote_data_source_impl.dart';
 import '../../feature/admin/semesters/view/semesters_view.dart';
 import '../../feature/admin/instructors/view/add_instructor_view.dart';
@@ -216,34 +221,36 @@ class AppRoutes {
       providers: [
         ChangeNotifierProvider(
           create: (_) => SubjectsViewModel(
-            SubjectsRepositoryImpl(
-              SubjectsRemoteDataSourceImpl(),
-            ),
+            SubjectsRepositoryImpl(SubjectsRemoteDataSourceImpl()),
           )..loadSubjects(),
         ),
         ChangeNotifierProvider(
           create: (_) => DepartmentViewModel(
-            DepartmentRepositoryImpl(
-              DepartmentRemoteDataSourceImpl(),
-            ),
+            DepartmentRepositoryImpl(DepartmentRemoteDataSourceImpl()),
           )..loadDepartments(),
         ),
         ChangeNotifierProvider(
-          create: (_) => YearViewmodel(
-            YearRepositoryImpl(
-              YearRemoteDataSourceImpl(),
-            ),
-          )..loadYears(),
+          create: (_) =>
+              YearViewmodel(YearRepositoryImpl(YearRemoteDataSourceImpl()))
+                ..loadYears(),
         ),
         ChangeNotifierProvider(
           create: (_) => SemesterViewModel(
-            SemesterRepositoryImpl(
-              SemesterRemoteDataSourceImpl(),
-            ),
+            SemesterRepositoryImpl(SemesterRemoteDataSourceImpl()),
           )..loadSemesters(),
         ),
       ],
-      child: const AddSubjects(), // ✅ هنا
+      child: const AddSubjects(),
+    ),
+
+    '/materials-admin': (_) => ChangeNotifierProvider(
+      create: (_) => MaterialAdminViewModel(
+        MaterialsAdminRepositoryImpl(MaterialsAdminRemoteSourceImpl()),
+        InstructorSubjectRepositoryImpl(
+          InstructorSubjectRemoteDataSourceImpl(),
+        ),
+      )..loadMaterials(),
+      child: MaterialsAdminView(),
     ),
   };
 }
