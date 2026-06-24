@@ -8,6 +8,7 @@ import '../../../../core/services/pdf_cache_service.dart';
 import '../../instructors/repository/instructor_subject_repository.dart';
 import '../model/materials_admin_model.dart';
 import '../model/materials_request_model.dart';
+import '../model/update_materials_admin_model.dart';
 import '../repository/materials_admin_repository.dart';
 
 class MaterialAdminViewModel extends ChangeNotifier {
@@ -142,5 +143,48 @@ class MaterialAdminViewModel extends ChangeNotifier {
     _selectedInstructorName = instructorName;
     _selectedInstructorId = instructorId;
     notifyListeners();
+  }
+
+  Future<bool> deleteMaterial(int id) async {
+    try {
+      _errorMessage = null;
+      _isLoading = true;
+      notifyListeners();
+      await _repository.deleteMaterials(id);
+      _materials.removeWhere((material) => material.id == id);
+      _filteredMaterials.removeWhere((material) => material.id == id);
+      return true;
+    } catch (e) {
+      if (e is DioException) {
+        _errorMessage = e.response?.data['message'] ?? 'Server Error';
+      } else {
+        _errorMessage = e.toString();
+      }
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> updateMaterial(UpdateMaterialsAdminModel material) async {
+    try {
+      _errorMessage = null;
+      _isLoading = true;
+      notifyListeners();
+      await _repository.updateMaterials(material);
+      await loadMaterials();
+      return true;
+    } catch (e) {
+      if (e is DioException) {
+        _errorMessage = e.response?.data['message'] ?? 'Server Error';
+      } else {
+        _errorMessage = e.toString();
+      }
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
   }
 }

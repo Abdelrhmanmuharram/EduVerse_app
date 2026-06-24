@@ -28,6 +28,7 @@ import '../../feature/admin/instructors/viewmodel/instructor_viewmodel.dart';
 import '../../feature/admin/materials/data/remote/materials_admin_remote_source_imp.dart';
 import '../../feature/admin/materials/repository/materials_admin_repository_impl.dart';
 import '../../feature/admin/materials/view/add_materials_admin_view.dart';
+import '../../feature/admin/materials/view/materials_admin_details_view.dart';
 import '../../feature/admin/materials/view/pdf_viewer_screen.dart';
 import '../../feature/admin/materials/view_model/materials_admin_view_model.dart';
 import '../../feature/admin/materials/view_model/pdf_viewer_view_model.dart';

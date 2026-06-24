@@ -1,33 +1,67 @@
-import 'dart:io';
-
-import 'package:edusync_app/core/utils/validators.dart';
-import 'package:edusync_app/core/widgets/default_drop_down_field.dart';
-import 'package:edusync_app/core/widgets/default_text_field.dart';
-import 'package:edusync_app/core/widgets/loading_widget.dart';
-import 'package:edusync_app/core/widgets/primary_button.dart';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/app_theme.dart';
+import '../../../../core/utils/validators.dart';
 import '../../../../core/widgets/back_item.dart';
+import '../../../../core/widgets/default_drop_down_field.dart';
+import '../../../../core/widgets/default_text_field.dart';
+import '../../../../core/widgets/loading_widget.dart';
+import '../../../../core/widgets/primary_button.dart';
 import '../../../../core/widgets/title_widget.dart';
 import '../../instructors/viewmodel/instructor_viewmodel.dart';
 import '../../subject/view_model/subject_view_model.dart';
+import '../model/materials_admin_model.dart';
+import '../model/update_materials_admin_model.dart';
 import '../view_model/materials_admin_view_model.dart';
 
-class AddMaterialsAdminView extends StatefulWidget {
-  static const String routeName = '/add-materials-admin';
-  const AddMaterialsAdminView({super.key});
+class MaterialsAdminDetailsView extends StatefulWidget {
+  static const String routeName = '/materials-admin-details';
+  final MaterialsAdminModel material;
+  const MaterialsAdminDetailsView({super.key, required this.material});
 
   @override
-  State<AddMaterialsAdminView> createState() => _AddMaterialsAdminViewState();
+  State<MaterialsAdminDetailsView> createState() =>
+      _MaterialsAdminDetailsViewState();
 }
 
-class _AddMaterialsAdminViewState extends State<AddMaterialsAdminView> {
+class _MaterialsAdminDetailsViewState extends State<MaterialsAdminDetailsView> {
   final titleController = TextEditingController();
   final descriptionController = TextEditingController();
+  late String originalTitle;
+  late String originalDescription;
+  late String originalInstructorId;
+  late int originalSubjectId;
   final _formKey = GlobalKey<FormState>();
+
+  @override
+  void initState() {
+    super.initState();
+    originalTitle = widget.material.title;
+    originalDescription = widget.material.description ?? '';
+    originalInstructorId = widget.material.instructorId;
+    originalSubjectId = widget.material.subjectId;
+    titleController.text = widget.material.title;
+    descriptionController.text = widget.material.description ?? '';
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      final vm = context.read<MaterialAdminViewModel>();
+      vm.selectSubject(
+        subjectName: widget.material.subject.engName,
+        subjectId: widget.material.subjectId,
+      );
+      vm.selectInstructor(
+        instructorName: widget.material.instructor.fullName,
+        instructorId: widget.material.instructorId,
+      );
+    });
+  }
+
+  bool hasChanges(MaterialAdminViewModel viewModel) {
+    return titleController.text.trim() != originalTitle ||
+        descriptionController.text.trim() != originalDescription ||
+        viewModel.selectedInstructorId != originalInstructorId ||
+        viewModel.selectedSubjectId != originalSubjectId;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -39,7 +73,7 @@ class _AddMaterialsAdminViewState extends State<AddMaterialsAdminView> {
         Scaffold(
           resizeToAvoidBottomInset: false,
           appBar: AppBar(
-            title: TitleWidget(title: 'Add Material'),
+            title: TitleWidget(title: 'Edit Material'),
             centerTitle: true,
             leading: BackItem(),
           ),
@@ -49,11 +83,7 @@ class _AddMaterialsAdminViewState extends State<AddMaterialsAdminView> {
               key: _formKey,
               child: Column(
                 children: [
-                  DefaultTextField(
-                    hint: 'Title',
-                    controller: titleController,
-                    validator: (value) => AppValidators.requiredField(value, 'Please enter a title'),
-                  ),
+                  DefaultTextField(hint: 'Title', controller: titleController),
                   const SizedBox(height: 16),
                   DefaultDropDownField(
                     selectedItem: materialViewModel.selectedSubjectName,
@@ -97,15 +127,11 @@ class _AddMaterialsAdminViewState extends State<AddMaterialsAdminView> {
                   DefaultTextField(
                     hint: 'Description',
                     controller: descriptionController,
-                    validator: (value) => AppValidators.requiredField(value, 'Please enter a description'),
+                    validator: (value) => AppValidators.requiredField(
+                      value,
+                      'Please enter a description',
+                    ),
                     maxLines: 5,
-                  ),
-                  const SizedBox(height: 16),
-                  PrimaryButton(
-                    label:
-                        materialViewModel.selectedPdfName ?? 'Select PDF File',
-                    onPressed: materialViewModel.pickPdf,
-                    icon: Icons.upload_file,
                   ),
                   const Spacer(),
                   SizedBox(
@@ -115,14 +141,6 @@ class _AddMaterialsAdminViewState extends State<AddMaterialsAdminView> {
                       isLoading: materialViewModel.isLoading,
                       onPressed: () async {
                         if (!_formKey.currentState!.validate()) {
-                          return;
-                        }
-                        if (materialViewModel.selectedPdf == null) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Please select PDF file'),
-                            ),
-                          );
                           return;
                         }
                         if (materialViewModel.selectedSubjectId == null) {
@@ -141,18 +159,35 @@ class _AddMaterialsAdminViewState extends State<AddMaterialsAdminView> {
                           );
                           return;
                         }
+                        if (!hasChanges(materialViewModel)) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: AppTheme.red,
+                              content: Text('No changes to save'),
+                            ),
+                          );
+                          return;
+                        }
+                        final material = UpdateMaterialsAdminModel(
+                          id: widget.material.id,
+                          instructorId: materialViewModel.selectedInstructorId!,
+                          subjectId: materialViewModel.selectedSubjectId!,
+                          title: titleController.text.trim(),
+                          description: descriptionController.text.trim(),
+                          filePath: widget.material.filePath,
+                          publicId: widget.material.publicId,
+                        );
                         final result = await context
                             .read<MaterialAdminViewModel>()
-                            .createMaterial(
-                              pdfFile: materialViewModel.selectedPdf,
-                              instructorId:
-                                  materialViewModel.selectedInstructorId,
-                              subjectId: materialViewModel.selectedSubjectId,
-                              title: titleController.text,
-                              description: descriptionController.text,
-                            );
+                            .updateMaterial(material);
                         if (!mounted) return;
                         if (result) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            const SnackBar(
+                              backgroundColor: AppTheme.green,
+                              content: Text('Material updated successfully'),
+                            ),
+                          );
                           Navigator.pop(context, true);
                         } else {
                           ScaffoldMessenger.of(context).showSnackBar(
@@ -160,7 +195,7 @@ class _AddMaterialsAdminViewState extends State<AddMaterialsAdminView> {
                               backgroundColor: AppTheme.red,
                               content: Text(
                                 materialViewModel.errorMessage ??
-                                    'Failed to add material',
+                                    'Failed to update material',
                               ),
                             ),
                           );
