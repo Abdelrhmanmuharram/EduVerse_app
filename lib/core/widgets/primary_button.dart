@@ -49,22 +49,31 @@ class PrimaryButton extends StatelessWidget {
                 ),
               )
             : Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Text(
-                    label,
-                    style: TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                      color: textColor ?? AppTheme.white,
-                    ),
-                  ),
-                  const SizedBox(width: 8),
-                  icon == null
-                      ? SizedBox()
-                      : Icon(icon, size: 18, color: AppTheme.white),
-                ],
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                textAlign: TextAlign.center,
+                style: TextStyle(
+                  fontSize: 16,
+                  fontWeight: FontWeight.w600,
+                  color: textColor ?? AppTheme.white,
+                ),
               ),
+            ),
+            if (icon != null) ...[
+              const SizedBox(width: 8),
+              Icon(
+                icon,
+                size: 18,
+                color: AppTheme.white,
+              ),
+            ],
+          ],
+        )
       ),
     );
   }

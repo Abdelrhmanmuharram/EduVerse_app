@@ -1,4 +1,5 @@
 import 'package:edusync_app/feature/admin/materials/model/materials_admin_model.dart';
+import 'package:edusync_app/feature/admin/materials/model/materials_request_model.dart';
 import '../data/remote/materials_admin_remote_source.dart';
 import 'materials_admin_repository.dart';
 
@@ -8,5 +9,10 @@ class MaterialsAdminRepositoryImpl implements MaterialsAdminRepository {
   @override
   Future<List<MaterialsAdminModel>> getMaterials() {
     return _remoteSource.getMaterials();
+  }
+
+  @override
+  Future<bool> addMaterials(MaterialRequestModel material) {
+    return _remoteSource.addMaterials(material);
   }
 }

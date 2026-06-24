@@ -1,8 +1,13 @@
+import 'dart:io';
+
+import 'package:dio/dio.dart';
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../../core/services/pdf_cache_service.dart';
 import '../../instructors/repository/instructor_subject_repository.dart';
 import '../model/materials_admin_model.dart';
+import '../model/materials_request_model.dart';
 import '../repository/materials_admin_repository.dart';
 
 class MaterialAdminViewModel extends ChangeNotifier {
@@ -19,6 +24,20 @@ class MaterialAdminViewModel extends ChangeNotifier {
   List<MaterialsAdminModel> _materials = [];
   List<MaterialsAdminModel> get materials =>
       _filteredMaterials.isEmpty ? _materials : _filteredMaterials;
+  File? _selectedPdf;
+  File? get selectedPdf => _selectedPdf;
+  String? _selectedPdfName;
+  String? get selectedPdfName => _selectedPdfName;
+  String? _selectedInstructorName;
+  String? get selectedInstructorName => _selectedInstructorName;
+  String? _selectedInstructorId;
+  String? get selectedInstructorId => _selectedInstructorId;
+  String? _selectedSubjectName;
+  String? get selectedSubjectName => _selectedSubjectName;
+  int? _selectedSubjectId;
+  int? get selectedSubjectId => _selectedSubjectId;
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
 
   void searchMaterials(String query) {
     if (query.trim().isEmpty) {
@@ -34,7 +53,6 @@ class MaterialAdminViewModel extends ChangeNotifier {
             );
       }).toList();
     }
-
     notifyListeners();
   }
 
@@ -58,5 +76,71 @@ class MaterialAdminViewModel extends ChangeNotifier {
       _isDownloading = false;
       notifyListeners();
     }
+  }
+
+  Future<bool> addMaterial(MaterialRequestModel material) async {
+    try {
+      _isLoading = true;
+      notifyListeners();
+      final result = await _repository.addMaterials(material);
+      if (result) {
+        await loadMaterials();
+      }
+      return result;
+    } catch (e) {
+      if (e is DioException) {
+        _errorMessage = e.response?.data['message'] ?? 'Server Error';
+      } else {
+        _errorMessage = e.toString();
+      }
+      return false;
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<bool> createMaterial({
+    required File? pdfFile,
+    required String? instructorId,
+    required int? subjectId,
+    required String title,
+    required String description,
+  }) async {
+    final material = MaterialRequestModel(
+      file: pdfFile!,
+      instructorId: instructorId!,
+      subjectId: subjectId!,
+      title: title.trim(),
+      description: description.trim(),
+    );
+    return await addMaterial(material);
+  }
+
+  Future<void> pickPdf() async {
+    final result = await FilePicker.platform.pickFiles(
+      type: FileType.custom,
+      allowedExtensions: ['pdf'],
+    );
+    if (result != null) {
+      _selectedPdf = File(result.files.single.path!);
+      _selectedPdfName = result.files.single.name;
+      notifyListeners();
+    }
+  }
+
+  void selectSubject({required String subjectName, required int subjectId}) {
+    _selectedSubjectName = subjectName;
+    _selectedSubjectId = subjectId;
+    notifyListeners();
+  }
+
+  void selectInstructor({
+    required String instructorName,
+    required String instructorId,
+  }) {
+    _selectedInstructorName = instructorName;
+    _selectedInstructorId = instructorId;
+    notifyListeners();
   }
 }

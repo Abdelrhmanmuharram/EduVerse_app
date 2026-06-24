@@ -48,6 +48,7 @@ class MaterialsTable extends StatelessWidget {
                     const DataColumn(label: Text("Subject")),
                     const DataColumn(label: Text("Instructor")),
                     const DataColumn(label: Text("File")),
+                    const DataColumn(label: Text("Action")),
                   ],
 
                   rows: viewModel.materials.map((material) {
@@ -59,52 +60,74 @@ class MaterialsTable extends StatelessWidget {
                         DataCell(
                           Row(
                             children: [
-                              InkWell(
-                                onTap: () {
-                                  Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                      builder: (_) => ChangeNotifierProvider(
-                                        create: (_) => PdfViewerViewModel(),
-                                        child: PdfViewerScreen(
-                                          pdfUrl: material.filePath,
-                                          title: material.title,
-                                          fileName: material.publicId,
-                                        ),
-                                      ),
-                                    ),
-                                  );
-                                },
-                                child: const Icon(
-                                  Icons.picture_as_pdf,
-                                  color: AppTheme.red,
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              InkWell(
-                                onTap: () async {
-                                  final isSaved = await context
-                                      .read<MaterialAdminViewModel>()
-                                      .downloadPdf(
-                                        material.filePath,
-                                        material.publicId,
-                                      );
-                                  if (!context.mounted) return;
-                                  if (isSaved) {
-                                    ScaffoldMessenger.of(context).showSnackBar(
-                                      const SnackBar(
-                                        backgroundColor: AppTheme.green,
-                                        content: Text(
-                                          'PDF downloaded successfully',
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () {
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                        builder: (_) => ChangeNotifierProvider(
+                                          create: (_) => PdfViewerViewModel(),
+                                          child: PdfViewerScreen(
+                                            pdfUrl: material.filePath,
+                                            title: material.title,
+                                            fileName: material.publicId,
+                                          ),
                                         ),
                                       ),
                                     );
-                                  }
-                                },
-                                child: const Icon(
-                                  Icons.download,
+                                  },
+                                  child: const Icon(
+                                    Icons.picture_as_pdf,
+                                    color: AppTheme.red,
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 16),
+                              Expanded(
+                                child: InkWell(
+                                  onTap: () async {
+                                    final isSaved = await context
+                                        .read<MaterialAdminViewModel>()
+                                        .downloadPdf(
+                                          material.filePath,
+                                          material.publicId,
+                                        );
+                                    if (!context.mounted) return;
+                                    if (isSaved) {
+                                      ScaffoldMessenger.of(
+                                        context,
+                                      ).showSnackBar(
+                                        const SnackBar(
+                                          backgroundColor: AppTheme.green,
+                                          content: Text(
+                                            'PDF downloaded successfully',
+                                          ),
+                                        ),
+                                      );
+                                    }
+                                  },
+                                  child: const Icon(
+                                    Icons.download,
+                                    color: AppTheme.primaryLight,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        DataCell(
+                          Row(
+                            children: [
+                              Expanded(
+                                child: Icon(
+                                  Icons.edit,
                                   color: AppTheme.primaryLight,
                                 ),
+                              ),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Icon(Icons.delete, color: AppTheme.red),
                               ),
                             ],
                           ),
