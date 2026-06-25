@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/app_theme.dart';
+import '../../../../core/widgets/loading_widget.dart';
 import '../view_model/attendance_view_model.dart';
 
 class AttendanceTable extends StatelessWidget {
@@ -24,151 +25,166 @@ class AttendanceTable extends StatelessWidget {
           onRefresh: () async {
             await viewModel.loadAttendances();
           },
-          child: ListView(
-            children: [
-              SingleChildScrollView(
-                physics: const AlwaysScrollableScrollPhysics(),
-                scrollDirection: Axis.horizontal,
-                child: DataTable(
-                  sortAscending: true,
-                  headingTextStyle: const TextStyle(
-                    fontWeight: FontWeight.w600,
-                    color: AppTheme.primaryLight,
-                  ),
-                  columns: [
-                    DataColumn(label: const Text("Date")),
-                    const DataColumn(label: Text("Instructor")),
-                    const DataColumn(label: Text("Subject")),
-                    const DataColumn(label: Text("Action")),
-                  ],
-                  rows: viewModel.filteredAttendances.map((attendance) {
-                    return DataRow(
-                      cells: [
-                        DataCell(
-                          Text(
-                            attendance.sessionDate.toString().split(' ').first,
-                          ),
+          child: viewModel.isLoading
+              ? const Center(child: LoadingWidget())
+              : ListView(
+                  children: [
+                    SingleChildScrollView(
+                      physics: const AlwaysScrollableScrollPhysics(),
+                      scrollDirection: Axis.horizontal,
+                      child: DataTable(
+                        sortAscending: true,
+                        headingTextStyle: const TextStyle(
+                          fontWeight: FontWeight.w600,
+                          color: AppTheme.primaryLight,
                         ),
-                        DataCell(Text(attendance.instructorName)),
-                        DataCell(Text(attendance.subjectName)),
-                        DataCell(
-                          Row(
-                            children: [
-                              InkWell(
-                                child: Icon(
-                                  Icons.edit,
-                                  color: AppTheme.primaryLight,
+                        columns: [
+                          DataColumn(label: const Text("Date")),
+                          const DataColumn(label: Text("Instructor")),
+                          const DataColumn(label: Text("Subject")),
+                          const DataColumn(label: Text("Action")),
+                        ],
+                        rows: viewModel.filteredAttendances.map((attendance) {
+                          return DataRow(
+                            cells: [
+                              DataCell(
+                                Text(
+                                  attendance.sessionDate
+                                      .toString()
+                                      .split(' ')
+                                      .first,
                                 ),
                               ),
-                              const SizedBox(width: 8),
-                              InkWell(
-                                child: Icon(
-                                  Icons.qr_code_2,
-                                  color: AppTheme.primaryLight,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              InkWell(
-                                child: Icon(
-                                  Icons.person_pin_outlined,
-                                  color: AppTheme.primaryLight,
-                                ),
-                              ),
-                              const SizedBox(width: 8),
-                              viewModel.deletingId == attendance.id
-                                  ? const SizedBox(
-                                      height: 16,
-                                      width: 16,
-                                      child: CircularProgressIndicator(
+                              DataCell(Text(attendance.instructorName)),
+                              DataCell(Text(attendance.subjectName)),
+                              DataCell(
+                                Row(
+                                  children: [
+                                    InkWell(
+                                      child: Icon(
+                                        Icons.edit,
                                         color: AppTheme.primaryLight,
                                       ),
-                                    )
-                                  : InkWell(
-                                      onTap: () async {
-                                        final confirm = showDialog(
-                                          context: context,
-                                          builder: (_) => AlertDialog(
-                                            title: const Text(
-                                              'Delete Attendance',
-                                            ),
-                                            content: const Text(
-                                              'Are you sure you want to delete this attendance?',
-                                            ),
-                                            actions: [
-                                              TextButton(
-                                                onPressed: () {
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text(
-                                                  'Cancel',
-                                                  style: textTheme.titleSmall,
-                                                ),
-                                              ),
-                                              TextButton(
-                                                onPressed: () async {
-                                                  final result = await viewModel
-                                                      .deleteAttendanceSession(
-                                                        attendance.id,
-                                                      );
-                                                  if (!context.mounted) return;
-                                                  if (!result) {
-                                                    ScaffoldMessenger.of(
-                                                      context,
-                                                    ).showSnackBar(
-                                                      SnackBar(
-                                                        backgroundColor:
-                                                            AppTheme.red,
-                                                        content: Text(
-                                                          viewModel.errorMages,
-                                                        ),
-                                                      ),
-                                                    );
-                                                  }
-                                                  Navigator.pop(context);
-                                                },
-                                                child: Text(
-                                                  'Delete',
-                                                  style: textTheme.titleSmall!
-                                                      .copyWith(
-                                                        color: AppTheme.red,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        );
-                                        if (confirm != true) return;
-                                        await context
-                                            .read<AttendanceViewModel>()
-                                            .deleteAttendanceSession(
-                                              attendance.id,
-                                            );
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          const SnackBar(
-                                            backgroundColor: AppTheme.green,
-                                            content: Text('Attendance deleted'),
-                                          ),
-                                        );
-                                      },
+                                    ),
+                                    const SizedBox(width: 8),
+                                    InkWell(
                                       child: Icon(
-                                        Icons.delete,
-                                        color: AppTheme.red,
+                                        Icons.qr_code_2,
+                                        color: AppTheme.primaryLight,
                                       ),
                                     ),
+                                    const SizedBox(width: 8),
+                                    InkWell(
+                                      child: Icon(
+                                        Icons.person_pin_outlined,
+                                        color: AppTheme.primaryLight,
+                                      ),
+                                    ),
+                                    const SizedBox(width: 8),
+                                    viewModel.deletingId == attendance.id
+                                        ? const SizedBox(
+                                            height: 16,
+                                            width: 16,
+                                            child: CircularProgressIndicator(
+                                              color: AppTheme.primaryLight,
+                                            ),
+                                          )
+                                        : InkWell(
+                                            onTap: () async {
+                                              final confirm = showDialog(
+                                                context: context,
+                                                builder: (_) => AlertDialog(
+                                                  title: const Text(
+                                                    'Delete Attendance',
+                                                  ),
+                                                  content: const Text(
+                                                    'Are you sure you want to delete this attendance?',
+                                                  ),
+                                                  actions: [
+                                                    TextButton(
+                                                      onPressed: () {
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text(
+                                                        'Cancel',
+                                                        style: textTheme
+                                                            .titleSmall,
+                                                      ),
+                                                    ),
+                                                    TextButton(
+                                                      onPressed: () async {
+                                                        final result =
+                                                            await viewModel
+                                                                .deleteAttendanceSession(
+                                                                  attendance.id,
+                                                                );
+                                                        if (!context.mounted)
+                                                          return;
+                                                        if (!result) {
+                                                          ScaffoldMessenger.of(
+                                                            context,
+                                                          ).showSnackBar(
+                                                            SnackBar(
+                                                              backgroundColor:
+                                                                  AppTheme.red,
+                                                              content: Text(
+                                                                viewModel
+                                                                    .errorMages,
+                                                              ),
+                                                            ),
+                                                          );
+                                                        }
+                                                        Navigator.pop(context);
+                                                      },
+                                                      child: Text(
+                                                        'Delete',
+                                                        style: textTheme
+                                                            .titleSmall!
+                                                            .copyWith(
+                                                              color:
+                                                                  AppTheme.red,
+                                                              fontWeight:
+                                                                  FontWeight
+                                                                      .bold,
+                                                            ),
+                                                      ),
+                                                    ),
+                                                  ],
+                                                ),
+                                              );
+                                              if (confirm != true) return;
+                                              await context
+                                                  .read<AttendanceViewModel>()
+                                                  .deleteAttendanceSession(
+                                                    attendance.id,
+                                                  );
+                                              ScaffoldMessenger.of(
+                                                context,
+                                              ).showSnackBar(
+                                                const SnackBar(
+                                                  backgroundColor:
+                                                      AppTheme.green,
+                                                  content: Text(
+                                                    'Attendance deleted',
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Icon(
+                                              Icons.delete,
+                                              color: AppTheme.red,
+                                            ),
+                                          ),
+                                  ],
+                                ),
+                              ),
                             ],
-                          ),
-                        ),
-                      ],
-                    );
-                  }).toList(),
+                          );
+                        }).toList(),
+                      ),
+                    ),
+                  ],
                 ),
-              ),
-            ],
-          ),
         ),
       ),
     );

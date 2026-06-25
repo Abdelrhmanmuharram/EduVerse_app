@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
 enum MenuType {
   semesters,
@@ -71,7 +72,7 @@ extension MenuTypeExtension on MenuType {
       case MenuType.materials:
         return Icons.book_outlined;
       case MenuType.attendance:
-        return Icons.book_outlined;
+        return Icons.person_pin_outlined;
     }
   }
 
@@ -86,13 +87,13 @@ extension MenuTypeExtension on MenuType {
       case MenuType.instructors:
         return 'Profiles & assignments';
       case MenuType.years:
-        return 'Academic years';
+        return 'Manage academic years';
       case MenuType.subjects:
-        return 'Subjects';
+        return 'Manage course subjects';
       case MenuType.materials:
-        return 'Materials';
+        return 'Course resources & files';
       case MenuType.attendance:
-        return 'Attendance';
+        return 'Attendance sessions';
     }
   }
 }

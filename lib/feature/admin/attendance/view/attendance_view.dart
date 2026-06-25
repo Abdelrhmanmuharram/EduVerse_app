@@ -29,10 +29,6 @@ class AttendanceView extends StatelessWidget {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     final viewModel = context.watch<AttendanceViewModel>();
-
-    if (viewModel.isLoading) {
-      return const Scaffold(body: Center(child: LoadingWidget()));
-    }
     return Scaffold(
       appBar: AppBar(
         title: TitleWidget(title: 'Attendance'),
