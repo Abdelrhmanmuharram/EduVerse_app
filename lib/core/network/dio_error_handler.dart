@@ -5,6 +5,7 @@ import 'api_exception.dart';
 class DioErrorHandler {
   static ApiException handle(DioException e) {
     final data = e.response?.data;
+
     if (data is Map<String, dynamic>) {
       final message = data['message'];
       switch (message) {
@@ -14,6 +15,10 @@ class DioErrorHandler {
           );
         case 'NotFoundMessage':
           return ApiException('The requested item was not found.');
+        case 'An error occurred while processing your request. Please try again later.':
+          return ApiException(
+            'This session cannot be deleted because it already has attendance records.',
+          );
         default:
           return ApiException(message?.toString() ?? 'Something went wrong.');
       }

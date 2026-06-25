@@ -11,6 +11,7 @@ class PanelViewModel {
     MenuItem(type: MenuType.years),
     MenuItem(type: MenuType.subjects),
     MenuItem(type: MenuType.materials),
+    MenuItem(type: MenuType.attendance),
   ];
 
   void onItemClicked(BuildContext context, MenuItem item) {

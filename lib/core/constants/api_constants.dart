@@ -17,5 +17,6 @@ class APIConstants {
       '/InstructorSubjects/GetSubjectInstructors';
   static const String getMaterials = '/Materials';
   static const String subjects = '/Subjects';
+  static const String attendancesSessions = '/AttendanceSessions';
 
 }

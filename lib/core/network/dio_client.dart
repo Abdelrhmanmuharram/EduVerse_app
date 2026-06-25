@@ -8,16 +8,10 @@ import '../services/local_storage_service.dart';
 class DioClient {
   static final CookieJar cookieJar = CookieJar();
 
-  /// Buffer before actual expiry to refresh proactively (avoids edge cases)
   static const _expiryBuffer = Duration(seconds: 30);
-
-  // ─── Refresh lock ────────────────────────────────────────────────────────────
-  // If a refresh is in progress, all other requests wait for it instead of
-  // triggering their own refresh (which would cause a 400 — token already used).
   static bool _isRefreshing = false;
   static Future<String?>? _refreshFuture;
 
-  // ─── Separate Dio instance ONLY for refresh calls ───────────────────────────
   static final Dio _refreshDio = Dio(
     BaseOptions(
       baseUrl: APIConstants.baseUrl,
@@ -27,7 +21,6 @@ class DioClient {
     ),
   )..interceptors.add(CookieManager(cookieJar));
 
-  // ─── Main Dio instance ──────────────────────────────────────────────────────
   static final Dio dio = Dio(
     BaseOptions(
       baseUrl: APIConstants.baseUrl,
@@ -40,12 +33,10 @@ class DioClient {
     ..interceptors.add(
       InterceptorsWrapper(
         onRequest: (options, handler) async {
-          // Skip all token logic for the login endpoint
           if (options.path.contains('/Auth/GetToken')) {
             return handler.next(options);
           }
 
-          // ── Step 1: check if refresh token itself is expired ────────────────
           final refreshExpiry = await LocalStorageService.getRefreshTokenExpiry();
           final now = DateTime.now().toUtc();
 
@@ -62,7 +53,6 @@ class DioClient {
             );
           }
 
-          // ── Step 2: check if access token is expired (with buffer) ──────────
           final tokenExpiry = await LocalStorageService.getTokenExpiry();
           final accessTokenExpired =
               tokenExpiry == null ||
@@ -88,7 +78,6 @@ class DioClient {
             }
           }
 
-          // ── Step 3: access token still valid — attach it normally ────────────
           final token = await LocalStorageService.getToken();
           if (token != null) {
             options.headers['Authorization'] = 'Bearer $token';
@@ -97,7 +86,6 @@ class DioClient {
         },
 
         onError: (DioException error, handler) async {
-          // Safety net: 401 from clock skew or server-side revocation
           if (error.response?.statusCode == 401) {
             print('401 received — attempting emergency token refresh...');
 
@@ -122,10 +110,6 @@ class DioClient {
         },
       ),
     );
-
-  // ─── Refresh lock wrapper ────────────────────────────────────────────────────
-  // Ensures only one refresh call is in flight at a time.
-  // All concurrent callers share the same Future and get the same result.
   static Future<String?> _getRefreshLocked() {
     if (_isRefreshing && _refreshFuture != null) {
       print('Refresh already in progress — waiting for it...');
@@ -140,8 +124,6 @@ class DioClient {
 
     return _refreshFuture!;
   }
-
-  // ─── Actual token refresh ────────────────────────────────────────────────────
   static Future<String?> _refreshAccessToken() async {
     try {
       final refreshToken = await LocalStorageService.getRefreshToken();

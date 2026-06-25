@@ -14,6 +14,11 @@ import 'package:edusync_app/feature/users/repository/users_repository_impl.dart'
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../../feature/admin/attendance/data/remote/attendance_remote_data_source_impl.dart';
+import '../../feature/admin/attendance/repository/attendance_repository_impl.dart';
+import '../../feature/admin/attendance/view/add_attendance_view.dart';
+import '../../feature/admin/attendance/view/attendance_view.dart';
+import '../../feature/admin/attendance/view_model/attendance_view_model.dart';
 import '../../feature/admin/departments/data/remote/department_remote_data_source_impl.dart';
 import '../../feature/admin/departments/repository/department_repository_impl.dart';
 import '../../feature/admin/departments/view/add_department_view.dart';
@@ -273,9 +278,7 @@ class AppRoutes {
         ),
         ChangeNotifierProvider(
           create: (_) => MaterialAdminViewModel(
-            MaterialsAdminRepositoryImpl(
-              MaterialsAdminRemoteSourceImpl(),
-            ),
+            MaterialsAdminRepositoryImpl(MaterialsAdminRemoteSourceImpl()),
             InstructorSubjectRepositoryImpl(
               InstructorSubjectRemoteDataSourceImpl(),
             ),
@@ -283,6 +286,12 @@ class AppRoutes {
         ),
       ],
       child: const AddMaterialsAdminView(),
+    ),
+    '/attendance': (_) => ChangeNotifierProvider(
+      create: (_) => AttendanceViewModel(
+        AttendanceRepositoryImpl(AttendanceRemoteDataSourceImpl()),
+      )..loadAttendances(),
+      child: const AttendanceView(),
     ),
   };
 }

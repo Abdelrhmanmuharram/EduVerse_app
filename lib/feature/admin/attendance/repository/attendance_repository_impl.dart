@@ -1,0 +1,24 @@
+import 'package:edusync_app/feature/admin/attendance/model/attendance_session_model.dart';
+import '../data/remote/attendance_remote_data_source.dart';
+import '../model/attendance_session_request_model.dart';
+import 'attendance_repository.dart';
+
+class AttendanceRepositoryImpl implements AttendanceRepository {
+  final AttendanceRemoteDataSource _remoteDataSource;
+  AttendanceRepositoryImpl(this._remoteDataSource);
+
+  @override
+  Future<List<AttendanceSessionModel>> getAttendance() {
+    return _remoteDataSource.getAttendance();
+  }
+
+  @override
+  Future<void> deleteAttendanceSession(String id) {
+    return _remoteDataSource.deleteAttendanceSession(id);
+  }
+
+  @override
+  Future<void> createAttendanceSession(AttendanceSessionRequestModel session) {
+    return _remoteDataSource.createAttendanceSession(session);
+  }
+}

@@ -8,6 +8,7 @@ enum MenuType {
   years,
   subjects,
   materials,
+  attendance,
 }
 
 extension MenuTypeExtension on MenuType {
@@ -25,8 +26,10 @@ extension MenuTypeExtension on MenuType {
         return '/years';
       case MenuType.subjects:
         return '/subjects';
-        case MenuType.materials:
+      case MenuType.materials:
         return '/materials-admin';
+      case MenuType.attendance:
+        return '/attendance';
     }
   }
 
@@ -46,6 +49,8 @@ extension MenuTypeExtension on MenuType {
         return 'Subjects';
       case MenuType.materials:
         return 'Materials';
+      case MenuType.attendance:
+        return 'Attendance';
     }
   }
 
@@ -64,6 +69,8 @@ extension MenuTypeExtension on MenuType {
       case MenuType.subjects:
         return Icons.book_outlined;
       case MenuType.materials:
+        return Icons.book_outlined;
+      case MenuType.attendance:
         return Icons.book_outlined;
     }
   }
@@ -84,6 +91,8 @@ extension MenuTypeExtension on MenuType {
         return 'Subjects';
       case MenuType.materials:
         return 'Materials';
+      case MenuType.attendance:
+        return 'Attendance';
     }
   }
 }
