@@ -3,6 +3,7 @@ import 'package:edusync_app/feature/admin/attendance/model/attendance_session_mo
 import 'package:flutter/material.dart';
 import '../../../../core/network/dio_error_handler.dart';
 import '../model/attendance_session_request_model.dart';
+import '../model/update_attendance_session_model.dart';
 import '../repository/attendance_repository.dart';
 import 'package:intl/intl.dart';
 
@@ -148,5 +149,27 @@ class AttendanceViewModel extends ChangeNotifier {
     _selectedSubjectId = null;
     _selectedSubjectName = null;
     notifyListeners();
+  }
+
+  Future<bool> updateAttendanceSession(
+    UpdateAttendanceSessionModel session,
+  ) async {
+    try {
+      _errorMages = '';
+      _isLoading = true;
+      notifyListeners();
+      await _attendanceRepository.updateAttendanceSession(session);
+      await loadAttendances();
+      return true;
+    } catch (e) {
+      if (e is DioException) {
+        _errorMages = DioErrorHandler.handle(e).message;
+      } else {
+        _errorMages = 'Something went wrong';
+      }
+      return false;
+    } finally {
+      _isLoading = false;
+    }
   }
 }

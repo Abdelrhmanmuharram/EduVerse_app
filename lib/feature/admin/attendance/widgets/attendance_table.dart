@@ -2,6 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../../../../core/app_theme.dart';
 import '../../../../core/widgets/loading_widget.dart';
+import '../../../users/data/remote/users_remote_data_source_impl.dart';
+import '../../../users/repository/users_repository_impl.dart';
+import '../../instructors/data/remote/instructor_subject_remote_data_source_impl.dart';
+import '../../instructors/data/remote/subject_remote_data_source_impl.dart';
+import '../../instructors/repository/instructor_repository.dart';
+import '../../instructors/repository/instructor_subject_repository_impl.dart';
+import '../../instructors/repository/subject_repository_impl.dart';
+import '../../instructors/viewmodel/instructor_viewmodel.dart';
+import '../view/edit_attendance_session_view.dart';
 import '../view_model/attendance_view_model.dart';
 
 class AttendanceTable extends StatelessWidget {
@@ -61,15 +70,48 @@ class AttendanceTable extends StatelessWidget {
                                 Row(
                                   children: [
                                     InkWell(
+                                      onTap: () async {
+                                        final result = await Navigator.push(
+                                          context,
+                                          MaterialPageRoute(
+                                            builder: (_) => MultiProvider(
+                                              providers: [
+                                                ChangeNotifierProvider(
+                                                  create: (_) => InstructorViewModel(
+                                                    UsersRepositoryImpl(
+                                                      UsersRemoteDataSourceImpl(),
+                                                    ),
+                                                    InstructorRepository(),
+                                                    InstructorSubjectRepositoryImpl(
+                                                      InstructorSubjectRemoteDataSourceImpl(),
+                                                    ),
+                                                    SubjectRepositoryImpl(
+                                                      SubjectRemoteDataSourceImpl(),
+                                                    ),
+                                                  )..loadInstructors(),
+                                                ),
+                                                ChangeNotifierProvider.value(
+                                                  value: context
+                                                      .read<
+                                                        AttendanceViewModel
+                                                      >(),
+                                                ),
+                                              ],
+                                              child: EditAttendanceSessionView(
+                                                session: attendance,
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                        if (!context.mounted) return;
+                                        if (result == true) {
+                                          await context
+                                              .read<AttendanceViewModel>()
+                                              .loadAttendances();
+                                        }
+                                      },
                                       child: Icon(
                                         Icons.edit,
-                                        color: AppTheme.primaryLight,
-                                      ),
-                                    ),
-                                    const SizedBox(width: 8),
-                                    InkWell(
-                                      child: Icon(
-                                        Icons.qr_code_2,
                                         color: AppTheme.primaryLight,
                                       ),
                                     ),

@@ -1,24 +1,57 @@
-import 'package:edusync_app/core/widgets/default_drop_down_field.dart';
-import 'package:edusync_app/core/widgets/loading_widget.dart';
-import 'package:edusync_app/core/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../../core/app_theme.dart';
 import '../../../../core/widgets/back_item.dart';
+import '../../../../core/widgets/default_drop_down_field.dart';
+import '../../../../core/widgets/loading_widget.dart';
+import '../../../../core/widgets/primary_button.dart';
 import '../../../../core/widgets/title_widget.dart';
 import '../../instructors/viewmodel/instructor_viewmodel.dart';
+import '../model/attendance_session_model.dart';
+import '../model/update_attendance_session_model.dart';
 import '../view_model/attendance_view_model.dart';
 
-class AddAttendanceView extends StatefulWidget {
-  static const String routeName = '/add-attendance';
-  const AddAttendanceView({super.key});
+class EditAttendanceSessionView extends StatefulWidget {
+  final AttendanceSessionModel session;
+  const EditAttendanceSessionView({super.key, required this.session});
 
   @override
-  State<AddAttendanceView> createState() => _AddAttendanceViewState();
+  State<EditAttendanceSessionView> createState() =>
+      _EditAttendanceSessionViewState();
 }
 
-class _AddAttendanceViewState extends State<AddAttendanceView> {
+class _EditAttendanceSessionViewState extends State<EditAttendanceSessionView> {
+  late String originalInstructorId;
+  late int originalSubjectId;
+
+  @override
+  void initState() {
+    super.initState();
+
+    originalInstructorId = widget.session.instructorId;
+    originalSubjectId = widget.session.subjectId;
+
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
+      final instructorVM = context.read<InstructorViewModel>();
+      final attendanceVM = context.read<AttendanceViewModel>();
+      attendanceVM.selectInstructor(
+        instructorName: widget.session.instructorName,
+        instructorId: widget.session.instructorId,
+      );
+      await instructorVM.loadInstructorSubjects(widget.session.instructorId);
+      attendanceVM.selectSubject(
+        subjectName: widget.session.subjectName,
+        subjectId: widget.session.subjectId,
+      );
+    });
+  }
+
+  bool hasChanges(AttendanceViewModel vm) {
+    return vm.selectedInstructorId != originalInstructorId ||
+        vm.selectedSubjectId != originalSubjectId;
+  }
+
   @override
   Widget build(BuildContext context) {
     final instructorViewModel = context.watch<InstructorViewModel>();
@@ -27,7 +60,7 @@ class _AddAttendanceViewState extends State<AddAttendanceView> {
       children: [
         Scaffold(
           appBar: AppBar(
-            title: TitleWidget(title: 'Add Attendance Session'),
+            title: TitleWidget(title: 'Edit Attendance Session'),
             centerTitle: true,
             leading: BackItem(),
           ),
@@ -75,7 +108,7 @@ class _AddAttendanceViewState extends State<AddAttendanceView> {
                 ),
                 const Spacer(),
                 PrimaryButton(
-                  label: 'Add Attendance',
+                  label: 'Edit Attendance',
                   isLoading: attendanceViewModel.isLoading,
                   onPressed: () async {
                     if (attendanceViewModel.selectedInstructorId == null) {
@@ -92,20 +125,24 @@ class _AddAttendanceViewState extends State<AddAttendanceView> {
                       );
                       return;
                     }
+                    if (!hasChanges(attendanceViewModel)) {
+                      return;
+                    }
+                    final session = UpdateAttendanceSessionModel(
+                      id: widget.session.id,
+                      instructorId: attendanceViewModel.selectedInstructorId!,
+                      subjectId: attendanceViewModel.selectedSubjectId!,
+                      sessionDate: widget.session.sessionDate,
+                    );
                     final result = await context
                         .read<AttendanceViewModel>()
-                        .createAttendanceSession(
-                          instructorId:
-                              attendanceViewModel.selectedInstructorId!,
-                          subjectId: attendanceViewModel.selectedSubjectId!,
-                          sessionDate: DateTime.now(),
-                        );
-                    if (!context.mounted) return;
+                        .updateAttendanceSession(session);
+                    if (!mounted) return;
                     if (result) {
                       ScaffoldMessenger.of(context).showSnackBar(
                         const SnackBar(
                           backgroundColor: AppTheme.green,
-                          content: Text('Attendance added'),
+                          content: Text('Attendance updated'),
                         ),
                       );
                       Navigator.pop(context, true);
