@@ -19,11 +19,15 @@ import '../../feature/admin/attendance/repository/attendance_repository_impl.dar
 import '../../feature/admin/attendance/view/add_attendance_view.dart';
 import '../../feature/admin/attendance/view/attendance_view.dart';
 import '../../feature/admin/attendance/view_model/attendance_view_model.dart';
+import '../../feature/admin/chat_bot/data/remote/ai_remote_data_source_impl.dart';
+import '../../feature/admin/chat_bot/repository/ai_repository_impl.dart';
+import '../../feature/admin/chat_bot/view_model/ai_view_model.dart';
 import '../../feature/admin/departments/data/remote/department_remote_data_source_impl.dart';
 import '../../feature/admin/departments/repository/department_repository_impl.dart';
 import '../../feature/admin/departments/view/add_department_view.dart';
 import '../../feature/admin/departments/view/edit_department_view.dart';
 import '../../feature/admin/departments/viewmodel/departement_viewmodel.dart';
+import '../../feature/admin/chat_bot/view/chat_bot_view.dart';
 import '../../feature/admin/instructors/data/remote/instructor_subject_remote_data_source_impl.dart';
 import '../../feature/admin/instructors/data/remote/subject_remote_data_source_impl.dart';
 import '../../feature/admin/instructors/repository/instructor_repository.dart';
@@ -78,7 +82,25 @@ class AppRoutes {
       create: (_) => LoginViewModel(AuthRepository(AuthRemoteDataSourceImpl())),
       child: LoginView(),
     ),
-    AdminHomeView.routeName: (_) => AdminHomeView(),
+    AdminHomeView.routeName: (_) => MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => SubjectsViewModel(
+            SubjectsRepositoryImpl(
+              SubjectsRemoteDataSourceImpl(),
+            ),
+          )..loadSubjects(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => AiViewModel(
+            AiRepositoryImpl(
+              AiRemoteDataSourceImpl(),
+            ),
+          ),
+        ),
+      ],
+      child: const AdminHomeView(),
+    ),
     AddStudentView.routeName: (_) => AddStudentView(),
     '/students': (_) => MultiProvider(
       providers: [
@@ -292,6 +314,22 @@ class AppRoutes {
         AttendanceRepositoryImpl(AttendanceRemoteDataSourceImpl()),
       )..loadAttendances(),
       child: const AttendanceView(),
+    ),
+
+    'chat-bot': (_) => MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => SubjectsViewModel(
+            SubjectsRepositoryImpl(SubjectsRemoteDataSourceImpl()),
+          )..loadSubjects(),
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) =>
+              AiViewModel(AiRepositoryImpl(AiRemoteDataSourceImpl())),
+        ),
+      ],
+      child: const ChatBotView(),
     ),
   };
 }

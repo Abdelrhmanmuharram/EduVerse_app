@@ -61,15 +61,12 @@ class MaterialsViewModel extends ChangeNotifier {
   Future<void> loadSubjects() async {
     try {
       final user = await LocalStorageService.getUser();
-      print("USER ID: ${user?.id}");
       final response = await _instructorSubjectRepository.getInstructorSubjects(
         user!.id,
       );
-      print("RESPONSE LENGTH: ${response.length}");
       subjects = response;
       notifyListeners();
     } catch (e) {
-      print("LOAD SUBJECTS ERROR: $e");
     }
   }
 }
