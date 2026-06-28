@@ -19,5 +19,6 @@ class APIConstants {
   static const String subjects = '/Subjects';
   static const String attendancesSessions = '/AttendanceSessions';
   static const String generateAi = '/ai/generate';
+  static const String attendances = '/Attendances';
 
 }

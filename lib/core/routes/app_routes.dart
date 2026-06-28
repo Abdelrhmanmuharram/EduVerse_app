@@ -64,6 +64,8 @@ import '../../feature/instructors/view/screens/materials_view.dart';
 import '../../feature/instructors/view/screens/students_list_view.dart';
 import '../../feature/instructors/viewmodel/materials_viewmodel.dart';
 import '../../feature/instructors/viewmodel/students_list_viewmodel.dart';
+import '../../feature/students/attendance/view/scan_qr_view.dart';
+import '../../feature/students/view_model/student_attendance_view_model.dart';
 import '../../feature/years/data/remote/year_remote_data_source_impl.dart';
 import '../../feature/years/repository/year_repository_impl.dart';
 import '../../feature/years/viewmodel/year_viewmodel.dart';
@@ -86,17 +88,12 @@ class AppRoutes {
       providers: [
         ChangeNotifierProvider(
           create: (_) => SubjectsViewModel(
-            SubjectsRepositoryImpl(
-              SubjectsRemoteDataSourceImpl(),
-            ),
+            SubjectsRepositoryImpl(SubjectsRemoteDataSourceImpl()),
           )..loadSubjects(),
         ),
         ChangeNotifierProvider(
-          create: (_) => AiViewModel(
-            AiRepositoryImpl(
-              AiRemoteDataSourceImpl(),
-            ),
-          ),
+          create: (_) =>
+              AiViewModel(AiRepositoryImpl(AiRemoteDataSourceImpl())),
         ),
       ],
       child: const AdminHomeView(),
@@ -180,7 +177,12 @@ class AppRoutes {
 
       child: InstructorsHomeView(),
     ),
-    '/student': (_) => const StudentView(),
+    '/student': (_) => ChangeNotifierProvider(
+      create: (_) => StudentAttendanceViewModel(
+        AttendanceRepositoryImpl(AttendanceRemoteDataSourceImpl()),
+      ),
+      child: StudentView(),
+    ),
     '/splash': (_) => const SplashView(),
     '/add-semester': (_) => const AddSemester(),
     '/edit-semester': (_) => const EditSemesterView(),
@@ -331,5 +333,6 @@ class AppRoutes {
       ],
       child: const ChatBotView(),
     ),
+    '/scan-qr': (_) => const ScanQrView(),
   };
 }
