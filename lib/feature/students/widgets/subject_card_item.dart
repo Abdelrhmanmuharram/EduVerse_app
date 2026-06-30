@@ -1,16 +1,17 @@
 import 'package:edusync_app/core/app_theme.dart';
-import 'package:edusync_app/feature/students/model/subject_attendance_model.dart';
 import 'package:edusync_app/feature/students/widgets/subject_person_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../model/student_instructor_subject_model.dart';
+import '../materials/model/student_subject_model.dart';
+import '../view/student_subject_details.dart';
 
 class SubjectCardItem extends StatelessWidget {
   final String subjectName;
   final List<String> instructorName;
   final int materialsCount;
   final double attendance;
+  final StudentSubjectModel subject;
 
   const SubjectCardItem({
     super.key,
@@ -18,6 +19,7 @@ class SubjectCardItem extends StatelessWidget {
     required this.instructorName,
     required this.materialsCount,
     required this.attendance,
+    required this.subject,
   });
   @override
   Widget build(BuildContext context) {
@@ -64,7 +66,13 @@ class SubjectCardItem extends StatelessWidget {
                   ),
                 ),
                 InkWell(
-                  onTap: () {},
+                  onTap: () {
+                    Navigator.pushNamed(
+                      context,
+                      StudentSubjectDetails.routeName,
+                      arguments: subject.id,
+                    );
+                  },
                   child: Icon(
                     Icons.chevron_right_rounded,
                     size: 28,

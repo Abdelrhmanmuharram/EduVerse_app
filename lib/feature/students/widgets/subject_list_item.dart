@@ -25,6 +25,7 @@ class SubjectListItem extends StatelessWidget {
           final subject = vm.filteredSubjects[index];
           final attendance = vm.getAttendanceBySubjectId(subject.id);
           return SubjectCardItem(
+            subject: subject,
             subjectName: subject.subjectName,
             attendance: attendance?.attendancePercentage ?? 0,
             instructorName: vm.instructors[subject.id] ?? [],
