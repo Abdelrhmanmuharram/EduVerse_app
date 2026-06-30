@@ -47,9 +47,7 @@ class _ScanQrViewState extends State<ScanQrView> {
               if (scanned) return;
               final value = capture.barcodes.first.rawValue;
               if (value == null) return;
-              print('HERE====> $value');
               scanned = true;
-
               setState(() {
                 isSuccess = true;
               });

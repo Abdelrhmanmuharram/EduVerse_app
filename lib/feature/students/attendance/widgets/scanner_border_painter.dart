@@ -14,7 +14,6 @@ class ScannerBorderPainter extends CustomPainter {
     const r = 30.0;
     canvas.drawLine(const Offset(0, r), const Offset(0, 0), paint);
     canvas.drawLine(const Offset(0, 0), const Offset(r, 0), paint);
-
     canvas.drawLine(Offset(size.width - r, 0), Offset(size.width, 0), paint);
     canvas.drawLine(Offset(size.width, 0), Offset(size.width, r), paint);
     canvas.drawLine(Offset(0, size.height - r), Offset(0, size.height), paint);
@@ -24,14 +23,12 @@ class ScannerBorderPainter extends CustomPainter {
       Offset(size.width, size.height),
       paint,
     );
-
     canvas.drawLine(
       Offset(size.width, size.height - r),
       Offset(size.width, size.height),
       paint,
     );
   }
-
   @override
   bool shouldRepaint(CustomPainter oldDelegate) => false;
 }

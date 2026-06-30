@@ -1,7 +1,7 @@
 import 'package:edusync_app/feature/admin/attendance/model/attendance_session_model.dart';
 import 'package:edusync_app/feature/admin/attendance/model/attendance_session_request_model.dart';
 
-import '../../../../students/model/attendance_scan_request_model.dart';
+import '../../../../students/attendance/model/attendance_scan_request_model.dart';
 import '../../model/update_attendance_session_model.dart';
 
 abstract class AttendanceRemoteDataSource {

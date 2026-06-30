@@ -20,5 +20,8 @@ class APIConstants {
   static const String attendancesSessions = '/AttendanceSessions';
   static const String generateAi = '/ai/generate';
   static const String attendances = '/Attendances';
-
+  static const String dashboard = '/Dashboard/student';
+  static const String instructorBySubject =
+      '/InstructorSubjects/GetSubjectInstructors';
+  static const String subjectMaterials = '/Materials/GetSubjectMaterials';
 }

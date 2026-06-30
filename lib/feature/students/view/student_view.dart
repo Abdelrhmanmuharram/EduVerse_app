@@ -4,13 +4,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/app_theme.dart';
-import '../view_model/student_attendance_view_model.dart';
+import '../attendance/view_model/student_attendance_view_model.dart';
 
-class StudentView extends StatelessWidget {
+class StudentView extends StatefulWidget {
   static const String routeName = '/student';
 
   const StudentView({super.key});
 
+  @override
+  State<StudentView> createState() => _StudentViewState();
+}
+
+class _StudentViewState extends State<StudentView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

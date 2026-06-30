@@ -1,6 +1,6 @@
 import 'package:edusync_app/feature/admin/attendance/data/remote/attendance_remote_data_source.dart';
 import 'package:edusync_app/feature/admin/attendance/model/update_attendance_session_model.dart';
-import 'package:edusync_app/feature/students/model/attendance_scan_request_model.dart';
+import 'package:edusync_app/feature/students/attendance/model/attendance_scan_request_model.dart';
 import '../../../../../core/constants/api_constants.dart';
 import '../../../../../core/network/dio_client.dart';
 import '../../model/attendance_session_model.dart';

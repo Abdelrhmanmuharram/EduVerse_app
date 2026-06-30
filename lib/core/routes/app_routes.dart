@@ -65,7 +65,17 @@ import '../../feature/instructors/view/screens/students_list_view.dart';
 import '../../feature/instructors/viewmodel/materials_viewmodel.dart';
 import '../../feature/instructors/viewmodel/students_list_viewmodel.dart';
 import '../../feature/students/attendance/view/scan_qr_view.dart';
-import '../../feature/students/view_model/student_attendance_view_model.dart';
+import '../../feature/students/data/remote/student_dashboard_remote_data_source_impl.dart';
+import '../../feature/students/data/remote/student_instructor_subject_remote_data_source_impl.dart';
+import '../../feature/students/materials/data/remote/student_material_remote_data_source_impl.dart';
+import '../../feature/students/materials/repository/student_material_repository_impl.dart';
+import '../../feature/students/repository/student_dashboard_repository_impl.dart';
+import '../../feature/students/repository/student_instructor_subject_repository_impl.dart';
+import '../../feature/students/view/student_chat_bot_view.dart';
+import '../../feature/students/view/student_dashboard_view.dart';
+import '../../feature/students/view/student_home_view.dart';
+import '../../feature/students/attendance/view_model/student_attendance_view_model.dart';
+import '../../feature/students/view_model/student_dashboard_view_model.dart';
 import '../../feature/years/data/remote/year_remote_data_source_impl.dart';
 import '../../feature/years/repository/year_repository_impl.dart';
 import '../../feature/years/viewmodel/year_viewmodel.dart';
@@ -334,5 +344,18 @@ class AppRoutes {
       child: const ChatBotView(),
     ),
     '/scan-qr': (_) => const ScanQrView(),
+    '/student-home': (_) => ChangeNotifierProvider(
+      create: (_) => StudentDashboardViewModel(
+        StudentDashboardRepositoryImpl(
+          StudentDashboardRemoteDataSourceImpl(),
+        ),
+        StudentMaterialRepositoryImpl(
+          StudentMaterialRemoteDataSourceImpl(),
+        ),
+      )..getDashboard(),
+      child: const StudentHomeView(),
+    ),
+    '/student-chat-bot': (_) => const StudentChatBotView(),
+    '/student-dashboard': (_) => StudentDashboardView(),
   };
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/cupertino.dart';
 
-import '../../../core/services/local_storage_service.dart';
-import '../../admin/attendance/repository/attendance_repository.dart';
+import '../../../../core/services/local_storage_service.dart';
+import '../../../admin/attendance/repository/attendance_repository.dart';
 import '../model/attendance_scan_request_model.dart';
 
 class StudentAttendanceViewModel extends ChangeNotifier {
