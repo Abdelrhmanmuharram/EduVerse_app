@@ -1,22 +1,22 @@
-class StudentSubjectModel {
+class SemesterModel {
   final int id;
-  final String code;
   final String arbName;
   final String engName;
 
-  const StudentSubjectModel({
+  const SemesterModel({
     required this.id,
-    required this.code,
     required this.arbName,
     required this.engName,
   });
 
-  factory StudentSubjectModel.fromJson(Map<String, dynamic> json) {
-    return StudentSubjectModel(
+  factory SemesterModel.fromJson(Map<String, dynamic> json) {
+    return SemesterModel(
       id: json['id'] ?? 0,
-      code: json['code'] ?? '',
       arbName: json['arbName'] ?? '',
       engName: json['engName'] ?? '',
     );
+  }
+  Map<String, dynamic> toJson() {
+    return {'id': id, 'arbName': arbName, 'engName': engName};
   }
 }

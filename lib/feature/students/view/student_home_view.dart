@@ -1,6 +1,5 @@
 import 'package:edusync_app/feature/students/view/student_chat_bot_view.dart';
 import 'package:edusync_app/feature/students/view/student_dashboard_view.dart';
-import 'package:edusync_app/feature/students/view/student_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/widgets/nav_bar_icons.dart';

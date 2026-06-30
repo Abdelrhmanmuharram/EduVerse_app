@@ -68,9 +68,15 @@ import '../../feature/students/attendance/view/scan_qr_view.dart';
 import '../../feature/students/data/remote/student_dashboard_remote_data_source_impl.dart';
 import '../../feature/students/data/remote/student_instructor_subject_remote_data_source_impl.dart';
 import '../../feature/students/materials/data/remote/student_material_remote_data_source_impl.dart';
+import '../../feature/students/materials/data/remote/student_subject_remote_data_source_impl.dart';
 import '../../feature/students/materials/repository/student_material_repository_impl.dart';
+import '../../feature/students/materials/repository/student_subject_repository_impl.dart';
 import '../../feature/students/repository/student_dashboard_repository_impl.dart';
 import '../../feature/students/repository/student_instructor_subject_repository_impl.dart';
+import '../../feature/students/semester/data/remote/system_setting_remote_data_source_impl.dart';
+import '../../feature/students/semester/repository/system_setting_repository_impl.dart';
+import '../../feature/students/subjects/data/remote/student_subject_instructor_remote_data_source_impl.dart';
+import '../../feature/students/subjects/repository/student_subject_instructor_repository_impl.dart';
 import '../../feature/students/view/student_chat_bot_view.dart';
 import '../../feature/students/view/student_dashboard_view.dart';
 import '../../feature/students/view/student_home_view.dart';
@@ -346,13 +352,17 @@ class AppRoutes {
     '/scan-qr': (_) => const ScanQrView(),
     '/student-home': (_) => ChangeNotifierProvider(
       create: (_) => StudentDashboardViewModel(
-        StudentDashboardRepositoryImpl(
-          StudentDashboardRemoteDataSourceImpl(),
+        StudentDashboardRepositoryImpl(StudentDashboardRemoteDataSourceImpl()),
+        StudentMaterialRepositoryImpl(StudentMaterialRemoteDataSourceImpl()),
+        StudentSubjectRepositoryImpl(
+          remoteDataSource: StudentSubjectRemoteDataSourceImpl(),
         ),
-        StudentMaterialRepositoryImpl(
-          StudentMaterialRemoteDataSourceImpl(),
+        SystemSettingRepositoryImpl(SystemSettingRemoteDataSourceImpl()),
+        StudentSubjectInstructorRepositoryImpl(
+          StudentSubjectInstructorRemoteDataSourceImpl(),
         ),
-      )..getDashboard(),
+      )..loadData(),
+
       child: const StudentHomeView(),
     ),
     '/student-chat-bot': (_) => const StudentChatBotView(),

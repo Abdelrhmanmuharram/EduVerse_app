@@ -24,11 +24,13 @@ class StudentDashboardView extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(16),
           child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               DashboardHeader(studentName: viewModel.user?.fullName ?? ''),
               const SizedBox(height: 8),
               DefaultTextField(
-                hint: 'Search',
+                onChanged: viewModel.searchSubjects,
+                hint: 'Search by subject name',
                 prefixIcon: SvgPicture.asset(
                   'assets/icons/search.svg',
                   width: 24,
@@ -37,24 +39,12 @@ class StudentDashboardView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              Row(
-                children: [
                   Text(
                     'Your Subjects',
                     style: textTheme.titleLarge!.copyWith(
                       color: AppTheme.black,
                     ),
                   ),
-                  const Spacer(),
-                  Text(
-                    'View All',
-                    style: textTheme.titleSmall!.copyWith(
-                      color: AppTheme.primaryLight,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                ],
-              ),
               const SizedBox(height: 16),
               Expanded(
                 child: viewModel.isLoading

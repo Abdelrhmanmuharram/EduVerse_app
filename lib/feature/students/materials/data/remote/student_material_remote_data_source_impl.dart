@@ -11,7 +11,6 @@ class StudentMaterialRemoteDataSourceImpl
     final response = await DioClient.dio.get(
       '${APIConstants.subjectMaterials}/$subjectId',
     );
-    print(response.data);
     return (response.data['data'] as List)
         .map((e) => StudentMaterialModel.fromJson(e))
         .toList();

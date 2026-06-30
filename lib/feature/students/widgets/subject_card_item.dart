@@ -8,7 +8,7 @@ import '../model/student_instructor_subject_model.dart';
 
 class SubjectCardItem extends StatelessWidget {
   final String subjectName;
-  final String instructorName;
+  final List<String> instructorName;
   final int materialsCount;
   final double attendance;
 
@@ -34,7 +34,6 @@ class SubjectCardItem extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Row(
-              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Container(
                   width: 56,
@@ -61,20 +60,16 @@ class SubjectCardItem extends StatelessWidget {
                           fontWeight: FontWeight.w700,
                         ),
                       ),
-                      const SizedBox(height: 4),
-                      Text(
-                        'Lecture: 02:00 PM - 04:00 PM',
-                        style: textTheme.bodyMedium?.copyWith(
-                          color: Colors.grey,
-                        ),
-                      ),
                     ],
                   ),
                 ),
-                Icon(
-                  Icons.chevron_right_rounded,
-                  size: 28,
-                  color: AppTheme.secondText,
+                InkWell(
+                  onTap: () {},
+                  child: Icon(
+                    Icons.chevron_right_rounded,
+                    size: 28,
+                    color: AppTheme.secondText,
+                  ),
                 ),
               ],
             ),
@@ -85,7 +80,7 @@ class SubjectCardItem extends StatelessWidget {
                   child: SubjectPersonInfo(
                     role: 'Instructor',
                     name: instructorName.isNotEmpty
-                        ? 'Dr. $instructorName'
+                        ? instructorName.map((e) => 'Dr. $e').join(', ')
                         : 'Instructor Not Assigned',
                     image: 'assets/images/avatar.jpg',
                   ),

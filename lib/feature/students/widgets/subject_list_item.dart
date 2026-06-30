@@ -16,18 +16,19 @@ class SubjectListItem extends StatelessWidget {
       backgroundColor: AppTheme.primaryLight,
       color: AppTheme.white,
       onRefresh: () async {
-        await vm.getDashboard();
+        await vm.loadData();
       },
       child: ListView.separated(
-        itemCount: vm.dashboard?.subjectAttendances.length ?? 0,
+        itemCount: vm.filteredSubjects.length,
         separatorBuilder: (_, _) => const SizedBox(height: 16),
         itemBuilder: (_, index) {
-          final subject = vm.dashboard!.subjectAttendances[index];
+          final subject = vm.filteredSubjects[index];
+          final attendance = vm.getAttendanceBySubjectId(subject.id);
           return SubjectCardItem(
-            subjectName: subject.subjectEngName,
-            attendance: subject.attendancePercentage,
-            instructorName: vm.instructors[subject.subjectId] ?? 'Unknown',
-            materialsCount: vm.materialsCount[subject.subjectId] ?? 0,
+            subjectName: subject.subjectName,
+            attendance: attendance?.attendancePercentage ?? 0,
+            instructorName: vm.instructors[subject.id] ?? [],
+            materialsCount: vm.materialsCount[subject.id] ?? 0,
           );
         },
       ),
