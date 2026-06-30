@@ -70,7 +70,7 @@ class SubjectCardItem extends StatelessWidget {
                     Navigator.pushNamed(
                       context,
                       StudentSubjectDetails.routeName,
-                      arguments: subject.id,
+                      arguments: subject,
                     );
                   },
                   child: Icon(

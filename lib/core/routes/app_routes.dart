@@ -83,6 +83,7 @@ import '../../feature/students/view/student_home_view.dart';
 import '../../feature/students/attendance/view_model/student_attendance_view_model.dart';
 import '../../feature/students/view/student_subject_details.dart';
 import '../../feature/students/view_model/student_dashboard_view_model.dart';
+import '../../feature/students/view_model/student_subject_details_view_model.dart';
 import '../../feature/years/data/remote/year_remote_data_source_impl.dart';
 import '../../feature/years/repository/year_repository_impl.dart';
 import '../../feature/years/viewmodel/year_viewmodel.dart';
@@ -362,12 +363,26 @@ class AppRoutes {
         StudentSubjectInstructorRepositoryImpl(
           StudentSubjectInstructorRemoteDataSourceImpl(),
         ),
+        AttendanceRepositoryImpl(AttendanceRemoteDataSourceImpl()),
       )..loadData(),
 
       child: const StudentHomeView(),
     ),
     '/student-chat-bot': (_) => const StudentChatBotView(),
     '/student-dashboard': (_) => StudentDashboardView(),
-    '/student-subject-details': (_) => const StudentSubjectDetails(),
+    '/student-subject-details': (_) => ChangeNotifierProvider(
+      create: (_) => StudentSubjectDetailsViewModel(
+        StudentMaterialRepositoryImpl(
+          StudentMaterialRemoteDataSourceImpl(),
+        ),
+        StudentSubjectInstructorRepositoryImpl(
+          StudentSubjectInstructorRemoteDataSourceImpl(),
+        ),
+        AttendanceRepositoryImpl(
+          AttendanceRemoteDataSourceImpl(),
+        ),
+      ),
+      child: const StudentSubjectDetails(),
+    ),
   };
 }

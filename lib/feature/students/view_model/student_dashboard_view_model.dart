@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import '../../../core/model/user_model.dart';
 import '../../../core/services/local_storage_service.dart';
 import '../../admin/attendance/repository/attendance_repository.dart';
+import '../attendance/model/attendance_scan_request_model.dart';
 import '../materials/model/student_subject_model.dart';
 import '../materials/repository/student_material_repository.dart';
 import '../materials/repository/student_subject_repository.dart';
@@ -17,6 +18,7 @@ class StudentDashboardViewModel extends ChangeNotifier {
   final StudentDashboardRepository _dashboardRepository;
   final StudentSubjectRepository _subjectRepository;
   final SystemSettingRepository _systemSettingRepository;
+  final AttendanceRepository _attendanceRepository;
   final StudentSubjectInstructorRepository _instructorRepository;
   StudentDashboardViewModel(
     this._dashboardRepository,
@@ -24,6 +26,7 @@ class StudentDashboardViewModel extends ChangeNotifier {
     this._subjectRepository,
     this._systemSettingRepository,
     this._instructorRepository,
+    this._attendanceRepository,
   );
 
   bool _isLoading = false;
@@ -133,5 +136,25 @@ class StudentDashboardViewModel extends ChangeNotifier {
 
   SubjectAttendanceModel? getAttendanceBySubjectId(int subjectId) {
     return _attendanceMap[subjectId];
+  }
+
+  Future<bool> scanAttendance({
+    required String qrData,
+  }) async {
+    try {
+      _errorMessage = null;
+      await _attendanceRepository.addAttendance(
+        AttendanceScanRequestModel(
+          attendanceTime: DateTime.now(),
+          isPresent: true,
+          sessionId: qrData,
+          studentId: _user!.id,
+        ),
+      );
+      return true;
+    } catch (e) {
+      _errorMessage = e.toString();
+      return false;
+    }
   }
 }

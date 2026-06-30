@@ -1,14 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 
 import '../../../core/app_theme.dart';
+import '../materials/model/student_subject_model.dart';
+import '../view_model/student_dashboard_view_model.dart';
+import '../view_model/student_subject_details_view_model.dart';
 
 class SubjectHeaderItem extends StatelessWidget {
   const SubjectHeaderItem({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final subject =
+        ModalRoute.of(context)!.settings.arguments as StudentSubjectModel;
     TextTheme textTheme = Theme.of(context).textTheme;
+    final vm = context.watch<StudentSubjectDetailsViewModel>();
     return Stack(
       children: [
         Container(
@@ -54,7 +61,7 @@ class SubjectHeaderItem extends StatelessWidget {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Mathematics',
+                  subject.subjectName,
                   style: textTheme.headlineMedium!.copyWith(
                     color: AppTheme.white,
                     fontWeight: FontWeight.w700,
@@ -70,7 +77,11 @@ class SubjectHeaderItem extends StatelessWidget {
                     ),
                     SizedBox(width: 4),
                     Text(
-                      'Dr. Abdelrahman Muharram',
+                      vm.instructors.isNotEmpty
+                          ? vm.instructors
+                                .map((e) => 'Dr. ${e.fullName}')
+                                .join(', ')
+                          : 'Instructor Not Assigned',
                       style: textTheme.titleLarge!.copyWith(
                         color: AppTheme.white.withOpacity(.7),
                       ),
@@ -162,7 +173,7 @@ class SubjectHeaderItem extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 16,),
+                margin: EdgeInsets.only(top: 16),
                 decoration: BoxDecoration(
                   color: AppTheme.white,
                   borderRadius: BorderRadius.circular(24),
@@ -217,7 +228,7 @@ class SubjectHeaderItem extends StatelessWidget {
                 ),
               ),
               Container(
-                margin: EdgeInsets.only(top: 16,),
+                margin: EdgeInsets.only(top: 16),
                 decoration: BoxDecoration(
                   color: AppTheme.white,
                   borderRadius: BorderRadius.circular(24),
