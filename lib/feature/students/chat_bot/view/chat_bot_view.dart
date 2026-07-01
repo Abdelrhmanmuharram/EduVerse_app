@@ -33,57 +33,49 @@ class _StudentChatBotViewState extends State<StudentChatBotView> {
   @override
   Widget build(BuildContext context) {
     final vm = context.watch<StudentChatBotViewModel>();
-    final contextKey = GlobalKey<ChatContextCardState>();
 
-    return GestureDetector(
-      behavior: HitTestBehavior.translucent,
-      onTap: () {
-        FocusScope.of(context).unfocus();
-        contextKey.currentState?.collapse();
-      },
-      child: Scaffold(
-        appBar: AppBar(
-          title: const TitleWidget(title: "AI Student Assistant"),
-          centerTitle: true,
-        ),
-        body: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Column(
-              children: [
-                ChatContextCard(key: contextKey),
-                const SizedBox(height: 16),
-                Expanded(
-                  child: ChatBodyItem(
-                    messages: vm.messages,
-                    scrollController: scrollController,
-                    isTyping: vm.isTyping,
-                  ),
+    return Scaffold(
+      appBar: AppBar(
+        title: const TitleWidget(title: "AI Student Assistant"),
+        centerTitle: true,
+      ),
+      body: SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            children: [
+              ChatContextCard(),
+              const SizedBox(height: 16),
+              Expanded(
+                child: ChatBodyItem(
+                  messages: vm.messages,
+                  scrollController: scrollController,
+                  isTyping: vm.isTyping,
                 ),
-                const SizedBox(height: 8),
-                ChatInputItem(
-                  isLoading: vm.isTyping,
-                  controller: controller,
-                  onSend: () async {
-                    try {
-                      final success = await vm.sendMessage(controller.text);
-                      if (success) {
-                        controller.clear();
-                      }
-                      scrollToBottom();
-                    } catch (e) {
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text(
-                            e.toString().replaceFirst("Exception: ", ""),
-                          ),
-                        ),
-                      );
+              ),
+              const SizedBox(height: 8),
+              ChatInputItem(
+                isLoading: vm.isTyping,
+                controller: controller,
+                onSend: () async {
+                  try {
+                    final success = await vm.sendMessage(controller.text);
+                    if (success) {
+                      controller.clear();
                     }
-                  },
-                ),
-              ],
-            ),
+                    scrollToBottom();
+                  } catch (e) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(
+                        content: Text(
+                          e.toString().replaceFirst("Exception: ", ""),
+                        ),
+                      ),
+                    );
+                  }
+                },
+              ),
+            ],
           ),
         ),
       ),

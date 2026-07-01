@@ -3,12 +3,11 @@ import 'package:edusync_app/core/widgets/title_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/app_theme.dart';
-import '../../../core/widgets/loading_widget.dart';
-import '../../../core/widgets/primary_button.dart';
-import '../attendance/view/scan_qr_view.dart';
-import '../attendance/view_model/student_attendance_view_model.dart';
-import '../materials/model/student_subject_model.dart';
+import '../../../../core/app_theme.dart';
+import '../../../../core/widgets/loading_widget.dart';
+import '../../../../core/widgets/primary_button.dart';
+import '../../attendance/view/scan_qr_view.dart';
+import '../../materials/model/student_subject_model.dart';
 import '../view_model/student_subject_details_view_model.dart';
 import '../widgets/attendance_history_item.dart';
 import '../widgets/course_materials_item.dart';

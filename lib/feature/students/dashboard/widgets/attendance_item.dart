@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 
-import '../../../core/app_theme.dart';
-import '../attendance/model/student_attendance_model.dart';
+import '../../../../core/app_theme.dart';
+import '../../attendance/model/student_attendance_model.dart';
 
 class AttendanceItem extends StatelessWidget {
   final StudentAttendanceModel attendance;

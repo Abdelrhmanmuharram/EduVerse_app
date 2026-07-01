@@ -1,5 +1,4 @@
-import 'package:edusync_app/feature/students/repository/student_instructor_subject_repository.dart';
-
+import 'package:edusync_app/feature/students/dashboard/repository/student_instructor_subject_repository.dart';
 import '../data/remote/student_instructor_subject_remote_data_source.dart';
 import '../model/student_instructor_subject_model.dart';
 

@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/app_theme.dart';
-import '../../../core/services/file_download_service.dart';
+import '../../../../core/app_theme.dart';
+import '../../../../core/services/file_download_service.dart';
 import '../view/student_pdf_view.dart';
 import '../view_model/student_subject_details_view_model.dart';
 

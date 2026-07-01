@@ -1,4 +1,4 @@
-import 'package:edusync_app/feature/students/model/subject_attendance_model.dart';
+import 'package:edusync_app/feature/students/dashboard/model/subject_attendance_model.dart';
 
 import 'attendance_overview_model.dart';
 import 'latest_material_model.dart';

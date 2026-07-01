@@ -1,12 +1,12 @@
 import 'package:edusync_app/core/app_theme.dart';
 import 'package:edusync_app/core/widgets/default_text_field.dart';
 import 'package:edusync_app/core/widgets/loading_widget.dart';
-import 'package:edusync_app/feature/students/widgets/subject_list_item.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:provider/provider.dart';
 import '../view_model/student_dashboard_view_model.dart';
 import '../widgets/dashboard_header.dart';
+import '../widgets/subject_list_item.dart';
 
 class StudentDashboardView extends StatelessWidget {
   static const String routeName = '/student-dashboard';

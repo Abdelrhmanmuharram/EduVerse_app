@@ -1,17 +1,17 @@
 import 'package:flutter/cupertino.dart';
-import '../../../core/model/user_model.dart';
-import '../../../core/services/local_storage_service.dart';
-import '../../admin/attendance/repository/attendance_repository.dart';
-import '../attendance/model/attendance_scan_request_model.dart';
-import '../materials/model/student_subject_model.dart';
-import '../materials/repository/student_material_repository.dart';
-import '../materials/repository/student_subject_repository.dart';
+import '../../../../core/model/user_model.dart';
+import '../../../../core/services/local_storage_service.dart';
+import '../../../admin/attendance/repository/attendance_repository.dart';
+import '../../attendance/model/attendance_scan_request_model.dart';
+import '../../materials/model/student_subject_model.dart';
+import '../../materials/repository/student_material_repository.dart';
+import '../../materials/repository/student_subject_repository.dart';
 import '../model/student_dashboard_model.dart';
+import '../../semester/model/system_setting_model.dart';
+import '../../semester/repository/system_setting_repository.dart';
+import '../../subjects/repository/student_subject_instructor_repository.dart';
 import '../model/subject_attendance_model.dart';
 import '../repository/student_dashboard_repository.dart';
-import '../semester/model/system_setting_model.dart';
-import '../semester/repository/system_setting_repository.dart';
-import '../subjects/repository/student_subject_instructor_repository.dart';
 
 class StudentDashboardViewModel extends ChangeNotifier {
   final StudentMaterialRepository _materialRepository;

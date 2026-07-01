@@ -1,4 +1,4 @@
-import '../materials/model/student_subject_model.dart';
+import '../../materials/model/student_subject_model.dart';
 import 'student_instructor_model.dart';
 
 class StudentInstructorSubjectModel {

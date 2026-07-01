@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
-import '../../../core/services/file_download_service.dart';
+import '../../../../core/services/file_download_service.dart';
 
 class StudentPdfView extends StatefulWidget {
   static const routeName = '/student-pdf';

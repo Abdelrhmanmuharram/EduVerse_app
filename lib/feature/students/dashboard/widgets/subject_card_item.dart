@@ -1,9 +1,9 @@
 import 'package:edusync_app/core/app_theme.dart';
-import 'package:edusync_app/feature/students/widgets/subject_person_info.dart';
+import 'package:edusync_app/feature/students/dashboard/widgets/subject_person_info.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
-import '../materials/model/student_subject_model.dart';
+import '../../materials/model/student_subject_model.dart';
 import '../view/student_subject_details.dart';
 
 class SubjectCardItem extends StatelessWidget {

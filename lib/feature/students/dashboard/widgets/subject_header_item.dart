@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 
-import '../../../core/app_theme.dart';
-import '../materials/model/student_subject_model.dart';
-import '../view_model/student_dashboard_view_model.dart';
+import '../../../../core/app_theme.dart';
+import '../../materials/model/student_subject_model.dart';
 import '../view_model/student_subject_details_view_model.dart';
 
 class SubjectHeaderItem extends StatelessWidget {

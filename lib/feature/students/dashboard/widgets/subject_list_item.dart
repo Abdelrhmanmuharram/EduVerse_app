@@ -1,8 +1,6 @@
-import 'package:edusync_app/feature/students/widgets/subject_card_item.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:edusync_app/feature/students/dashboard/widgets/subject_card_item.dart';
 import 'package:flutter/material.dart';
-
-import '../../../core/app_theme.dart';
+import '../../../../core/app_theme.dart';
 import '../view_model/student_dashboard_view_model.dart';
 
 class SubjectListItem extends StatelessWidget {

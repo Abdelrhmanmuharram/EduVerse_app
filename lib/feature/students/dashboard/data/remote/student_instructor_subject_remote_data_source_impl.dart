@@ -1,7 +1,6 @@
-import 'package:edusync_app/feature/students/data/remote/student_instructor_subject_remote_data_source.dart';
-
-import '../../../../core/constants/api_constants.dart';
-import '../../../../core/network/dio_client.dart';
+import 'package:edusync_app/feature/students/dashboard/data/remote/student_instructor_subject_remote_data_source.dart';
+import '../../../../../core/constants/api_constants.dart';
+import '../../../../../core/network/dio_client.dart';
 import '../../model/student_instructor_subject_model.dart';
 
 class StudentInstructorSubjectRemoteDataSourceImpl

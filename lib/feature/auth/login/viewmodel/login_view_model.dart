@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import '../../../../core/services/navigation_service.dart';
 import '../../../admin/home/view/admin_home_view.dart';
 import '../../../instructors/view/screens/instructor_view.dart';
-import '../../../students/view/student_home_view.dart';
+import '../../../students/dashboard/view/student_home_view.dart';
 import '../repository/auth_repository.dart';
 import '../view/login_view.dart';
 
