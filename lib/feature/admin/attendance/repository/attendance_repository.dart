@@ -1,6 +1,7 @@
 import 'package:edusync_app/feature/admin/attendance/model/attendance_session_model.dart';
 import 'package:edusync_app/feature/students/attendance/model/attendance_scan_request_model.dart';
 
+import '../../../students/attendance/model/student_attendance_model.dart';
 import '../model/attendance_session_request_model.dart';
 import '../model/update_attendance_session_model.dart';
 
@@ -10,4 +11,5 @@ abstract class AttendanceRepository {
   Future<void> updateAttendanceSession(UpdateAttendanceSessionModel session);
   Future<void> addAttendance(AttendanceScanRequestModel attendance);
   Future<void> deleteAttendanceSession(String id);
+  Future<List<StudentAttendanceModel>> getAttendances();
 }

@@ -50,7 +50,7 @@ class SubjectHeaderItem extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        'Computer Science',
+                        subject.department.englishName,
                         style: textTheme.titleSmall!.copyWith(
                           color: AppTheme.white,
                           fontWeight: FontWeight.w700,
@@ -98,7 +98,7 @@ class SubjectHeaderItem extends StatelessWidget {
                     ),
                     SizedBox(width: 4),
                     Text(
-                      'First Semester',
+                      vm.systemSetting?.currentSemester.englishName ?? '',
                       style: textTheme.titleLarge!.copyWith(
                         color: AppTheme.white.withOpacity(.7),
                       ),
@@ -145,7 +145,7 @@ class SubjectHeaderItem extends StatelessWidget {
                           ),
                           Spacer(),
                           Text(
-                            '94%',
+                            vm.attendedSessions.toString(),
                             style: textTheme.headlineLarge!.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppTheme.primaryLight,
@@ -162,7 +162,7 @@ class SubjectHeaderItem extends StatelessWidget {
                         ),
                       ),
                       Text(
-                        '16 of 20 sessions',
+                        '${vm.attendedSessions} days attendance',
                         style: textTheme.titleSmall!.copyWith(
                           fontWeight: FontWeight.w400,
                           color: AppTheme.secondText,
@@ -200,7 +200,7 @@ class SubjectHeaderItem extends StatelessWidget {
                           ),
                           Spacer(),
                           Text(
-                            '24',
+                            vm.materials.length.toString(),
                             style: textTheme.headlineLarge!.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppTheme.blueGray,
@@ -255,7 +255,7 @@ class SubjectHeaderItem extends StatelessWidget {
                           ),
                           Spacer(),
                           Text(
-                            '12',
+                            vm.totalSessions.toString(),
                             style: textTheme.headlineLarge!.copyWith(
                               fontWeight: FontWeight.bold,
                               color: AppTheme.primaryLight,
@@ -269,13 +269,6 @@ class SubjectHeaderItem extends StatelessWidget {
                         style: textTheme.headlineSmall!.copyWith(
                           fontWeight: FontWeight.w700,
                           color: AppTheme.black,
-                        ),
-                      ),
-                      Text(
-                        'Remaining: 4',
-                        style: textTheme.titleSmall!.copyWith(
-                          fontWeight: FontWeight.w400,
-                          color: AppTheme.secondText,
                         ),
                       ),
                     ],

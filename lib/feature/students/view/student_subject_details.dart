@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../../core/app_theme.dart';
+import '../../../core/widgets/loading_widget.dart';
 import '../../../core/widgets/primary_button.dart';
 import '../attendance/view/scan_qr_view.dart';
 import '../attendance/view_model/student_attendance_view_model.dart';
@@ -27,11 +28,10 @@ class _StudentSubjectDetailsState extends State<StudentSubjectDetails> {
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
-
     if (_loaded) return;
     _loaded = true;
     final subject =
-    ModalRoute.of(context)!.settings.arguments as StudentSubjectModel;
+        ModalRoute.of(context)!.settings.arguments as StudentSubjectModel;
     WidgetsBinding.instance.addPostFrameCallback((_) {
       context.read<StudentSubjectDetailsViewModel>().loadData(subject.id);
     });
@@ -41,6 +41,12 @@ class _StudentSubjectDetailsState extends State<StudentSubjectDetails> {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     final vm = context.watch<StudentSubjectDetailsViewModel>();
+    if (vm.isLoading) {
+      return const Scaffold(body: LoadingWidget());
+    }
+    if (vm.errorMessage != null) {
+      return Scaffold(body: Center(child: Text(vm.errorMessage!)));
+    }
     return Scaffold(
       appBar: AppBar(
         title: TitleWidget(title: 'Subject Details'),
@@ -57,19 +63,7 @@ class _StudentSubjectDetailsState extends State<StudentSubjectDetails> {
               child: Column(
                 crossAxisAlignment: .start,
                 children: [
-                  Row(
-                    children: [
-                      Text('Course Materials', style: textTheme.headlineSmall),
-                      Spacer(),
-                      Text(
-                        'View All',
-                        style: textTheme.titleSmall!.copyWith(
-                          color: AppTheme.primaryLight,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ],
-                  ),
+                  Text('Course Materials', style: textTheme.headlineSmall),
                   const SizedBox(height: 16),
                   CourseMaterialsItem(),
                   const SizedBox(height: 16),
@@ -88,6 +82,11 @@ class _StudentSubjectDetailsState extends State<StudentSubjectDetails> {
                       final result = await context
                           .read<StudentSubjectDetailsViewModel>()
                           .scanAttendance(qrData: qrData);
+                      if (result) {
+                        await context
+                            .read<StudentSubjectDetailsViewModel>()
+                            .refresh();
+                      }
                       if (!context.mounted) return;
                       if (result) {
                         ScaffoldMessenger.of(context).showSnackBar(

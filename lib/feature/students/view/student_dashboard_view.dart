@@ -16,6 +16,9 @@ class StudentDashboardView extends StatelessWidget {
   Widget build(BuildContext context) {
     TextTheme textTheme = Theme.of(context).textTheme;
     final viewModel = context.watch<StudentDashboardViewModel>();
+    if (viewModel.isLoading) {
+      return const Scaffold(body: LoadingWidget());
+    }
     if (viewModel.errorMessage != null) {
       return Scaffold(body: Center(child: Text(viewModel.errorMessage!)));
     }
@@ -39,18 +42,12 @@ class StudentDashboardView extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-                  Text(
-                    'Your Subjects',
-                    style: textTheme.titleLarge!.copyWith(
-                      color: AppTheme.black,
-                    ),
-                  ),
-              const SizedBox(height: 16),
-              Expanded(
-                child: viewModel.isLoading
-                    ? LoadingWidget()
-                    : SubjectListItem(vm: viewModel),
+              Text(
+                'Your Subjects',
+                style: textTheme.titleLarge!.copyWith(color: AppTheme.black),
               ),
+              const SizedBox(height: 16),
+              Expanded(child: SubjectListItem(vm: viewModel)),
             ],
           ),
         ),

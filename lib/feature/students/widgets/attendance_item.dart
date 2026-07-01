@@ -1,10 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:intl/intl.dart';
 
 import '../../../core/app_theme.dart';
+import '../attendance/model/student_attendance_model.dart';
 
 class AttendanceItem extends StatelessWidget {
-  const AttendanceItem({super.key});
+  final StudentAttendanceModel attendance;
+  const AttendanceItem({super.key, required this.attendance});
 
   @override
   Widget build(BuildContext context) {
@@ -44,14 +47,16 @@ class AttendanceItem extends StatelessWidget {
               crossAxisAlignment: .start,
               children: [
                 Text(
-                  'Monday, Oct 16',
+                  DateFormat(
+                    'EEEE, MMM d',
+                  ).format(attendance.attendanceSession.sessionDate),
                   style: textTheme.titleLarge!.copyWith(
                     color: AppTheme.black,
                     fontWeight: FontWeight.w700,
                   ),
                 ),
                 Text(
-                  '09:00 AM',
+                  DateFormat('hh:mm a').format(attendance.attendanceTime),
                   style: textTheme.titleSmall!.copyWith(
                     color: AppTheme.secondText,
                     fontWeight: FontWeight.w700,
@@ -61,11 +66,13 @@ class AttendanceItem extends StatelessWidget {
                 Container(
                   padding: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
-                    color: AppTheme.green.withAlpha(40),
+                    color: attendance.isPresent
+                        ? AppTheme.green.withAlpha(40)
+                        : Colors.red.withAlpha(40),
                     borderRadius: BorderRadius.circular(16),
                   ),
                   child: Text(
-                    'Present',
+                    attendance.isPresent ? 'Present' : 'Absent',
                     textAlign: TextAlign.center,
                     style: textTheme.titleSmall!.copyWith(
                       color: AppTheme.green,

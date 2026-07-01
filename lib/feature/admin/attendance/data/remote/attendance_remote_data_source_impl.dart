@@ -1,6 +1,7 @@
 import 'package:edusync_app/feature/admin/attendance/data/remote/attendance_remote_data_source.dart';
 import 'package:edusync_app/feature/admin/attendance/model/update_attendance_session_model.dart';
 import 'package:edusync_app/feature/students/attendance/model/attendance_scan_request_model.dart';
+import 'package:edusync_app/feature/students/attendance/model/student_attendance_model.dart';
 import '../../../../../core/constants/api_constants.dart';
 import '../../../../../core/network/dio_client.dart';
 import '../../model/attendance_session_model.dart';
@@ -47,5 +48,16 @@ class AttendanceRemoteDataSourceImpl implements AttendanceRemoteDataSource {
       APIConstants.attendances,
       data: attendance.toJson(),
     );
+  }
+
+  @override
+  Future<List<StudentAttendanceModel>> getAttendances() async {
+    final response = await DioClient.dio.get(
+      APIConstants.attendances,
+      queryParameters: {'skip': 0, 'take': 2147483647},
+    );
+    return (response.data['data'] as List)
+        .map((e) => StudentAttendanceModel.fromJson(e))
+        .toList();
   }
 }

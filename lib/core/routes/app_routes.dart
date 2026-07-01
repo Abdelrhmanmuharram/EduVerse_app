@@ -16,7 +16,6 @@ import 'package:provider/provider.dart';
 
 import '../../feature/admin/attendance/data/remote/attendance_remote_data_source_impl.dart';
 import '../../feature/admin/attendance/repository/attendance_repository_impl.dart';
-import '../../feature/admin/attendance/view/add_attendance_view.dart';
 import '../../feature/admin/attendance/view/attendance_view.dart';
 import '../../feature/admin/attendance/view_model/attendance_view_model.dart';
 import '../../feature/admin/chat_bot/data/remote/ai_remote_data_source_impl.dart';
@@ -37,10 +36,7 @@ import '../../feature/admin/instructors/viewmodel/instructor_viewmodel.dart';
 import '../../feature/admin/materials/data/remote/materials_admin_remote_source_imp.dart';
 import '../../feature/admin/materials/repository/materials_admin_repository_impl.dart';
 import '../../feature/admin/materials/view/add_materials_admin_view.dart';
-import '../../feature/admin/materials/view/materials_admin_details_view.dart';
-import '../../feature/admin/materials/view/pdf_viewer_screen.dart';
 import '../../feature/admin/materials/view_model/materials_admin_view_model.dart';
-import '../../feature/admin/materials/view_model/pdf_viewer_view_model.dart';
 import '../../feature/admin/semesters/data/remote/semester_remote_data_source_impl.dart';
 import '../../feature/admin/semesters/view/semesters_view.dart';
 import '../../feature/admin/instructors/view/add_instructor_view.dart';
@@ -66,13 +62,11 @@ import '../../feature/instructors/viewmodel/materials_viewmodel.dart';
 import '../../feature/instructors/viewmodel/students_list_viewmodel.dart';
 import '../../feature/students/attendance/view/scan_qr_view.dart';
 import '../../feature/students/data/remote/student_dashboard_remote_data_source_impl.dart';
-import '../../feature/students/data/remote/student_instructor_subject_remote_data_source_impl.dart';
 import '../../feature/students/materials/data/remote/student_material_remote_data_source_impl.dart';
 import '../../feature/students/materials/data/remote/student_subject_remote_data_source_impl.dart';
 import '../../feature/students/materials/repository/student_material_repository_impl.dart';
 import '../../feature/students/materials/repository/student_subject_repository_impl.dart';
 import '../../feature/students/repository/student_dashboard_repository_impl.dart';
-import '../../feature/students/repository/student_instructor_subject_repository_impl.dart';
 import '../../feature/students/semester/data/remote/system_setting_remote_data_source_impl.dart';
 import '../../feature/students/semester/repository/system_setting_repository_impl.dart';
 import '../../feature/students/subjects/data/remote/student_subject_instructor_remote_data_source_impl.dart';
@@ -80,7 +74,6 @@ import '../../feature/students/subjects/repository/student_subject_instructor_re
 import '../../feature/students/view/student_chat_bot_view.dart';
 import '../../feature/students/view/student_dashboard_view.dart';
 import '../../feature/students/view/student_home_view.dart';
-import '../../feature/students/attendance/view_model/student_attendance_view_model.dart';
 import '../../feature/students/view/student_subject_details.dart';
 import '../../feature/students/view_model/student_dashboard_view_model.dart';
 import '../../feature/students/view_model/student_subject_details_view_model.dart';
@@ -91,7 +84,6 @@ import '../../feature/auth/login/data/remote/auth_remote_data_source_impl.dart';
 import '../../feature/auth/login/repository/auth_repository.dart';
 import '../../feature/auth/login/view/login_view.dart';
 import '../../feature/auth/login/viewmodel/login_view_model.dart';
-import '../../feature/students/view/student_view.dart';
 import '../../feature/users/data/remote/users_remote_data_source_impl.dart';
 import '../view/splash_view.dart';
 
@@ -192,14 +184,8 @@ class AppRoutes {
       create: (_) => StudentsListViewModel(
         UsersRepositoryImpl(UsersRemoteDataSourceImpl()),
       )..loadStudents(),
-
       child: InstructorsHomeView(),
-    ),
-    '/student': (_) => ChangeNotifierProvider(
-      create: (_) => StudentAttendanceViewModel(
-        AttendanceRepositoryImpl(AttendanceRemoteDataSourceImpl()),
-      ),
-      child: StudentView(),
+
     ),
     '/splash': (_) => const SplashView(),
     '/add-semester': (_) => const AddSemester(),
@@ -380,6 +366,9 @@ class AppRoutes {
         ),
         AttendanceRepositoryImpl(
           AttendanceRemoteDataSourceImpl(),
+        ),
+        SystemSettingRepositoryImpl(
+          SystemSettingRemoteDataSourceImpl(),
         ),
       ),
       child: const StudentSubjectDetails(),

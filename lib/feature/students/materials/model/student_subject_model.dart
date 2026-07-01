@@ -1,3 +1,5 @@
+import '../../../admin/departments/model/department_model.dart';
+
 class StudentSubjectModel {
   final int id;
   final String code;
@@ -5,6 +7,7 @@ class StudentSubjectModel {
   final int yearId;
   final int semesterId;
   final int departmentId;
+  final DepartmentModel department;
 
   const StudentSubjectModel({
     required this.id,
@@ -13,6 +16,7 @@ class StudentSubjectModel {
     required this.yearId,
     required this.semesterId,
     required this.departmentId,
+    required this.department,
   });
 
   factory StudentSubjectModel.fromJson(Map<String, dynamic> json) {
@@ -23,6 +27,7 @@ class StudentSubjectModel {
       yearId: json['yearId'],
       semesterId: json['semesterId'],
       departmentId: json['departmentId'],
+      department: DepartmentModel.fromJson(json['department']),
     );
   }
 }

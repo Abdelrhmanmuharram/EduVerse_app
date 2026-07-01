@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:edusync_app/core/app_theme.dart';
 import 'package:edusync_app/core/utils/validators.dart';
 import 'package:edusync_app/core/widgets/default_field_lable.dart';
@@ -8,6 +9,7 @@ import 'package:edusync_app/core/widgets/primary_button.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../viewmodel/login_view_model.dart';
+
 class LoginView extends StatefulWidget {
   static const String routeName = '/login';
   const LoginView({super.key});
@@ -27,6 +29,7 @@ class _LoginViewState extends State<LoginView> {
     _passwordController.dispose();
     super.dispose();
   }
+
   Future<void> _handleLogin() async {
     if (!_formKey.currentState!.validate()) return;
     setState(() => _isLoading = true);
@@ -44,16 +47,23 @@ class _LoginViewState extends State<LoginView> {
           ),
         );
       }
-    } catch (e) {
+    } on DioException catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(e as String),
+          content: Text(
+            e.response?.data.toString() ?? e.message ?? 'Something went wrong',
+          ),
           backgroundColor: Colors.red,
         ),
+      );
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(e.toString()), backgroundColor: Colors.red),
       );
     }
     setState(() => _isLoading = false);
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
