@@ -77,19 +77,11 @@ class _LoginViewState extends State<LoginView> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Align(
-                    alignment: Alignment.topRight,
-                    child: Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: LanguageSelector(),
-                    ),
-                  ),
-                  const SizedBox(height: 48),
                   Center(
                     child: Column(
                       children: [
-                        DefaultLogo(size: 80),
-                        const SizedBox(height: 20),
+                        const SizedBox(height: 48),
+                        DefaultLogo(size: 150),
                         RichText(
                           text: TextSpan(
                             children: [

@@ -8,20 +8,10 @@ class DefaultLogo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Image.asset(
+      'assets/images/ev.png',
       width: size,
       height: size,
-      decoration: BoxDecoration(
-        color: const Color(0xFFEFF6FF),
-        borderRadius: BorderRadius.circular(20),
-      ),
-      child: Center(
-        child: Icon(
-          Icons.school_outlined,
-          color: AppTheme.primaryLight,
-          size: size * 0.5,
-        ),
-      ),
     );
   }
 }
