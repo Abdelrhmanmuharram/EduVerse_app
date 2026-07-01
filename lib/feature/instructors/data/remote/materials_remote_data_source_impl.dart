@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:edusync_app/core/constants/api_constants.dart';
+import 'package:edusync_app/feature/instructors/model/instructor_material_model.dart';
 import 'package:edusync_app/feature/instructors/model/materials_model.dart';
 
 import '../../../../core/network/dio_client.dart';
@@ -8,16 +9,30 @@ import 'materials_remote_data_source.dart';
 class MaterialsRemoteDataSourceImpl implements MaterialsRemoteDataSource {
   @override
   Future<void> addMaterial(MaterialsModel material) async {
-   FormData formData =  FormData.fromMap({
-     'File' : await MultipartFile.fromFile(material.file.path),
-     'InstructorId' : material.instructorId,
-     'SubjectId' : material.subjectId,
-     'Title' : material.title,
-     'Description' : material.description,
-   });
-   await DioClient.dio.post(
-     APIConstants.getMaterials,
-     data: formData,
-   );
+    FormData formData = FormData.fromMap({
+      'File': await MultipartFile.fromFile(material.file.path),
+      'InstructorId': material.instructorId,
+      'SubjectId': material.subjectId,
+      'Title': material.title,
+      'Description': material.description,
+    });
+    await DioClient.dio.post(APIConstants.getMaterials, data: formData);
+  }
+
+  @override
+  Future<List<InstructorMaterialModel>> getInstructorMaterials(
+    String instructorId,
+  ) async {
+    final response = await DioClient.dio.get(
+      "${APIConstants.getInstructorMaterials}/$instructorId",
+    );
+    return (response.data["data"] as List)
+        .map((e) => InstructorMaterialModel.fromJson(e))
+        .toList();
+  }
+
+  @override
+  Future<void> deleteMaterial(int materialId) async {
+    await DioClient.dio.delete("${APIConstants.getMaterials}/$materialId");
   }
 }

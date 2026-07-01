@@ -1,3 +1,4 @@
+import 'package:edusync_app/feature/instructors/model/instructor_material_model.dart';
 import 'package:edusync_app/feature/instructors/model/materials_model.dart';
 
 import '../data/remote/materials_remote_data_source.dart';
@@ -10,5 +11,15 @@ class MaterialsRepositoryImpl implements MaterialsRepository {
   @override
   Future<void> addMaterial(MaterialsModel material) {
     return _remoteDataSource.addMaterial(material);
+  }
+
+  @override
+  Future<List<InstructorMaterialModel>> getInstructorMaterials(String instructorId) {
+    return _remoteDataSource.getInstructorMaterials(instructorId);
+  }
+
+  @override
+  Future<void> deleteMaterial(int materialId) {
+    return _remoteDataSource.deleteMaterial(materialId);
   }
 }

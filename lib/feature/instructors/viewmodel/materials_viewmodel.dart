@@ -1,11 +1,13 @@
 import 'dart:io';
 
+import 'package:dio/dio.dart';
 import 'package:edusync_app/core/services/local_storage_service.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../admin/instructors/model/instructor_subject_model.dart';
 import '../../admin/instructors/repository/instructor_subject_repository.dart';
+import '../model/instructor_material_model.dart';
 import '../model/materials_model.dart';
 import '../repository/materials_repository.dart';
 
@@ -19,6 +21,30 @@ class MaterialsViewModel extends ChangeNotifier {
   bool isLoading = false;
   File? selectedFile;
   List<InstructorSubjectModel> subjects = [];
+
+  List<InstructorMaterialModel> _instructorMaterials = [];
+  List<InstructorMaterialModel> get instructorMaterials => _instructorMaterials;
+
+  List<InstructorMaterialModel> _filteredMaterials = [];
+  List<InstructorMaterialModel> get filteredMaterials => _filteredMaterials;
+
+  String? _errorMessage;
+  String? get errorMessage => _errorMessage;
+
+  void search(String value) {
+    if (value.trim().isEmpty) {
+      _filteredMaterials = List.from(_instructorMaterials);
+    } else {
+      final q = value.toLowerCase();
+
+      _filteredMaterials = _instructorMaterials.where((e) {
+        return e.title.toLowerCase().contains(q) ||
+            e.subjectName.toLowerCase().contains(q);
+      }).toList();
+    }
+
+    notifyListeners();
+  }
 
   Future<void> addMaterial(MaterialsModel material) async {
     try {
@@ -67,6 +93,41 @@ class MaterialsViewModel extends ChangeNotifier {
       subjects = response;
       notifyListeners();
     } catch (e) {
+      print(e);
+    }
+  }
+
+  Future<void> loadMaterials() async {
+    try {
+      isLoading = true;
+      _errorMessage = null;
+      notifyListeners();
+      final user = await LocalStorageService.getUser();
+      if (user == null) {
+        throw Exception("User not found");
+      }
+      _instructorMaterials = await _materialsRepository.getInstructorMaterials(
+        user.id,
+      );
+      _filteredMaterials = List.from(_instructorMaterials);
+    } on DioException catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> deleteMaterial(int materialId) async {
+    try {
+      isLoading = true;
+      notifyListeners();
+      await _materialsRepository.deleteMaterial(materialId);
+      _instructorMaterials.removeWhere((e) => e.id == materialId);
+      _filteredMaterials.removeWhere((e) => e.id == materialId);
+    } finally {
+      isLoading = false;
+      notifyListeners();
     }
   }
 }

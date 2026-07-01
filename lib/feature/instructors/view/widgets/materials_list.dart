@@ -2,7 +2,9 @@ import 'dart:io';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 import '../../model/materials_model.dart';
+import '../../viewmodel/materials_viewmodel.dart';
 import 'matrial_item.dart';
 
 class MaterialsList extends StatelessWidget {
@@ -10,19 +12,15 @@ class MaterialsList extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final vm = context.watch<MaterialsViewModel>();
+
     return Expanded(
       child: ListView.separated(
-        itemBuilder: (context, index) => MaterialItem(
-          material: MaterialsModel(
-            title: 'Material Title',
-            description: 'Material Description',
-            file: File('path/to/file'),
-            instructorId: 1,
-            subjectId: 1,
-          ),
-        ),
-        separatorBuilder: (context, index) => const SizedBox(height: 16),
-        itemCount: 10,
+        itemCount: vm.filteredMaterials.length,
+        separatorBuilder: (_, _) => const SizedBox(height: 16),
+        itemBuilder: (_, index) {
+          return MaterialItem(material: vm.filteredMaterials[index]);
+        },
       ),
     );
   }

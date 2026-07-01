@@ -192,7 +192,14 @@ class AppRoutes {
     '/edit-semester': (_) => const EditSemesterView(),
     '/add-department': (_) => const AddDepartmentView(),
     '/edit-department': (_) => const EditDepartmentView(),
-    '/materials': (_) => const MaterialsView(),
+    '/materials': (_) => ChangeNotifierProvider(
+        create: (_) => MaterialsViewModel(
+          MaterialsRepositoryImpl(MaterialsRemoteDataSourceImpl()),
+          InstructorSubjectRepositoryImpl(
+            InstructorSubjectRemoteDataSourceImpl(),
+          ),
+        )..loadMaterials(),
+        child: const MaterialsView()),
     '/materials-details': (_) => const MaterialsDetails(),
     '/material-add': (_) => ChangeNotifierProvider(
       create: (_) => MaterialsViewModel(

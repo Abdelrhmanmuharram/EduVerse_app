@@ -27,5 +27,6 @@ class APIConstants {
   static const String departmentYearSemesterSubjects = '/Subjects/GetDepartmentYearSemesterSubjects/';
   static const String systemSetting = '/SystemSettings';
   static const String askAi = '/ai/ask';
+  static const String getInstructorMaterials = '/Materials/GetInstructorMaterials';
 
 }
