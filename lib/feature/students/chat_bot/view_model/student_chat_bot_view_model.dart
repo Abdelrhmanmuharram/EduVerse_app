@@ -46,13 +46,7 @@ class StudentChatBotViewModel extends ChangeNotifier {
   final List<StudentMaterialModel> _selectedMaterials = [];
   List<StudentMaterialModel> get selectedMaterials => _selectedMaterials;
 
-  final List<ChatMessageModel> _messages = [
-    const ChatMessageModel(
-      message:
-          "👋 Hi Mohammed! Select your course materials and ask me anything about them.",
-      isUser: false,
-    ),
-  ];
+  final List<ChatMessageModel> _messages = [];
   List<ChatMessageModel> get messages => _messages;
 
   bool _isTyping = false;
@@ -63,6 +57,17 @@ class StudentChatBotViewModel extends ChangeNotifier {
     if (_user == null) {
       throw Exception("User not found");
     }
+    if (_messages.isEmpty) {
+      _messages.add(
+        ChatMessageModel(
+          message:
+              "👋 Hi ${_user!.fullName}! Select your course materials and ask me anything about them.",
+          isUser: false,
+        ),
+      );
+    }
+
+    notifyListeners();
   }
 
   Future<void> _loadSubjects() async {
@@ -156,8 +161,14 @@ class StudentChatBotViewModel extends ChangeNotifier {
       addBotMessage(response.data);
       notifyListeners();
     } on DioException catch (e) {
-      debugPrint("DIO ERROR => ${e.response?.data}");
-      rethrow;
+      _isTyping = false;
+      notifyListeners();
+      if (e.type == DioExceptionType.receiveTimeout) {
+        throw Exception(
+          "The AI is taking longer than expected. Please try again.",
+        );
+      }
+      throw Exception(e.response?.data['message'] ?? "Something went wrong.");
     } catch (e, s) {
       debugPrint("ERROR => $e");
       debugPrint("$s");

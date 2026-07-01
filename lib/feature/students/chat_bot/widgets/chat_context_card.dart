@@ -10,12 +10,19 @@ class ChatContextCard extends StatefulWidget {
   const ChatContextCard({super.key});
 
   @override
-  State<ChatContextCard> createState() => _ChatContextCardState();
+  State<ChatContextCard> createState() => ChatContextCardState();
 }
 
-class _ChatContextCardState extends State<ChatContextCard>
+class ChatContextCardState extends State<ChatContextCard>
     with TickerProviderStateMixin {
   bool _isExpanded = false;
+  void collapse() {
+    if (_isExpanded) {
+      setState(() {
+        _isExpanded = false;
+      });
+    }
+  }
 
   @override
   Widget build(BuildContext context) {

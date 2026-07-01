@@ -14,6 +14,7 @@ class DefaultTextField extends StatefulWidget {
   final String? prefixSvg;
   final Function(String)? onChanged;
   final TextInputAction? textInputAction;
+  final ValueChanged<String>? onSubmitted;
 
   const DefaultTextField({
     super.key,
@@ -28,6 +29,7 @@ class DefaultTextField extends StatefulWidget {
     this.prefixSvg,
     this.onChanged,
     this.textInputAction,
+    this.onSubmitted,
   });
 
   @override
@@ -40,6 +42,7 @@ class _UmsTextFieldState extends State<DefaultTextField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      onFieldSubmitted: widget.onSubmitted,
       textInputAction: widget.textInputAction,
       onChanged: (value) {
         widget.onChanged?.call(value);
