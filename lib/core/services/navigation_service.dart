@@ -9,7 +9,6 @@ class NavigationService {
       arguments: arguments,
     );
   }
-
   static Future<dynamic> pushReplacementNamed(
     String routeName, {
     Object? arguments,
@@ -19,14 +18,12 @@ class NavigationService {
       arguments: arguments,
     );
   }
-
   static Future<dynamic> pushNamedAndRemoveUntil(String routeName) {
     return navigatorKey.currentState!.pushNamedAndRemoveUntil(
       routeName,
       (route) => false,
     );
   }
-
   static void pop([dynamic result]) {
     navigatorKey.currentState!.pop(result);
   }
