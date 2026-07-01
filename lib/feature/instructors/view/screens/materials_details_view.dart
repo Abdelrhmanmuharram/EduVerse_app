@@ -10,3 +10,4 @@ class MaterialsDetails extends StatelessWidget {
     return Scaffold();
   }
 }
+

@@ -2,7 +2,7 @@ import 'dart:io';
 
 class MaterialsModel {
   final File file;
-  final int instructorId;
+  final String instructorId;
   final int subjectId;
   final String title;
   final String description;

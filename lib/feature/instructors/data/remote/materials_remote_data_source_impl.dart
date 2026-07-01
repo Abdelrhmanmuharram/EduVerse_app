@@ -2,6 +2,7 @@ import 'package:dio/dio.dart';
 import 'package:edusync_app/core/constants/api_constants.dart';
 import 'package:edusync_app/feature/instructors/model/instructor_material_model.dart';
 import 'package:edusync_app/feature/instructors/model/materials_model.dart';
+import 'package:edusync_app/feature/instructors/model/update_material_model.dart';
 
 import '../../../../core/network/dio_client.dart';
 import 'materials_remote_data_source.dart';
@@ -34,5 +35,13 @@ class MaterialsRemoteDataSourceImpl implements MaterialsRemoteDataSource {
   @override
   Future<void> deleteMaterial(int materialId) async {
     await DioClient.dio.delete("${APIConstants.getMaterials}/$materialId");
+  }
+
+  @override
+  Future<void> updateMaterial(UpdateMaterialModel material) async {
+    await DioClient.dio.put(
+      "${APIConstants.getMaterials}/${material.id}",
+      data: material.toJson(),
+    );
   }
 }

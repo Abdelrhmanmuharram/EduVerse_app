@@ -8,6 +8,7 @@ import '../../../../core/widgets/back_item.dart';
 import '../../../../core/widgets/primary_button.dart';
 import '../../viewmodel/materials_viewmodel.dart';
 import '../widgets/materials_list.dart';
+import 'material_add_view.dart';
 
 class MaterialsView extends StatefulWidget {
   static const String routeName = '/materials';
@@ -68,8 +69,17 @@ class _MaterialsViewState extends State<MaterialsView> {
                 Expanded(
                   child: PrimaryButton(
                     label: 'Add',
-                    onPressed: () =>
-                        Navigator.pushNamed(context, '/material-add'),
+                    onPressed: () async {
+                      final result = await Navigator.pushNamed(
+                        context,
+                        MaterialAddView.routeName,
+                      );
+                      if (result == true && context.mounted) {
+                        await context
+                            .read<MaterialsViewModel>()
+                            .loadMaterials();
+                      }
+                    },
                   ),
                 ),
               ],
@@ -89,4 +99,3 @@ class _MaterialsViewState extends State<MaterialsView> {
     );
   }
 }
-

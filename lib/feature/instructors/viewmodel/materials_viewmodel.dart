@@ -9,6 +9,7 @@ import '../../admin/instructors/model/instructor_subject_model.dart';
 import '../../admin/instructors/repository/instructor_subject_repository.dart';
 import '../model/instructor_material_model.dart';
 import '../model/materials_model.dart';
+import '../model/update_material_model.dart';
 import '../repository/materials_repository.dart';
 
 class MaterialsViewModel extends ChangeNotifier {
@@ -125,6 +126,35 @@ class MaterialsViewModel extends ChangeNotifier {
       await _materialsRepository.deleteMaterial(materialId);
       _instructorMaterials.removeWhere((e) => e.id == materialId);
       _filteredMaterials.removeWhere((e) => e.id == materialId);
+    } finally {
+      isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<void> updateMaterial(UpdateMaterialModel material) async {
+    try {
+      isLoading = true;
+      notifyListeners();
+
+      await _materialsRepository.updateMaterial(material);
+
+      final index = _instructorMaterials.indexWhere((e) => e.id == material.id);
+
+      if (index != -1) {
+        _instructorMaterials[index] = InstructorMaterialModel(
+          id: material.id,
+          instructorId: material.instructorId,
+          subjectId: material.subjectId,
+          title: material.title,
+          description: material.description,
+          filePath: material.filePath,
+          publicId: material.publicId,
+          subjectName: _instructorMaterials[index].subjectName,
+          subjectCode: _instructorMaterials[index].subjectCode,
+        );
+      }
+      _filteredMaterials = List.from(_instructorMaterials);
     } finally {
       isLoading = false;
       notifyListeners();

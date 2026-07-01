@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import '../../../../core/services/file_download_service.dart';
 import '../../model/instructor_material_model.dart';
 import '../../viewmodel/materials_viewmodel.dart';
+import '../screens/material_add_view.dart';
 import '../screens/materials_details_view.dart';
 import '../screens/pdf_view.dart';
 
@@ -18,7 +19,22 @@ class MaterialItem extends StatelessWidget {
     TextTheme textTheme = Theme.of(context).textTheme;
     final vm = context.read<MaterialsViewModel>();
     return GestureDetector(
-      onTap: () => Navigator.pushNamed(context, MaterialsDetails.routeName),
+      onTap: () async {
+        final result = await Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (_) => ChangeNotifierProvider.value(
+              value: context.read<MaterialsViewModel>(),
+              child: MaterialAddView(
+                material: material,
+              ),
+            ),
+          ),
+        );
+        if (result == true && context.mounted) {
+          await context.read<MaterialsViewModel>().loadMaterials();
+        }
+      },
       child: Container(
         padding: const EdgeInsets.all(16),
         width: double.infinity,
@@ -100,9 +116,7 @@ class MaterialItem extends StatelessWidget {
                             ),
                             child: const Text(
                               "Delete",
-                              style: TextStyle(
-                                fontWeight: FontWeight.bold,
-                              ),
+                              style: TextStyle(fontWeight: FontWeight.bold),
                             ),
                           ),
                         ],
@@ -114,7 +128,9 @@ class MaterialItem extends StatelessWidget {
                         if (!context.mounted) return;
                         ScaffoldMessenger.of(context).showSnackBar(
                           SnackBar(
-                            content: const Text("Material deleted successfully"),
+                            content: const Text(
+                              "Material deleted successfully",
+                            ),
                             backgroundColor: AppTheme.green,
                             behavior: SnackBarBehavior.floating,
                             duration: const Duration(seconds: 2),
