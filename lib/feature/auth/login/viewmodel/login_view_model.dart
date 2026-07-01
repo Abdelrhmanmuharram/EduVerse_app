@@ -4,6 +4,9 @@ import 'package:edusync_app/core/helpers/roles.dart';
 import 'package:flutter/material.dart';
 
 import '../../../../core/services/navigation_service.dart';
+import '../../../admin/home/view/admin_home_view.dart';
+import '../../../instructors/view/screens/instructor_view.dart';
+import '../../../students/view/student_home_view.dart';
 import '../repository/auth_repository.dart';
 import '../view/login_view.dart';
 
@@ -33,11 +36,11 @@ class LoginViewModel extends ChangeNotifier {
       }
       final roles = result.roles;
       if (roles.contains(Roles.roleAdmin)) {
-        return "/home";
+        return AdminHomeView.routeName;
       } else if (roles.contains(Roles.roleInstructor)) {
-        return "/instructors-view";
+        return InstructorView.routeName;
       } else if (roles.contains(Roles.roleStudent)) {
-        return "/student";
+        return StudentHomeView.routeName;
       }
       return null;
     } on DioException catch (e) {

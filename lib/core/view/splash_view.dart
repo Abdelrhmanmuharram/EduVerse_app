@@ -1,5 +1,4 @@
 import 'package:edusync_app/core/widgets/loading_widget.dart';
-import 'package:edusync_app/feature/students/view/student_dashboard_view.dart';
 import 'package:edusync_app/feature/students/view/student_home_view.dart';
 import 'package:flutter/material.dart';
 import '../../feature/auth/login/view/login_view.dart';
@@ -40,6 +39,9 @@ class _SplashViewState extends State<SplashView> {
       } else if (role == "Instructor") {
         Navigator.pushReplacementNamed(context, InstructorView.routeName);
       } else if (role == "Student") {
+        debugPrint("Role = $role");
+        debugPrint("Token = $token");
+
         Navigator.pushReplacementNamed(context, StudentHomeView.routeName);
       }
     } else {

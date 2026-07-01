@@ -351,7 +351,6 @@ class AppRoutes {
         ),
         AttendanceRepositoryImpl(AttendanceRemoteDataSourceImpl()),
       )..loadData(),
-
       child: const StudentHomeView(),
     ),
     '/student-dashboard': (_) => StudentDashboardView(),

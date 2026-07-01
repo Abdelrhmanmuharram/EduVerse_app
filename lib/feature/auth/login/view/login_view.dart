@@ -142,6 +142,7 @@ class _LoginViewState extends State<LoginView> {
                     controller: _usernameController,
                     keyboardType: TextInputType.text,
                     validator: AppValidators.emailValidator,
+                    textInputAction: TextInputAction.next,
                   ),
                   const SizedBox(height: 20),
                   FieldLabel(label: 'Password'),
@@ -152,6 +153,7 @@ class _LoginViewState extends State<LoginView> {
                     isPassword: true,
                     controller: _passwordController,
                     validator: AppValidators.passwordValidator,
+                    textInputAction: TextInputAction.done,
                   ),
                   const SizedBox(height: 32),
                   PrimaryButton(
