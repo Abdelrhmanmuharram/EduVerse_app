@@ -17,7 +17,6 @@ class SubjectsRemoteDataSourceImpl implements SubjectsRemoteDataSource {
         .map((e) => SubjectsModel.fromJson(e))
         .toList();
   }
-
   @override
   Future<void> addSubject(SubjectsModel subject) async {
     await DioClient.dio.post(APIConstants.subjects, data: subject.toJson());

@@ -70,7 +70,6 @@ class AttendanceCardWidget extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: const [
-
                     Text(
                       "Take Attendance",
                       style: TextStyle(
@@ -79,9 +78,7 @@ class AttendanceCardWidget extends StatelessWidget {
                         fontWeight: FontWeight.w600,
                       ),
                     ),
-
                     SizedBox(height: 6),
-
                     Text(
                       "Next class starts in 15 mins: CS-402 Advanced Algorithms",
                       style: TextStyle(color: Colors.white70),
@@ -89,10 +86,7 @@ class AttendanceCardWidget extends StatelessWidget {
                   ],
                 ),
               ),
-
               const SizedBox(height: 16),
-
-              /// زرار
               Container(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 16,

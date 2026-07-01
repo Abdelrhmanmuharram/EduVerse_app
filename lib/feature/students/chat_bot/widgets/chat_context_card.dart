@@ -1,7 +1,9 @@
 import 'package:edusync_app/core/widgets/default_drop_down_field.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../../../core/app_theme.dart';
+import '../view_model/student_chat_bot_view_model.dart';
 import 'material_drop_item.dart';
 
 class ChatContextCard extends StatefulWidget {
@@ -18,7 +20,7 @@ class _ChatContextCardState extends State<ChatContextCard>
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
-
+    final vm = context.watch<StudentChatBotViewModel>();
     return Container(
       padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
@@ -62,7 +64,6 @@ class _ChatContextCardState extends State<ChatContextCard>
               ],
             ),
           ),
-
           AnimatedSize(
             duration: const Duration(milliseconds: 300),
             curve: Curves.easeInOut,
@@ -72,7 +73,6 @@ class _ChatContextCardState extends State<ChatContextCard>
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       const SizedBox(height: 22),
-
                       Text(
                         "SELECT SUBJECT",
                         style: textTheme.labelSmall?.copyWith(
@@ -82,7 +82,15 @@ class _ChatContextCardState extends State<ChatContextCard>
                       ),
                       const SizedBox(height: 8),
                       DefaultDropDownField(
-                        items: ['Quiz', 'Lecture 3', 'Lecture 1'],
+                        selectedItem: vm.selectedSubject?.subjectName,
+                        onChanged: (value) {
+                          vm.selectSubject(
+                            vm.subjects.firstWhere(
+                              (element) => element.subjectName == value,
+                            ),
+                          );
+                        },
+                        items: vm.subjects.map((e) => e.subjectName).toList(),
                         hint: 'Select Subject',
                         icon: 'subject',
                       ),
@@ -94,12 +102,48 @@ class _ChatContextCardState extends State<ChatContextCard>
                           letterSpacing: 1,
                         ),
                       ),
-                      const SizedBox(height: 10),
-                      MaterialDropItem(title: "Quiz", selected: true),
                       const SizedBox(height: 8),
-                      MaterialDropItem(title: "Lecture 3", selected: false),
+                      if (vm.selectedSubject == null)
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Text(
+                            "Please select a subject first",
+                            style: TextStyle(color: AppTheme.hintText),
+                          ),
+                        )
+                      else if (vm.materials.isEmpty)
+                        const Padding(
+                          padding: EdgeInsets.symmetric(vertical: 12),
+                          child: Text(
+                            "No materials found",
+                            style: TextStyle(color: AppTheme.hintText),
+                          ),
+                        )
+                      else
+                        SizedBox(
+                          height: vm.materials.length <= 2
+                              ? vm.materials.length * 72.0
+                              : 144,
+                          child: ListView.separated(
+                            physics: vm.materials.length <= 2
+                                ? const NeverScrollableScrollPhysics()
+                                : const AlwaysScrollableScrollPhysics(),
+                            itemCount: vm.materials.length,
+                            separatorBuilder: (_, _) =>
+                                const SizedBox(height: 8),
+                            itemBuilder: (_, index) {
+                              final material = vm.materials[index];
+                              return MaterialDropItem(
+                                onTap: () {
+                                  vm.toggleMaterial(material);
+                                },
+                                selected: vm.isMaterialSelected(material),
+                                title: material.title,
+                              );
+                            },
+                          ),
+                        ),
                       const SizedBox(height: 8),
-                      MaterialDropItem(title: "Lecture 1", selected: false),
                     ],
                   )
                 : const SizedBox.shrink(),
