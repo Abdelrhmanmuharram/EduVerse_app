@@ -61,6 +61,7 @@ import '../../feature/instructors/view/screens/students_list_view.dart';
 import '../../feature/instructors/viewmodel/materials_viewmodel.dart';
 import '../../feature/instructors/viewmodel/students_list_viewmodel.dart';
 import '../../feature/students/attendance/view/scan_qr_view.dart';
+import '../../feature/students/chat_bot/view/chat_bot_view.dart';
 import '../../feature/students/data/remote/student_dashboard_remote_data_source_impl.dart';
 import '../../feature/students/materials/data/remote/student_material_remote_data_source_impl.dart';
 import '../../feature/students/materials/data/remote/student_subject_remote_data_source_impl.dart';
@@ -71,7 +72,6 @@ import '../../feature/students/semester/data/remote/system_setting_remote_data_s
 import '../../feature/students/semester/repository/system_setting_repository_impl.dart';
 import '../../feature/students/subjects/data/remote/student_subject_instructor_remote_data_source_impl.dart';
 import '../../feature/students/subjects/repository/student_subject_instructor_repository_impl.dart';
-import '../../feature/students/view/student_chat_bot_view.dart';
 import '../../feature/students/view/student_dashboard_view.dart';
 import '../../feature/students/view/student_home_view.dart';
 import '../../feature/students/view/student_subject_details.dart';
@@ -354,7 +354,6 @@ class AppRoutes {
 
       child: const StudentHomeView(),
     ),
-    '/student-chat-bot': (_) => const StudentChatBotView(),
     '/student-dashboard': (_) => StudentDashboardView(),
     '/student-subject-details': (_) => ChangeNotifierProvider(
       create: (_) => StudentSubjectDetailsViewModel(
@@ -373,5 +372,6 @@ class AppRoutes {
       ),
       child: const StudentSubjectDetails(),
     ),
+    '/student-chat-bot' : (_) => const StudentChatBotView(),
   };
 }

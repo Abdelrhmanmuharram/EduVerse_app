@@ -1,9 +1,9 @@
-import 'package:edusync_app/feature/students/view/student_chat_bot_view.dart';
 import 'package:edusync_app/feature/students/view/student_dashboard_view.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/widgets/nav_bar_icons.dart';
 import '../../admin/home/view/profile_view.dart';
+import '../chat_bot/view/chat_bot_view.dart';
 
 class StudentHomeView extends StatefulWidget {
   static const String routeName = '/student-home';
