@@ -7,6 +7,7 @@ import '../../admin/attendance/model/update_attendance_session_model.dart';
 import '../../admin/instructors/model/instructor_subject_model.dart';
 import '../../admin/instructors/repository/instructor_subject_repository.dart';
 import '../model/instructor_attendance_session_model.dart';
+import '../model/single_session_attendance_model.dart';
 import '../repository/materials_repository.dart';
 
 class AttendanceSessionViewModel extends ChangeNotifier {
@@ -34,10 +35,30 @@ class AttendanceSessionViewModel extends ChangeNotifier {
 
   List<InstructorSubjectModel> subjects = [];
 
+  List<SingleSessionAttendanceModel> _attendances = [];
+  List<SingleSessionAttendanceModel> get attendances => _attendances;
+
+  Future<void> loadSessionAttendances(String sessionId) async {
+    try {
+      _isLoading = true;
+      _errorMessage = null;
+      notifyListeners();
+      _attendances = await _attendanceSessionRepository.getSessionAttendances(
+        sessionId,
+      );
+    } on DioException catch (e) {
+      _errorMessage = e.response?.data["message"] ?? e.message;
+    } catch (e) {
+      _errorMessage = e.toString();
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
   Future<void> loadAll() async {
     await Future.wait([loadAttendanceSessions(), loadSubjects()]);
   }
-
   Future<void> loadSubjects() async {
     try {
       final user = await LocalStorageService.getUser();

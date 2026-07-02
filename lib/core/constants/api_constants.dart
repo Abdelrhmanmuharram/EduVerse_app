@@ -32,4 +32,6 @@ class APIConstants {
       '/Materials/GetInstructorMaterials';
   static const getInstructorAttendanceSessions =
       "/AttendanceSessions/GetInstructorSessions";
+  static const getSessionAttendances = "/Attendances/GetSessionAttendances";
+
 }

@@ -58,6 +58,7 @@ import '../../feature/instructors/view/screens/instructor_view.dart';
 import '../../feature/instructors/view/screens/material_add_view.dart';
 import '../../feature/instructors/view/screens/materials_details_view.dart';
 import '../../feature/instructors/view/screens/materials_view.dart';
+import '../../feature/instructors/view/screens/session_attendance_view.dart';
 import '../../feature/instructors/view/screens/session_view.dart';
 import '../../feature/instructors/view/screens/students_list_view.dart';
 import '../../feature/instructors/viewmodel/attendance_session_view_model.dart';

@@ -1,5 +1,6 @@
 import 'package:edusync_app/feature/instructors/model/instructor_material_model.dart';
 import 'package:edusync_app/feature/instructors/model/materials_model.dart';
+import 'package:edusync_app/feature/instructors/model/single_session_attendance_model.dart';
 import 'package:edusync_app/feature/instructors/model/update_material_model.dart';
 
 import '../../admin/attendance/model/attendance_session_request_model.dart';
@@ -53,5 +54,10 @@ class MaterialsRepositoryImpl implements MaterialsRepository {
   @override
   Future<void> addAttendanceSession(AttendanceSessionRequestModel session) {
     return _remoteDataSource.addAttendanceSession(session);
+  }
+
+  @override
+  Future<List<SingleSessionAttendanceModel>> getSessionAttendances(String sessionId) {
+    return _remoteDataSource.getSessionAttendances(sessionId);
   }
 }

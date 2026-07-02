@@ -4,8 +4,8 @@ import 'package:provider/provider.dart';
 
 import '../../../../core/app_theme.dart';
 import '../../viewmodel/attendance_session_view_model.dart';
-import '../../viewmodel/students_list_viewmodel.dart';
 import '../screens/attendance_session_add_update_view.dart';
+import '../screens/session_attendance_view.dart';
 
 class InstructorTable extends StatelessWidget {
   const InstructorTable({super.key});
@@ -81,11 +81,9 @@ class InstructorTable extends StatelessWidget {
                                 onTap: () async {
                                   final vm = context
                                       .read<AttendanceSessionViewModel>();
-
                                   if (vm.subjects.isEmpty) {
                                     await vm.loadSubjects();
                                   }
-
                                   if (!context.mounted) return;
 
                                   Navigator.push(
@@ -108,9 +106,21 @@ class InstructorTable extends StatelessWidget {
                                 ),
                               ),
                               const SizedBox(width: 8),
-                              Icon(
-                                Icons.account_box_outlined,
-                                color: AppTheme.primaryLight,
+                              InkWell(
+                                onTap: () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                      builder: (_) => ChangeNotifierProvider.value(
+                                        value: context.read<AttendanceSessionViewModel>(),
+                                        child: SessionAttendanceView(
+                                          sessionId: session.id,
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                },
+                                child: const Icon(Icons.account_box_outlined, color: AppTheme.primaryLight),
                               ),
                               const SizedBox(width: 8),
                               InkWell(
@@ -148,8 +158,9 @@ class InstructorTable extends StatelessWidget {
                                     ),
                                   );
 
-                                  if (confirm != true || !context.mounted)
+                                  if (confirm != true || !context.mounted) {
                                     return;
+                                  }
 
                                   try {
                                     await context

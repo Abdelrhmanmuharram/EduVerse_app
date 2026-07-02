@@ -4,6 +4,7 @@ import '../../../admin/attendance/model/attendance_session_request_model.dart';
 import '../../model/instructor_attendance_session_model.dart';
 import '../../model/instructor_material_model.dart';
 import '../../model/materials_model.dart';
+import '../../model/single_session_attendance_model.dart';
 import '../../model/update_material_model.dart';
 
 abstract class MaterialsRemoteDataSource {
@@ -18,5 +19,7 @@ abstract class MaterialsRemoteDataSource {
   Future<void> updateAttendanceSession(UpdateAttendanceSessionModel session);
   Future<void> deleteMaterial(int materialId);
   Future<void> addAttendanceSession(AttendanceSessionRequestModel session);
-
+  Future<List<SingleSessionAttendanceModel>> getSessionAttendances(
+    String sessionId,
+  );
 }

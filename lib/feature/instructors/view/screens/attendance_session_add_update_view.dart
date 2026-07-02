@@ -138,9 +138,7 @@ class _AttendanceSessionAddUpdateViewState
                             sessionDate: DateTime.now(),
                           ),
                         );
-
                         if (!context.mounted) return;
-
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(
                             content: Text(

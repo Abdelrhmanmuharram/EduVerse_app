@@ -5,7 +5,9 @@ import 'package:edusync_app/feature/admin/attendance/model/update_attendance_ses
 import 'package:edusync_app/feature/instructors/model/instructor_attendance_session_model.dart';
 import 'package:edusync_app/feature/instructors/model/instructor_material_model.dart';
 import 'package:edusync_app/feature/instructors/model/materials_model.dart';
+import 'package:edusync_app/feature/instructors/model/single_session_attendance_model.dart';
 import 'package:edusync_app/feature/instructors/model/update_material_model.dart';
+import 'package:flutter/cupertino.dart';
 
 import '../../../../core/network/dio_client.dart';
 import 'materials_remote_data_source.dart';
@@ -84,5 +86,20 @@ class MaterialsRemoteDataSourceImpl implements MaterialsRemoteDataSource {
       APIConstants.attendancesSessions,
       data: session.toJson(),
     );
+  }
+
+  @override
+  Future<List<SingleSessionAttendanceModel>> getSessionAttendances(
+    String sessionId,
+  ) async {
+    final response = await DioClient.dio.get(
+      "${APIConstants.getSessionAttendances}/$sessionId",
+    );
+    debugPrint(response.data.toString());
+    debugPrint(response.data["data"].runtimeType.toString());
+    debugPrint(response.data["data"][0].toString());
+    return (response.data["data"] as List)
+        .map((e) => SingleSessionAttendanceModel.fromJson(e))
+        .toList();
   }
 }
