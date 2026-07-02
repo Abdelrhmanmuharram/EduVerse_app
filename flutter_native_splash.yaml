@@ -1,8 +1,8 @@
 flutter_native_splash:
   color: "#F8FAFC"
-  image: assets/images/edusync_logo.png
+  image: assets/images/eduverse_logo.png
  
   android_12:
     color: "#F8FAFC"
-    image: assets/images/android12splash.png
+    image: assets/images/android12splash_ev.png
    

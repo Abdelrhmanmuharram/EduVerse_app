@@ -1,3 +1,4 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 
 import '../../../../core/model/user_model.dart';
@@ -65,6 +66,7 @@ class StudentViewModel extends ChangeNotifier {
       return '-';
     }
   }
+
   String getYearName(int? yearId, List<YearModel> years) {
     try {
       return years.firstWhere((y) => y.id == yearId).engName;
@@ -84,6 +86,7 @@ class StudentViewModel extends ChangeNotifier {
         name: student.fullName,
         dept: getDepartmentName(student.departmentId, departments),
         year: getYearName(student.yearId, years),
+        isActive: student.isActive,
       );
     }).toList();
   }
@@ -134,5 +137,49 @@ class StudentViewModel extends ChangeNotifier {
       currentDepartmentId: user.departmentId,
       currentYearId: user.yearId,
     );
+  }
+
+  Future<void> deleteStudent(String userId) async {
+    try {
+      await _repository.deleteUsers(userId);
+      _students.removeWhere((e) => e.id == userId);
+      notifyListeners();
+    } on DioException catch (e) {
+      throw Exception(
+        e.response?.data["message"] ?? "Failed to delete student",
+      );
+    }
+  }
+
+  Future<void> deactivateStudent(String userId) async {
+    try {
+      await _repository.deactivateAccount(userId);
+      final index = _students.indexWhere((e) => e.id == userId);
+      if (index != -1) {
+        _students[index] = _students[index].copyWith(
+          isActive: false,
+        );
+      }
+      notifyListeners();
+    } on DioException catch (e) {
+      throw Exception(
+        e.response?.data["message"] ?? "Failed to deactivate account",
+      );
+    }
+  }
+
+  Future<void> reactivateStudent(String userId) async {
+    try {
+      await _repository.reactivateAccount(userId);
+      final index = _students.indexWhere((e) => e.id == userId);
+      if (index != -1) {
+        _students[index] = _students[index].copyWith(isActive: true);
+      }
+      notifyListeners();
+    } on DioException catch (e) {
+      throw Exception(
+        e.response?.data["message"] ?? "Failed to reactivate account",
+      );
+    }
   }
 }

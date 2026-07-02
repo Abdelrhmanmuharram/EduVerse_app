@@ -16,7 +16,7 @@ class AdminHomeView extends StatefulWidget {
 
 class _HomeAdminState extends State<AdminHomeView> {
   int currentIndex = 0;
-  List<Widget> taps = [PanelView(), ChatBotView(), ProfileView()];
+  List<Widget> taps = [PanelView(), ProfileView()];
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,11 +32,6 @@ class _HomeAdminState extends State<AdminHomeView> {
             icon: NavBarIcons(iconName: 'panel'),
             activeIcon: NavBarIcons(iconName: 'panel_active'),
             label: 'Panel',
-          ),
-          BottomNavigationBarItem(
-            icon: NavBarIcons(iconName: 'chat_bot'),
-            activeIcon: NavBarIcons(iconName: 'chat_bot_active'),
-            label: 'Chat',
           ),
           BottomNavigationBarItem(
             icon: NavBarIcons(iconName: 'profile'),

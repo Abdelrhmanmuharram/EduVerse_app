@@ -60,6 +60,8 @@ class InstructorProfile extends StatelessWidget {
             ),
             const SizedBox(height: 16),
             DefaultTextField(
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.text,
               hint: 'Full Name',
               controller: fullNameController,
               validator: (value) => AppValidators.requiredField(value, 'Full Name'),
@@ -72,6 +74,8 @@ class InstructorProfile extends StatelessWidget {
             ),
             const SizedBox(height: 24),
             DefaultTextField(
+              textInputAction: TextInputAction.next,
+              keyboardType: TextInputType.emailAddress,
               hint: 'Instructor Email',
               prefixIcon: null,
               controller: emailController,
@@ -80,6 +84,8 @@ class InstructorProfile extends StatelessWidget {
             const SizedBox(height: 16),
             if (showPassword)
               DefaultTextField(
+                textInputAction: TextInputAction.done,
+                keyboardType: TextInputType.text,
                 hint: 'Password',
                 prefixIcon: null,
                 controller: passwordController,

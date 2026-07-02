@@ -64,6 +64,7 @@ class _AddStudentViewState extends State<AddStudentView> {
                   FieldLabel(label: 'Full Name'),
                   SizedBox(height: 6),
                   DefaultTextField(
+                    textInputAction: TextInputAction.next,
                     hint: 'Enter your name',
                     prefixIcon: SvgPicture.asset(
                       'assets/icons/name.svg',
@@ -80,6 +81,7 @@ class _AddStudentViewState extends State<AddStudentView> {
                   FieldLabel(label: 'Email'),
                   SizedBox(height: 6),
                   DefaultTextField(
+                    textInputAction: TextInputAction.next,
                     hint: 'Enter your email',
                     prefixIcon: SvgPicture.asset(
                       'assets/icons/@.svg',
@@ -95,6 +97,7 @@ class _AddStudentViewState extends State<AddStudentView> {
                   FieldLabel(label: 'Password'),
                   SizedBox(height: 6),
                   DefaultTextField(
+                    textInputAction: TextInputAction.done,
                     hint: 'Password',
                     prefixIcon: SvgPicture.asset(
                       'assets/icons/password.svg',

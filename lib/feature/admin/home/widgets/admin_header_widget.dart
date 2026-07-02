@@ -37,7 +37,7 @@ class _AdminHeaderState extends State<AdminHeader> {
                 ],
               ),
               CircleAvatar(
-                backgroundImage: AssetImage('assets/images/admin-profile.png'),
+                backgroundImage: AssetImage('assets/images/avatar.jpg'),
               ),
             ],
           ),
