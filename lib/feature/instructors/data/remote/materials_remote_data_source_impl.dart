@@ -1,5 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:edusync_app/core/constants/api_constants.dart';
+import 'package:edusync_app/feature/admin/attendance/model/attendance_session_request_model.dart';
+import 'package:edusync_app/feature/admin/attendance/model/update_attendance_session_model.dart';
+import 'package:edusync_app/feature/instructors/model/instructor_attendance_session_model.dart';
 import 'package:edusync_app/feature/instructors/model/instructor_material_model.dart';
 import 'package:edusync_app/feature/instructors/model/materials_model.dart';
 import 'package:edusync_app/feature/instructors/model/update_material_model.dart';
@@ -42,6 +45,44 @@ class MaterialsRemoteDataSourceImpl implements MaterialsRemoteDataSource {
     await DioClient.dio.put(
       "${APIConstants.getMaterials}/${material.id}",
       data: material.toJson(),
+    );
+  }
+
+  @override
+  Future<List<InstructorAttendanceSessionModel>>
+  getInstructorAttendanceSessions(String instructorId) async {
+    final response = await DioClient.dio.get(
+      "${APIConstants.getInstructorAttendanceSessions}/$instructorId",
+    );
+    return (response.data["data"] as List)
+        .map((e) => InstructorAttendanceSessionModel.fromJson(e))
+        .toList();
+  }
+
+  @override
+  Future<void> deleteAttendanceSession(String attendanceSessionId) async {
+    await DioClient.dio.delete(
+      "${APIConstants.attendancesSessions}/$attendanceSessionId",
+    );
+  }
+
+  @override
+  Future<void> updateAttendanceSession(
+    UpdateAttendanceSessionModel session,
+  ) async {
+    await DioClient.dio.put(
+      "${APIConstants.attendancesSessions}/${session.id}",
+      data: session.toJson(),
+    );
+  }
+
+  @override
+  Future<void> addAttendanceSession(
+    AttendanceSessionRequestModel session,
+  ) async {
+    await DioClient.dio.post(
+      APIConstants.attendancesSessions,
+      data: session.toJson(),
     );
   }
 }

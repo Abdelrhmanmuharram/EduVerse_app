@@ -24,9 +24,12 @@ class APIConstants {
   static const String instructorBySubject =
       '/InstructorSubjects/GetSubjectInstructors';
   static const String subjectMaterials = '/Materials/GetSubjectMaterials';
-  static const String departmentYearSemesterSubjects = '/Subjects/GetDepartmentYearSemesterSubjects/';
+  static const String departmentYearSemesterSubjects =
+      '/Subjects/GetDepartmentYearSemesterSubjects/';
   static const String systemSetting = '/SystemSettings';
   static const String askAi = '/ai/ask';
-  static const String getInstructorMaterials = '/Materials/GetInstructorMaterials';
-
+  static const String getInstructorMaterials =
+      '/Materials/GetInstructorMaterials';
+  static const getInstructorAttendanceSessions =
+      "/AttendanceSessions/GetInstructorSessions";
 }

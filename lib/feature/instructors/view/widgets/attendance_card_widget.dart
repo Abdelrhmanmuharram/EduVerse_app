@@ -14,18 +14,12 @@ class AttendanceCardWidget extends StatelessWidget {
         gradient: const LinearGradient(
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
-          colors: [
-            Color(0xFF4F7FFF),
-            Color(0xFF3A4DFF),
-          ],
+          colors: [Color(0xFF4F7FFF), Color(0xFF3A4DFF)],
         ),
         borderRadius: BorderRadius.circular(16),
       ),
-
       child: Stack(
         children: [
-
-          /// 🔥 الأيقونة الكبيرة (Overlay)
           Positioned(
             right: 10,
             bottom: 10,
@@ -38,13 +32,9 @@ class AttendanceCardWidget extends StatelessWidget {
               ),
             ),
           ),
-
-          /// 🔥 المحتوى
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-
-              /// الأيقونة الصغيرة
               Container(
                 width: 40,
                 height: 40,
@@ -62,9 +52,7 @@ class AttendanceCardWidget extends StatelessWidget {
                   ),
                 ),
               ),
-
               const SizedBox(height: 14),
-
               Padding(
                 padding: const EdgeInsets.only(right: 100),
                 child: Column(
@@ -87,20 +75,23 @@ class AttendanceCardWidget extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              Container(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 8,
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(20),
-                ),
-                child: const Text(
-                  "Start Now →",
-                  style: TextStyle(
-                    color: AppTheme.primaryLight,
-                    fontWeight: FontWeight.w600,
+              InkWell(
+                onTap: () => Navigator.pushNamed(context, '/session'),
+                child: Container(
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 16,
+                    vertical: 8,
+                  ),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(20),
+                  ),
+                  child: const Text(
+                    "Start Now →",
+                    style: TextStyle(
+                      color: AppTheme.primaryLight,
+                      fontWeight: FontWeight.w600,
+                    ),
                   ),
                 ),
               ),

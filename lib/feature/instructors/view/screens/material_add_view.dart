@@ -91,8 +91,6 @@ class _MaterialAddViewState extends State<MaterialAddView> {
                       selectedSubjectName = value;
                       selectedSubjectId = selectedSubject.subjectId;
                     });
-                    debugPrint(selectedSubjectId.toString());
-                    debugPrint(selectedSubjectName.toString());
                   },
                 ),
                 const SizedBox(height: 16),

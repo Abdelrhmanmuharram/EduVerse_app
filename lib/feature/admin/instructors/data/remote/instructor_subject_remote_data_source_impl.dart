@@ -35,15 +35,11 @@ class InstructorSubjectRemoteDataSourceImpl
   ) async {
     try {
       final body = subjects.map((e) => e.toJson()).toList();
-      print('BODY = $body');
       final response = await DioClient.dio.put(
         '${APIConstants.baseUrl}/InstructorSubjects/BulkUpsert',
         data: body,
       );
-      print(response.data);
     } on DioException catch (e) {
-      print('STATUS = ${e.response?.statusCode}');
-      print('ERROR = ${e.response?.data}');
       rethrow;
     }
   }
@@ -51,17 +47,10 @@ class InstructorSubjectRemoteDataSourceImpl
   @override
   Future<void> deleteInstructorSubject(int id) async {
     try {
-      print('DELETE REQUEST ID = $id');
-
       final response = await DioClient.dio.delete(
         '${APIConstants.baseUrl}/InstructorSubjects/$id',
       );
-
-      print('DELETE STATUS = ${response.statusCode}');
-      print('DELETE RESPONSE = ${response.data}');
     } on DioException catch (e) {
-      print('STATUS = ${e.response?.statusCode}');
-      print('ERROR = ${e.response?.data}');
       rethrow;
     }
   }

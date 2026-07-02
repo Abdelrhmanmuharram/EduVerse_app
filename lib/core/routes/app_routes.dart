@@ -53,11 +53,14 @@ import '../../feature/admin/years/view/add_years_view.dart';
 import '../../feature/admin/years/view/years_details_view.dart';
 import '../../feature/instructors/data/remote/materials_remote_data_source_impl.dart';
 import '../../feature/instructors/repository/materials_repository_impl.dart';
+import '../../feature/instructors/view/screens/attendance_session_add_update_view.dart';
 import '../../feature/instructors/view/screens/instructor_view.dart';
 import '../../feature/instructors/view/screens/material_add_view.dart';
 import '../../feature/instructors/view/screens/materials_details_view.dart';
 import '../../feature/instructors/view/screens/materials_view.dart';
+import '../../feature/instructors/view/screens/session_view.dart';
 import '../../feature/instructors/view/screens/students_list_view.dart';
+import '../../feature/instructors/viewmodel/attendance_session_view_model.dart';
 import '../../feature/instructors/viewmodel/materials_viewmodel.dart';
 import '../../feature/instructors/viewmodel/students_list_viewmodel.dart';
 import '../../feature/students/attendance/view/scan_qr_view.dart';
@@ -185,7 +188,6 @@ class AppRoutes {
         UsersRepositoryImpl(UsersRemoteDataSourceImpl()),
       )..loadStudents(),
       child: InstructorsHomeView(),
-
     ),
     '/splash': (_) => const SplashView(),
     '/add-semester': (_) => const AddSemester(),
@@ -193,13 +195,14 @@ class AppRoutes {
     '/add-department': (_) => const AddDepartmentView(),
     '/edit-department': (_) => const EditDepartmentView(),
     '/materials': (_) => ChangeNotifierProvider(
-        create: (_) => MaterialsViewModel(
-          MaterialsRepositoryImpl(MaterialsRemoteDataSourceImpl()),
-          InstructorSubjectRepositoryImpl(
-            InstructorSubjectRemoteDataSourceImpl(),
-          ),
-        )..loadMaterials(),
-        child: const MaterialsView()),
+      create: (_) => MaterialsViewModel(
+        MaterialsRepositoryImpl(MaterialsRemoteDataSourceImpl()),
+        InstructorSubjectRepositoryImpl(
+          InstructorSubjectRemoteDataSourceImpl(),
+        ),
+      )..loadMaterials(),
+      child: const MaterialsView(),
+    ),
     '/materials-details': (_) => const MaterialsDetails(),
     '/material-add': (_) => ChangeNotifierProvider(
       create: (_) => MaterialsViewModel(
@@ -363,21 +366,33 @@ class AppRoutes {
     '/student-dashboard': (_) => StudentDashboardView(),
     '/student-subject-details': (_) => ChangeNotifierProvider(
       create: (_) => StudentSubjectDetailsViewModel(
-        StudentMaterialRepositoryImpl(
-          StudentMaterialRemoteDataSourceImpl(),
-        ),
+        StudentMaterialRepositoryImpl(StudentMaterialRemoteDataSourceImpl()),
         StudentSubjectInstructorRepositoryImpl(
           StudentSubjectInstructorRemoteDataSourceImpl(),
         ),
-        AttendanceRepositoryImpl(
-          AttendanceRemoteDataSourceImpl(),
-        ),
-        SystemSettingRepositoryImpl(
-          SystemSettingRemoteDataSourceImpl(),
-        ),
+        AttendanceRepositoryImpl(AttendanceRemoteDataSourceImpl()),
+        SystemSettingRepositoryImpl(SystemSettingRemoteDataSourceImpl()),
       ),
       child: const StudentSubjectDetails(),
     ),
-    '/student-chat-bot' : (_) => const StudentChatBotView(),
+    '/student-chat-bot': (_) => const StudentChatBotView(),
+    '/session': (_) => ChangeNotifierProvider(
+      create: (_) => AttendanceSessionViewModel(
+        MaterialsRepositoryImpl(MaterialsRemoteDataSourceImpl()),
+        InstructorSubjectRepositoryImpl(
+          InstructorSubjectRemoteDataSourceImpl(),
+        ),
+      )..loadAttendanceSessions(),
+      child: const SessionView(),
+    ),
+    '/attendance-session-add-update': (_) => ChangeNotifierProvider(
+      create: (_) => AttendanceSessionViewModel(
+        MaterialsRepositoryImpl(MaterialsRemoteDataSourceImpl()),
+        InstructorSubjectRepositoryImpl(
+          InstructorSubjectRemoteDataSourceImpl(),
+        ),
+      )..loadAll(),
+      child: const AttendanceSessionAddUpdateView(),
+    ),
   };
 }
