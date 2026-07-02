@@ -54,6 +54,7 @@ import '../../feature/admin/years/view/years_details_view.dart';
 import '../../feature/instructors/data/remote/materials_remote_data_source_impl.dart';
 import '../../feature/instructors/repository/materials_repository_impl.dart';
 import '../../feature/instructors/view/screens/attendance_session_add_update_view.dart';
+import '../../feature/instructors/view/screens/instructor_ai_view.dart';
 import '../../feature/instructors/view/screens/instructor_view.dart';
 import '../../feature/instructors/view/screens/material_add_view.dart';
 import '../../feature/instructors/view/screens/materials_details_view.dart';
@@ -166,11 +167,33 @@ class AppRoutes {
       ],
       child: const AdminInstructorsView(),
     ),
-    '/instructors-view': (_) => ChangeNotifierProvider(
-      create: (_) => StudentsListViewModel(
-        UsersRepositoryImpl(UsersRemoteDataSourceImpl()),
-      )..loadStudents(),
-      child: InstructorView(),
+    '/instructors-view': (_) => MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (_) => StudentsListViewModel(
+            UsersRepositoryImpl(UsersRemoteDataSourceImpl()),
+          )..loadStudents(),
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => AttendanceSessionViewModel(
+            MaterialsRepositoryImpl(MaterialsRemoteDataSourceImpl()),
+            InstructorSubjectRepositoryImpl(
+              InstructorSubjectRemoteDataSourceImpl(),
+            ),
+          )..loadSubjects(),
+        ),
+
+        ChangeNotifierProvider(
+          create: (_) => MaterialsViewModel(
+            MaterialsRepositoryImpl(MaterialsRemoteDataSourceImpl()),
+            InstructorSubjectRepositoryImpl(
+              InstructorSubjectRemoteDataSourceImpl(),
+            ),
+          )..loadMaterials(),
+        ),
+      ],
+      child: const InstructorView(),
     ),
     '/add-instructor': (_) => AddInstructorView(),
     '/instructor-details': (_) => InstructorDetails(),
@@ -395,5 +418,6 @@ class AppRoutes {
       )..loadAll(),
       child: const AttendanceSessionAddUpdateView(),
     ),
+    '/instructor-ai': (_) => const InstructorAiView(),
   };
 }

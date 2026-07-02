@@ -1,6 +1,7 @@
 import 'package:edusync_app/feature/admin/attendance/model/update_attendance_session_model.dart';
 
 import '../../../admin/attendance/model/attendance_session_request_model.dart';
+import '../../model/generate_ai_model.dart';
 import '../../model/instructor_attendance_session_model.dart';
 import '../../model/instructor_material_model.dart';
 import '../../model/materials_model.dart';
@@ -22,4 +23,5 @@ abstract class MaterialsRemoteDataSource {
   Future<List<SingleSessionAttendanceModel>> getSessionAttendances(
     String sessionId,
   );
+  Future<List<int>> generateAI(GenerateAIModel model);
 }

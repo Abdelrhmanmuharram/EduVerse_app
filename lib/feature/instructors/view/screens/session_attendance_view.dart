@@ -29,7 +29,7 @@ class SessionAttendanceView extends StatelessWidget {
           children: [
             DefaultTextField(
               hint: 'Search',
-              onChanged: viewModel.searchAttendance,
+              onChanged: viewModel.search,
 
             ),
             const SizedBox(height: 10),

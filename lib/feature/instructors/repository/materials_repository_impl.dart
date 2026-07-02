@@ -1,3 +1,4 @@
+import 'package:edusync_app/feature/instructors/model/generate_ai_model.dart';
 import 'package:edusync_app/feature/instructors/model/instructor_material_model.dart';
 import 'package:edusync_app/feature/instructors/model/materials_model.dart';
 import 'package:edusync_app/feature/instructors/model/single_session_attendance_model.dart';
@@ -59,5 +60,10 @@ class MaterialsRepositoryImpl implements MaterialsRepository {
   @override
   Future<List<SingleSessionAttendanceModel>> getSessionAttendances(String sessionId) {
     return _remoteDataSource.getSessionAttendances(sessionId);
+  }
+
+  @override
+  Future<List<int>> generateAI(GenerateAIModel model) {
+    return _remoteDataSource.generateAI(model);
   }
 }

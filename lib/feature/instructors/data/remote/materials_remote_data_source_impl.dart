@@ -10,6 +10,7 @@ import 'package:edusync_app/feature/instructors/model/update_material_model.dart
 import 'package:flutter/cupertino.dart';
 
 import '../../../../core/network/dio_client.dart';
+import '../../model/generate_ai_model.dart';
 import 'materials_remote_data_source.dart';
 
 class MaterialsRemoteDataSourceImpl implements MaterialsRemoteDataSource {
@@ -101,5 +102,19 @@ class MaterialsRemoteDataSourceImpl implements MaterialsRemoteDataSource {
     return (response.data["data"] as List)
         .map((e) => SingleSessionAttendanceModel.fromJson(e))
         .toList();
+  }
+
+  @override
+  Future<List<int>> generateAI(GenerateAIModel model) async {
+    final response = await DioClient.dio.post(
+      APIConstants.generateAi,
+      data: model.toJson(),
+      options: Options(
+        responseType: ResponseType.bytes,
+        receiveTimeout: const Duration(minutes: 2),
+        sendTimeout: const Duration(minutes: 2),
+      ),
+    );
+    return response.data;
   }
 }

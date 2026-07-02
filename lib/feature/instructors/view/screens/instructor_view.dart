@@ -1,6 +1,6 @@
 import 'package:edusync_app/core/widgets/nav_bar_icons.dart';
 import 'package:edusync_app/feature/admin/home/view/profile_view.dart';
-import 'package:edusync_app/feature/admin/home/view/panel_view.dart';
+import 'package:edusync_app/feature/instructors/view/screens/instructor_ai_view.dart';
 import 'package:edusync_app/feature/instructors/view/screens/instructors_home_view.dart';
 import 'package:flutter/material.dart';
 
@@ -11,9 +11,15 @@ class InstructorView extends StatefulWidget {
   @override
   State<InstructorView> createState() => _HomeAdminState();
 }
+
 class _HomeAdminState extends State<InstructorView> {
   int currentIndex = 0;
-  List<Widget> taps = [InstructorsHomeView(), ProfileView(),];
+  List<Widget> taps = [
+    InstructorsHomeView(),
+    InstructorAiView(),
+    ProfileView(),
+  ];
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,11 +37,15 @@ class _HomeAdminState extends State<InstructorView> {
             label: 'Home',
           ),
           BottomNavigationBarItem(
+            icon: NavBarIcons(iconName: 'chat_bot'),
+            activeIcon: NavBarIcons(iconName: 'chat_bot_active'),
+            label: 'Chatbot',
+          ),
+          BottomNavigationBarItem(
             icon: NavBarIcons(iconName: 'profile'),
             activeIcon: NavBarIcons(iconName: 'profile_active'),
             label: 'profile',
           ),
-
         ],
       ),
     );

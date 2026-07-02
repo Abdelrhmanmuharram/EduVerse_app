@@ -6,7 +6,9 @@ import '../../admin/attendance/model/attendance_session_request_model.dart';
 import '../../admin/attendance/model/update_attendance_session_model.dart';
 import '../../admin/instructors/model/instructor_subject_model.dart';
 import '../../admin/instructors/repository/instructor_subject_repository.dart';
+import '../model/generate_ai_model.dart';
 import '../model/instructor_attendance_session_model.dart';
+import '../model/instructor_material_model.dart';
 import '../model/single_session_attendance_model.dart';
 import '../repository/materials_repository.dart';
 
@@ -34,6 +36,7 @@ class AttendanceSessionViewModel extends ChangeNotifier {
   List<InstructorAttendanceSessionModel> _filteredSessions = [];
 
   List<InstructorSubjectModel> subjects = [];
+  List<InstructorMaterialModel> materials = [];
 
   List<SingleSessionAttendanceModel> _attendances = [];
   List<SingleSessionAttendanceModel> get attendances => _attendances;
@@ -42,17 +45,35 @@ class AttendanceSessionViewModel extends ChangeNotifier {
   List<SingleSessionAttendanceModel> get filteredAttendances =>
       _filteredAttendances;
 
-  void searchAttendance(String value) {
-    if (value.trim().isEmpty) {
-      _filteredAttendances = List.from(_attendances);
+  InstructorSubjectModel? selectedSubject;
+  final List<InstructorMaterialModel> _selectedMaterials = [];
+  List<InstructorMaterialModel> get selectedMaterials => _selectedMaterials;
+
+  Future<void> selectSubject(InstructorSubjectModel subject) async {
+    selectedSubject = subject;
+
+    final user = await LocalStorageService.getUser();
+    if (user == null) return;
+    final allMaterials = await _attendanceSessionRepository
+        .getInstructorMaterials(user.id);
+    materials = allMaterials
+        .where((e) => e.subjectId == subject.subjectId)
+        .toList();
+    _selectedMaterials.clear();
+    notifyListeners();
+  }
+
+  void toggleMaterial(InstructorMaterialModel material) {
+    if (_selectedMaterials.any((e) => e.id == material.id)) {
+      _selectedMaterials.removeWhere((e) => e.id == material.id);
     } else {
-      final q = value.toLowerCase();
-      _filteredAttendances = _attendances.where((e) {
-        return e.studentName.toLowerCase().contains(q) ||
-            e.studentEmail.toLowerCase().contains(q);
-      }).toList();
+      _selectedMaterials.add(material);
     }
     notifyListeners();
+  }
+
+  bool isMaterialSelected(InstructorMaterialModel material) {
+    return _selectedMaterials.any((e) => e.id == material.id);
   }
 
   Future<void> loadSessionAttendances(String sessionId) async {
@@ -76,7 +97,10 @@ class AttendanceSessionViewModel extends ChangeNotifier {
   }
 
   Future<void> loadAll() async {
-    await Future.wait([loadAttendanceSessions(), loadSubjects()]);
+    await Future.wait([
+      loadAttendanceSessions(),
+      loadSubjects(),
+    ]);
   }
 
   Future<void> loadSubjects() async {
@@ -86,7 +110,6 @@ class AttendanceSessionViewModel extends ChangeNotifier {
       if (user == null) {
         throw Exception("User not found");
       }
-
       subjects = await _instructorSubjectRepository.getInstructorSubjects(
         user.id,
       );
@@ -215,6 +238,25 @@ class AttendanceSessionViewModel extends ChangeNotifier {
       throw Exception(
         e.response?.data["message"] ?? "Failed to add attendance session",
       );
+    } finally {
+      _isLoading = false;
+      notifyListeners();
+    }
+  }
+
+  Future<List<int>> generateAI(GenerateAIModel model) async {
+    try {
+      _isLoading = true;
+      _errorMessage = null;
+      notifyListeners();
+      return await _attendanceSessionRepository.generateAI(model);
+    } on DioException catch (e) {
+      _errorMessage =
+          e.response?.data["message"] ?? e.message ?? "Failed to generate";
+      throw Exception(_errorMessage);
+    } catch (e) {
+      _errorMessage = e.toString();
+      throw Exception(_errorMessage);
     } finally {
       _isLoading = false;
       notifyListeners();
