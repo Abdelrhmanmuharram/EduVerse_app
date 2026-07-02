@@ -38,6 +38,23 @@ class AttendanceSessionViewModel extends ChangeNotifier {
   List<SingleSessionAttendanceModel> _attendances = [];
   List<SingleSessionAttendanceModel> get attendances => _attendances;
 
+  List<SingleSessionAttendanceModel> _filteredAttendances = [];
+  List<SingleSessionAttendanceModel> get filteredAttendances =>
+      _filteredAttendances;
+
+  void searchAttendance(String value) {
+    if (value.trim().isEmpty) {
+      _filteredAttendances = List.from(_attendances);
+    } else {
+      final q = value.toLowerCase();
+      _filteredAttendances = _attendances.where((e) {
+        return e.studentName.toLowerCase().contains(q) ||
+            e.studentEmail.toLowerCase().contains(q);
+      }).toList();
+    }
+    notifyListeners();
+  }
+
   Future<void> loadSessionAttendances(String sessionId) async {
     try {
       _isLoading = true;
@@ -46,6 +63,8 @@ class AttendanceSessionViewModel extends ChangeNotifier {
       _attendances = await _attendanceSessionRepository.getSessionAttendances(
         sessionId,
       );
+      _filteredAttendances = List.from(_attendances);
+      notifyListeners();
     } on DioException catch (e) {
       _errorMessage = e.response?.data["message"] ?? e.message;
     } catch (e) {
@@ -59,6 +78,7 @@ class AttendanceSessionViewModel extends ChangeNotifier {
   Future<void> loadAll() async {
     await Future.wait([loadAttendanceSessions(), loadSubjects()]);
   }
+
   Future<void> loadSubjects() async {
     try {
       final user = await LocalStorageService.getUser();

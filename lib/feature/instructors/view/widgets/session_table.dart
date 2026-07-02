@@ -31,7 +31,7 @@ class _SessionTableState extends State<SessionTable> {
     if (viewModel.isLoading) {
       return const Center(child: LoadingWidget());
     }
-    if (viewModel.attendances.isEmpty) {
+    if (viewModel.filteredAttendances.isEmpty) {
       return const Center(
         child: Text("No students found"),
       );
@@ -64,7 +64,7 @@ class _SessionTableState extends State<SessionTable> {
                     const DataColumn(label: Text("Attendance Date")),
                     const DataColumn(label: Text("Status")),
                   ],
-                  rows: viewModel.attendances.map((attendance) {
+                  rows: viewModel.filteredAttendances.map((attendance) {
                     return DataRow(
                       cells: [
                         DataCell(Text(attendance.studentName)),
